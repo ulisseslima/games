@@ -1,4 +1,4 @@
-package com.dvlcube.game;
+package com.dvlcube.gaming;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import com.sun.j3d.utils.timer.J3DTimer;
 
 /**
+ * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
+ * <p>
  * The call to Toolkit.sync( ) after drawImage( ) ensures that the display is
  * promptly updated. This is required for Linux, which doesn't automatically
  * flush its display buffer. Without the sync( ) call, the animation may be only

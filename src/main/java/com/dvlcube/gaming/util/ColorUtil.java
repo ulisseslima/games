@@ -1,4 +1,4 @@
-package com.dvlcube.game.util;
+package com.dvlcube.gaming.util;
 
 import java.awt.Color;
 

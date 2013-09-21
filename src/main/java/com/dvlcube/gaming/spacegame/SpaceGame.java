@@ -1,4 +1,4 @@
-package com.dvlcube.spacegame;
+package com.dvlcube.gaming.spacegame;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,9 +10,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dvlcube.game.Coords;
-import com.dvlcube.game.Game;
-import com.dvlcube.game.GamePolygon;
+import com.dvlcube.gaming.Coords;
+import com.dvlcube.gaming.Game;
+import com.dvlcube.gaming.GamePolygon;
 
 /**
  * @author wonka

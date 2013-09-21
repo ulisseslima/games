@@ -1,26 +1,4 @@
-package com.dvlcube.game;
-
-//Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
-
-/* 
- The display includes two textfields for showing the current time
- and number of boxes. The average FPS/UPS values are drawn in
- the game's JPanel.
-
- Pausing/Resuming/Quiting are controlled via the frame's window
- listener methods. (-not)
-
- Uses active rendering to update the JPanel.
-
- Using Java 3D's timer: J3DTimer.getValue()
- *  nanosecs rather than millisecs for the period
-
- Average FPS / UPS
- 20			50			80			100
- Win 98:    20/20       48/50       81/83       96/100
- Win 2000:  20/20       43/50       59/83       58/100    // slow machine
- Win XP:    20/20       50/50       83/83      100/100
- */
+package com.dvlcube.gaming;
 
 import java.awt.Container;
 import java.awt.event.WindowEvent;
@@ -31,6 +9,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
+ * <p>
+ * The display includes two textfields for showing the current time and number
+ * of boxes. The average FPS/UPS values are drawn in the game's JPanel.
+ * 
+ * Pausing/Resuming/Quiting are controlled via the frame's window listener
+ * methods. (-not exactly)
+ * 
+ * Uses active rendering to update the JPanel.
+ * 
+ * Using Java 3D's timer: J3DTimer.getValue() nanosecs rather than millisecs for
+ * the period
+ * 
+ * Average FPS / UPS 20 50 80 100 Win 98: 20/20 48/50 81/83 96/100 Win 2000:
+ * 20/20 43/50 59/83 58/100 // slow machine Win XP: 20/20 50/50 83/83 100/100
+ */
 public class GameWindow extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 
@@ -81,8 +76,6 @@ public class GameWindow extends JFrame implements WindowListener {
 		jtfTime.setText("Time Spent: " + t + " secs");
 	}
 
-	// ----------------- window listener methods -------------
-
 	public void windowActivated(WindowEvent e) {
 		gamePanel.resumeGame();
 	}
@@ -108,8 +101,6 @@ public class GameWindow extends JFrame implements WindowListener {
 
 	public void windowOpened(WindowEvent e) {
 	}
-
-	// ----------------------------------------------------
 
 	public static void main(String args[]) {
 		go(args);

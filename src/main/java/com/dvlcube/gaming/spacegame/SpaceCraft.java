@@ -1,9 +1,9 @@
-package com.dvlcube.spacegame;
+package com.dvlcube.gaming.spacegame;
 
 import java.awt.Polygon;
 
-import com.dvlcube.game.Coords;
-import com.dvlcube.game.GamePolygon;
+import com.dvlcube.gaming.Coords;
+import com.dvlcube.gaming.GamePolygon;
 
 /**
  * @author wonka

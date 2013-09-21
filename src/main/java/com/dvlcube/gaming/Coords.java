@@ -1,4 +1,4 @@
-package com.dvlcube.game;
+package com.dvlcube.gaming;
 
 /**
  * coords.

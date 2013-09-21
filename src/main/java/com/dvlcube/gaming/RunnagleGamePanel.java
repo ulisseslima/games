@@ -1,11 +1,4 @@
-package com.dvlcube.game;
-
-/**
- * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
- *  The game's drawing surface. It shows:
- * - the game
- * - the current average FPS and UPS
- */
+package com.dvlcube.gaming;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,9 +11,15 @@ import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
-import com.dvlcube.spacegame.SpaceGame;
+import com.dvlcube.gaming.spacegame.SpaceGame;
 import com.sun.j3d.utils.timer.J3DTimer;
 
+/**
+ * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
+ * <p>
+ * The game's drawing surface. It shows: - the game - the current average FPS
+ * and UPS
+ */
 public class RunnagleGamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 
@@ -63,9 +62,14 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 	private DecimalFormat decimalFormat = new DecimalFormat("0.##"); // 2 dp
 	// private DecimalFormat timedf = new DecimalFormat("0.####"); // 4 dp
 
-	private Thread animator; // the thread that performs the animation
-	private volatile boolean isRunning = false; // used to stop the animation
-												// thread
+	/**
+	 * the thread that performs the animation
+	 */
+	private Thread animator;
+	/**
+	 * used to stop the animation thread
+	 */
+	private volatile boolean isRunning = false;
 	private boolean isPaused = false;
 
 	private long fpsPeriod; // period between drawing in _nanosecs_
@@ -102,7 +106,7 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		font = new Font("SansSerif", Font.BOLD, 10);
 		metrics = this.getFontMetrics(font);
 
-		// initialise timing elements
+		// initialize timing elements
 		fpsStore = new double[NUM_FPS];
 		upsStore = new double[NUM_FPS];
 		for (int i = 0; i < NUM_FPS; i++) {
@@ -111,64 +115,28 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		}
 	}
 
-	// create game components
+	/**
+	 * create game components
+	 */
 	private void resetState() {
 		game = new SpaceGame();
 		score = 0;
 	}
 
 	private void readyForTermination() {
-		// addKeyListener(new KeyAdapter() {
-		// // listen for esc, q, end, ctrl-c on the canvas to
-		// // allow a convenient exit from the full screen configuration
-		// @Override
-		// public void keyPressed(KeyEvent e) {
-		// int keyCode = e.getKeyCode();
-		// if ((keyCode == KeyEvent.VK_ESCAPE)
-		// || (keyCode == KeyEvent.VK_Q)
-		// || (keyCode == KeyEvent.VK_END)
-		// || ((keyCode == KeyEvent.VK_C) && e.isControlDown())) {
-		// isRunning = false;
-		// } else if (keyCode == KeyEvent.VK_HOME) {
-		// restartGame();
-		// }
-		//
-		// switch (keyCode) {
-		// case KeyEvent.VK_ESCAPE:
-		// ;
-		// case KeyEvent.VK_Q:
-		// ;
-		// case KeyEvent.VK_END:
-		// isRunning = false;
-		// break;
-		// case KeyEvent.VK_C:
-		// if (e.isControlDown())
-		// isRunning = false;
-		// break;
-		// case KeyEvent.VK_HOME:
-		// restartGame();
-		// break;
-		// case KeyEvent.VK_UP:
-		// raiseFps();
-		// break;
-		// case KeyEvent.VK_DOWN:
-		// lowerFps();
-		// break;
-		// }
-		// }
-		//
-		// });
 		addKeyListener(game.getKeyAdapter());
 	}
 
-	// wait for the JPanel to be added to the JFrame before starting
 	@Override
 	public void addNotify() {
+		// wait for the JPanel to be added to the JFrame before starting
 		super.addNotify(); // creates the peer
 		startGame(); // start the thread
 	}
 
-	// initialise and start the thread
+	/**
+	 * initialize and start the thread
+	 */
 	private void startGame() {
 		if (animator == null || !isRunning) {
 			animator = new Thread(this);
@@ -176,20 +144,23 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		}
 	}
 
-	// ------------- game life cycle methods ------------
-	// called by the JFrame's window listener methods
-
-	// called when the JFrame is activated / deiconified
+	/**
+	 * called when the JFrame is activated / deiconified
+	 */
 	public void resumeGame() {
 		isPaused = false;
 	}
 
-	// called when the JFrame is deactivated / iconified
+	/**
+	 * called when the JFrame is deactivated / iconified
+	 */
 	public void pauseGame() {
 		isPaused = true;
 	}
 
-	// called when the JFrame is closing
+	/**
+	 * called when the JFrame is closing
+	 */
 	public void stopGame() {
 		isRunning = false;
 	}
@@ -200,7 +171,6 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		startGame();
 	}
 
-	/* The frames of the animation are drawn inside the while loop. */
 	public synchronized void run() {
 		long beforeTime, afterTime, timeDiff, sleepTime;
 		long overSleepTime = 0L;
@@ -257,7 +227,6 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		}
 
 		printStats();
-		// System.exit(0); // so window disappears
 	}
 
 	private void gameUpdate() {
@@ -322,7 +291,7 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		}
 	}
 
-	/*
+	/**
 	 * The statistics: - the summed periods for all the iterations in this
 	 * interval (period is the amount of time a single frame iteration should
 	 * take), the actual elapsed time in this interval, the error between these

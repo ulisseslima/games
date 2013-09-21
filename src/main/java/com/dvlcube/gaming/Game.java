@@ -1,4 +1,4 @@
-package com.dvlcube.game;
+package com.dvlcube.gaming;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
