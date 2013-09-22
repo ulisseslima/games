@@ -127,6 +127,7 @@ class SpaceCraft extends Polygon implements GamePolygon {
 
 	public void go(int x, int y) {
 		destination = new Coords(x, y);
+		face(destination);
 	}
 
 	public void update() {
@@ -159,5 +160,20 @@ class SpaceCraft extends Polygon implements GamePolygon {
 
 	public int getAngle() {
 		return angle;
+	}
+
+	/**
+	 * Face towards destination.
+	 * 
+	 * @param coords
+	 *            destination.
+	 * @author wonka
+	 * @since 22/09/2013
+	 */
+	public void face(Coords coords) {
+		int currentPosition = (x + y) / 2;
+		int targetPosition = (coords.x + coords.y) / 2;
+
+		angle = targetPosition - currentPosition;
 	}
 }
