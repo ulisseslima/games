@@ -12,7 +12,7 @@ import com.dvlcube.gaming.GamePolygon;
 class SpaceCraft extends Polygon implements GamePolygon {
 
 	private static final long serialVersionUID = 6842909318229368081L;
-	public boolean debug = true;
+	public boolean debug = false;
 
 	private int x;
 	private int y;

@@ -19,7 +19,7 @@ import com.dvlcube.gaming.GamePolygon;
  * @since 20/09/2013
  */
 public class SpaceGame implements Game {
-	public boolean debug = true;
+	public boolean debug = false;
 	private int x;
 	private int y = 100;
 	private List<Coords> mouseObs = new ArrayList<Coords>();
@@ -57,12 +57,13 @@ public class SpaceGame implements Game {
 			int polyX = polygon.getX();
 			int polyY = polygon.getY();
 			int polyAngle = polygon.getAngle();
+			double fixedAngle = Math.toRadians(polyAngle);
 			if (debug)
-				System.out.printf("filling %d,%d at %dº\n", polyX, polyY,
-						polyAngle);
-			g.rotate(polyAngle, polyX, polyY);
+				System.out.printf("filling %d,%d at %fº\n", polyX, polyY,
+						fixedAngle);
+			g.rotate(fixedAngle, polyX, polyY);
 			g.fillPolygon((Polygon) polygon);
-			g.rotate(-polyAngle, polyX, polyY);
+			g.rotate(-fixedAngle, polyX, polyY);
 			g.drawString(String.format("%dº", polyAngle), polyX + 10,
 					polyY + 10);
 		}

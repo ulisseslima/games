@@ -2,7 +2,7 @@ package com.dvlcube.gaming.util;
 
 import java.awt.Color;
 
-public class ColorUtil {
+public class ColorUtils {
 	public static Color getRandom() {
 		int r = randomInt(256), //
 		g = randomInt(256), //
