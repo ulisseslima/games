@@ -19,6 +19,7 @@ import com.dvlcube.gaming.GamePolygon;
  * @since 20/09/2013
  */
 public class SpaceGame implements Game {
+	public boolean debug = true;
 	private int x;
 	private int y = 100;
 	private List<Coords> mouseObs = new ArrayList<Coords>();
@@ -26,7 +27,7 @@ public class SpaceGame implements Game {
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 
-	private SpaceCraft spaceCraft = new SpaceCraft(new Coords(300, 300));
+	private final SpaceCraft spaceCraft = new SpaceCraft(new Coords(300, 300));
 	{
 		polys.add(spaceCraft);
 	}
@@ -46,7 +47,7 @@ public class SpaceGame implements Game {
 
 	public void doGraphics(Graphics2D g) {
 		for (Coords coords : mouseObs) {
-			g.drawRect(coords.x, coords.y, 1, 1);
+			g.drawRect(coords.x, coords.y, 2, 2);
 		}
 
 		g.drawRect(x, y, 10, 10);
@@ -56,6 +57,9 @@ public class SpaceGame implements Game {
 			int polyX = polygon.getX();
 			int polyY = polygon.getY();
 			int polyAngle = polygon.getAngle();
+			if (debug)
+				System.out.printf("filling %d,%d at %dº\n", polyX, polyY,
+						polyAngle);
 			g.rotate(polyAngle, polyX, polyY);
 			g.fillPolygon((Polygon) polygon);
 			g.rotate(-polyAngle, polyX, polyY);
@@ -107,5 +111,8 @@ public class SpaceGame implements Game {
 
 	public MouseAdapter getMouseAdapter() {
 		return mouse;
+	}
+
+	public void reset() {
 	}
 }

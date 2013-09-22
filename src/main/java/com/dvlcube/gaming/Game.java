@@ -38,4 +38,12 @@ public interface Game {
 	 * @since 21/09/2013
 	 */
 	KeyAdapter getKeyAdapter();
+
+	/**
+	 * reset state.
+	 * 
+	 * @author wonka
+	 * @since 21/09/2013
+	 */
+	void reset();
 }

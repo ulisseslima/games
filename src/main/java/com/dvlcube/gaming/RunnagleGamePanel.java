@@ -75,7 +75,7 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
 	private GameWindow window;
-	private Game game = new SpaceGame();
+	private final Game game = new SpaceGame();
 
 	// used at game termination
 	private boolean gameOver = false;
@@ -119,7 +119,7 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 	 * create game components
 	 */
 	private void resetState() {
-		game = new SpaceGame();
+		game.reset();
 		score = 0;
 	}
 
@@ -222,10 +222,8 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 				skips++;
 			}
 			framesSkipped += skips;
-
 			storeStats();
 		}
-
 		printStats();
 	}
 
@@ -311,12 +309,11 @@ public class RunnagleGamePanel extends JPanel implements Runnable {
 		frameCount++;
 		statsInterval += fpsPeriod;
 
-		if (statsInterval >= MAX_STATS_INTERVAL) { // record stats every
-													// MAX_STATS_INTERVAL
+		// record stats every MAX_STATS_INTERVAL
+		if (statsInterval >= MAX_STATS_INTERVAL) {
 			long timeNow = J3DTimer.getValue();
-			timeSpentInGame = (int) ((timeNow - gameStartTime) / 1000000000L); // ns
-																				// -->
-																				// secs
+			// ns --> secs
+			timeSpentInGame = (int) ((timeNow - gameStartTime) / 1000000000L);
 			window.setTimeSpent(timeSpentInGame);
 
 			long realElapsedTime = timeNow - prevStatsTime; // time since last

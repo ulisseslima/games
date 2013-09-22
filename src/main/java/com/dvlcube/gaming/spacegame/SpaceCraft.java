@@ -12,7 +12,7 @@ import com.dvlcube.gaming.GamePolygon;
 class SpaceCraft extends Polygon implements GamePolygon {
 
 	private static final long serialVersionUID = 6842909318229368081L;
-	public boolean debug = false;
+	public boolean debug = true;
 
 	private int x;
 	private int y;
@@ -86,6 +86,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void down() {
+		if (debug)
+			System.out.printf("down (%d, %d)\n", x, y);
 		y(y + 1);
 		if (angle < 180) {
 			angle++;
@@ -94,6 +96,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void left() {
+		if (debug)
+			System.out.printf("left (%d, %d)\n", x, y);
 		x(x - 1);
 		if (angle < -90) {
 			angle++;
@@ -102,6 +106,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void right() {
+		if (debug)
+			System.out.printf("right (%d, %d)\n", x, y);
 		x(x + 1);
 		if (angle < 90) {
 			angle++;
@@ -110,6 +116,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void up() {
+		if (debug)
+			System.out.printf("up (%d, %d)\n", x, y);
 		y(y - 1);
 		if (angle < 0) {
 			angle++;
@@ -122,23 +130,23 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void update() {
-		if (!destination.is(x, y)) {
-			moving = true;
-
-			if (this.x < destination.x) {
-				right();
-			} else if (this.x > destination.x) {
-				left();
-			}
-
-			if (this.y < destination.y) {
-				down();
-			} else if (this.y > destination.y) {
-				up();
-			}
-		} else {
-			moving = false;
-		}
+		// if (!destination.is(x, y)) {
+		// moving = true;
+		//
+		// if (this.x < destination.x) {
+		// right();
+		// } else if (this.x > destination.x) {
+		// left();
+		// }
+		//
+		// if (this.y < destination.y) {
+		// down();
+		// } else if (this.y > destination.y) {
+		// up();
+		// }
+		// } else {
+		// moving = false;
+		// }
 	}
 
 	public int getX() {
