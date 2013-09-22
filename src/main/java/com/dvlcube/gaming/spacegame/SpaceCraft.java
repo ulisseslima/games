@@ -130,23 +130,23 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	}
 
 	public void update() {
-		// if (!destination.is(x, y)) {
-		// moving = true;
-		//
-		// if (this.x < destination.x) {
-		// right();
-		// } else if (this.x > destination.x) {
-		// left();
-		// }
-		//
-		// if (this.y < destination.y) {
-		// down();
-		// } else if (this.y > destination.y) {
-		// up();
-		// }
-		// } else {
-		// moving = false;
-		// }
+		if (!destination.is(x, y)) {
+			moving = true;
+
+			if (this.x < destination.x) {
+				right();
+			} else if (this.x > destination.x) {
+				left();
+			}
+
+			if (this.y < destination.y) {
+				down();
+			} else if (this.y > destination.y) {
+				up();
+			}
+		} else {
+			moving = false;
+		}
 	}
 
 	public int getX() {
