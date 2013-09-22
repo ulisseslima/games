@@ -72,7 +72,7 @@ public class SpaceGame implements Game {
 	public class Mouse extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			int x = e.getX(), y = e.getY();
+			int x = e.getX() / 2, y = e.getY() / 2;
 			mouseObs.add(new Coords(x, y));
 			spaceCraft.go(x, y);
 		}

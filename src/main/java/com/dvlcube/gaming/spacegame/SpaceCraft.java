@@ -89,40 +89,24 @@ class SpaceCraft extends Polygon implements GamePolygon {
 		if (debug)
 			System.out.printf("down (%d, %d)\n", x, y);
 		y(y + 1);
-		if (angle < 180) {
-			angle++;
-		} else if (angle > 180)
-			angle--;
 	}
 
 	public void left() {
 		if (debug)
 			System.out.printf("left (%d, %d)\n", x, y);
 		x(x - 1);
-		if (angle < -90) {
-			angle++;
-		} else if (angle > -90)
-			angle--;
 	}
 
 	public void right() {
 		if (debug)
 			System.out.printf("right (%d, %d)\n", x, y);
 		x(x + 1);
-		if (angle < 90) {
-			angle++;
-		} else if (angle > 90)
-			angle--;
 	}
 
 	public void up() {
 		if (debug)
 			System.out.printf("up (%d, %d)\n", x, y);
 		y(y - 1);
-		if (angle < 0) {
-			angle++;
-		} else if (angle > 0)
-			angle--;
 	}
 
 	public void go(int x, int y) {
@@ -132,6 +116,7 @@ class SpaceCraft extends Polygon implements GamePolygon {
 
 	public void update() {
 		if (!destination.is(x, y)) {
+			face(destination);
 			moving = true;
 
 			if (this.x < destination.x) {

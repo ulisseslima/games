@@ -23,8 +23,8 @@ import com.sun.j3d.utils.timer.J3DTimer;
 public class RunnableGamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	private static final int PANEL_WIDTH = 800; // size of panel
-	private static final int PANEL_HEIGHT = 600;
+	private static final int PANEL_WIDTH = 1024;
+	private static final int PANEL_HEIGHT = 768;
 
 	private static long MAX_STATS_INTERVAL = 1000000000L;
 	// private static long MAX_STATS_INTERVAL = 1000L;
@@ -35,7 +35,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	 * Number of frames with a delay of 0 ms before the animation thread yields
 	 * to other running threads.
 	 */
-	private static int MAX_FRAME_SKIPS = 5; // was 2;
+	private static int MAX_FRAME_SKIPS = 5;
 	// no. of frames that can be skipped in any one animation loop
 	// i.e the games state is updated but not rendered
 
@@ -85,7 +85,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	// off screen rendering
 	private Graphics graphics;
 	private Image dbImage = null;
-	public static final Color bgColor = new Color(61, 61, 61);
+	public static final Color bgColor = new Color(60, 60, 60);
 	public static final Color fgColor = new Color(8, 130, 230);
 
 	public RunnableGamePanel(GameWindow window, long period) {
@@ -235,7 +235,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 	private void gameRender() {
 		if (dbImage == null) {
-			dbImage = createImage(PANEL_WIDTH, PANEL_HEIGHT);
+			dbImage = createImage(PANEL_WIDTH / 2, PANEL_HEIGHT / 2);
 			if (dbImage == null) {
 				System.out.println("dbImage is null");
 				return;
@@ -245,7 +245,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		// clear the background
 		graphics.setColor(bgColor);
-		graphics.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
+		graphics.fillRect(0, 0, PANEL_WIDTH / 2, PANEL_HEIGHT / 2);
 
 		graphics.setColor(fgColor);
 		graphics.setFont(font);
@@ -254,8 +254,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		// dbg.drawString("Frame Count " + frameCount, 10, 25);
 		graphics.drawString(
 				"Average FPS/UPS: " + decimalFormat.format(averageFPS) + ", "
-						+ decimalFormat.format(averageUPS), 20, 25); // was
-																		// (10,55)
+						+ decimalFormat.format(averageUPS), 20, 25);
 
 		graphics.setColor(fgColor);
 
@@ -266,7 +265,12 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 			gameOverMessage(graphics);
 	}
 
-	// center the game-over message in the panel
+	/**
+	 * center the game-over message in the panel
+	 * 
+	 * @param g
+	 *            graphics 2d.
+	 */
 	private void gameOverMessage(Graphics g) {
 		String msg = "Game Over.";
 		int x = (PANEL_WIDTH - metrics.stringWidth(msg)) / 2;
@@ -276,13 +280,15 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		g.drawString(msg, x, y);
 	}
 
-	// use active rendering to put the buffered image on-screen
+	/**
+	 * use active rendering to put the buffered image on-screen
+	 */
 	private void paintScreen() {
 		Graphics g;
 		try {
 			g = this.getGraphics();
 			if ((g != null) && (dbImage != null))
-				g.drawImage(dbImage, 0, 0, null);
+				g.drawImage(dbImage, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, null);
 			g.dispose();
 		} catch (Exception e) {
 			System.out.println("Graphics context error: " + e);
