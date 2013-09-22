@@ -33,7 +33,7 @@ public class GameWindow extends JFrame implements WindowListener {
 
 	private static volatile long fpsPeriod;
 
-	private RunnagleGamePanel gamePanel; // where the game is drawn
+	private RunnableGamePanel gamePanel; // where the game is drawn
 	private JTextField jtfBox; // displays no.of boxes used
 	private JTextField jtfTime; // displays time spent in game
 
@@ -51,7 +51,7 @@ public class GameWindow extends JFrame implements WindowListener {
 	private void makeGUI(long period) {
 		Container container = getContentPane(); // default BorderLayout used
 
-		gamePanel = new RunnagleGamePanel(this, period);
+		gamePanel = new RunnableGamePanel(this, period);
 		container.add(gamePanel, "Center");
 
 		JPanel ctrls = new JPanel(); // a row of textfields
