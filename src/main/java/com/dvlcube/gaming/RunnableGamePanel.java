@@ -79,13 +79,14 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 	// used at game termination
 	private boolean gameOver = false;
-	private int score = 0;
 	private Font font;
 	private FontMetrics metrics;
 
 	// off screen rendering
 	private Graphics graphics;
 	private Image dbImage = null;
+	public static final Color bgColor = new Color(61, 61, 61);
+	public static final Color fgColor = new Color(8, 130, 230);
 
 	public RunnableGamePanel(GameWindow window, long period) {
 		this.window = window;
@@ -120,7 +121,6 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	 */
 	private void resetState() {
 		game.reset();
-		score = 0;
 	}
 
 	private void readyForTermination() {
@@ -244,10 +244,10 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		}
 
 		// clear the background
-		graphics.setColor(Color.white);
+		graphics.setColor(bgColor);
 		graphics.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
 
-		graphics.setColor(Color.blue);
+		graphics.setColor(fgColor);
 		graphics.setFont(font);
 
 		// report frame count & average FPS and UPS at top left
@@ -257,7 +257,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 						+ decimalFormat.format(averageUPS), 20, 25); // was
 																		// (10,55)
 
-		graphics.setColor(Color.pink);
+		graphics.setColor(fgColor);
 
 		// draw game elements
 		game.doGraphics((Graphics2D) graphics);
@@ -268,7 +268,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 	// center the game-over message in the panel
 	private void gameOverMessage(Graphics g) {
-		String msg = "Game Over. Your Score: " + score;
+		String msg = "Game Over.";
 		int x = (PANEL_WIDTH - metrics.stringWidth(msg)) / 2;
 		int y = (PANEL_HEIGHT - metrics.getHeight()) / 2;
 		g.setColor(Color.red);

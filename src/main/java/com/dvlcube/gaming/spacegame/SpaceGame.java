@@ -1,6 +1,5 @@
 package com.dvlcube.gaming.spacegame;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.KeyAdapter;
@@ -48,11 +47,12 @@ public class SpaceGame implements Game {
 	public void doGraphics(Graphics2D g) {
 		for (Coords coords : mouseObs) {
 			g.drawRect(coords.x, coords.y, 2, 2);
+			g.drawString(String.format("%d,%d", coords.x, coords.y),
+					coords.x + 10, coords.y - 10);
 		}
 
 		g.drawRect(x, y, 10, 10);
 
-		g.setColor(Color.red);
 		for (GamePolygon polygon : polys) {
 			int polyX = polygon.getX();
 			int polyY = polygon.getY();
