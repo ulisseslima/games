@@ -311,4 +311,13 @@ public class EnvelopeGenerator {
 		}
 		return value;
 	}
+
+	/**
+	 * @return
+	 * @author wonka
+	 * @since 23/09/2013
+	 */
+	public boolean isNoteOn() {
+		return noteOn;
+	}
 }

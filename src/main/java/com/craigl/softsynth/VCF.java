@@ -187,6 +187,7 @@ public class VCF extends EnvelopeGenerator implements SampleProviderIntfc {
 	 * 
 	 * @return Count of number of bytes processed
 	 */
+	@Override
 	public int getSamples(byte[] buffer) {
 
 		// Grab samples to manipulate from this modules sample provider

@@ -1,5 +1,8 @@
 package com.dvlcube.gaming.soundgame;
 
+import static com.dvlcube.gaming.util.Cuber.map;
+import static com.dvlcube.gaming.util.Cuber.r;
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -7,8 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
+import com.craigl.softsynth.EnvelopeGenerator;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.SoundTrack;
+import com.dvlcube.gaming.util.Range;
 
 /**
  * @author wonka
@@ -20,52 +25,71 @@ public class SoundGame implements Game {
 	private KeyAdapter keyboard = new Keyboard();
 	private SoundTrack sound = new SoundTrack();
 
+	/**
+	 * Screen
+	 */
+	private final int SC_W = 1024;
+	private final int SC_H = 768;
+
+	@Override
 	public void doLogic() {
 	}
 
+	@Override
 	public void doGraphics(Graphics2D g) {
 		int offset = 10, y = 50;
-		g.drawString(String.format("frequency.: %f", sound.osc.getFrequency()),
-				offset, y);
-		y += 20;
+		g.drawString(String.format("wave (1 saw, 2 sine, 3 square): %s",
+				sound.osc.getWaveshape().name()), offset, y);
+		y += 15;
+		g.drawString(String.format("frequency (q-/w+): %f",
+				sound.osc.getFrequency()), offset, y);
+		y += 15;
 		g.drawString(
-				String.format("wave: %s", sound.osc.getWaveshape().name()),
-				offset, y);
-		y += 20;
+				String.format("attack time (a-/s+/mouse x): %d",
+						sound.vcf.getAttackTime()), offset, y);
+		y += 15;
 		g.drawString(
-				String.format("attack time: %d", sound.vcf.getAttackTime()),
+				String.format("decay time (z-/x+): %d", sound.vcf.getDecayMS()),
 				offset, y);
-		y += 20;
-		g.drawString(String.format("decay time: %d", sound.vcf.getDecayMS()),
-				offset, y);
-		y += 20;
+		y += 15;
 		g.drawString(
-				String.format("sustain level: %f", sound.vcf.getSustainLevel()),
-				offset, y);
-		y += 20;
+				String.format("sustain level (e-/r+): %f",
+						sound.vcf.getSustainLevel()), offset, y);
+		y += 15;
 		g.drawString(
-				String.format("release time: %d", sound.vcf.getReleaseMS()),
-				offset, y);
-		y += 20;
+				String.format("release time (d-/f+/mouse y): %d",
+						sound.vcf.getReleaseMS()), offset, y);
+		y += 15;
 		g.drawString(
-				String.format("cutoff frequency: %f",
+				String.format("cutoff frequency (c-/v+): %f",
 						sound.vcf.getCutoffFrequencyInHz()), offset, y);
-		y += 20;
-		g.drawString(String.format("resonance: %f", sound.vcf.getResonance()),
+		y += 15;
+		g.drawString(String.format("resonance (t-/y+): %f",
+				sound.vcf.getResonance()), offset, y);
+		y += 15;
+		g.drawString(String.format("depth (g-/h+): %f", sound.vcf.getDepth()),
 				offset, y);
-		y += 20;
-		g.drawString(String.format("depth: %f", sound.vcf.getDepth()), offset,
-				y);
+		y += 15;
+		g.drawString(
+				String.format("note %s", sound.vcf.isNoteOn() ? "on" : "off"),
+				offset, y);
 	}
 
 	public class Mouse extends MouseAdapter {
 		@Override
-		public void mousePressed(MouseEvent e) {
+		public void mouseMoved(MouseEvent e) {
+			int x = e.getX(), y = e.getY();
+
+			Range<Integer> millisRange = r(EnvelopeGenerator.MS_MIN,
+					EnvelopeGenerator.MS_MAX);
+
+			sound.vcf.setAttackTimeInMS(map(x, r(0, SC_W), millisRange));
+			sound.vcf.setReleaseTimeInMS(map(y, r(0, SC_H), millisRange));
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			super.mouseReleased(e);
+		public void mousePressed(MouseEvent e) {
+			sound.toggleNote();
 		}
 	}
 
@@ -136,14 +160,17 @@ public class SoundGame implements Game {
 		}
 	}
 
+	@Override
 	public KeyAdapter getKeyAdapter() {
 		return keyboard;
 	}
 
+	@Override
 	public MouseAdapter getMouseAdapter() {
 		return mouse;
 	}
 
+	@Override
 	public void reset() {
 	}
 }

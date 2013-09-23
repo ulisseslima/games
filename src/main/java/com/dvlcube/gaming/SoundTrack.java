@@ -47,20 +47,22 @@ public class SoundTrack {
 
 		// Start the player
 		player.startPlayer();
-
-		// Initiate note on event
-		vcf.noteOn();
 	}
 
 	public void stop() {
 		player.stopPlayer();
 	}
 
-	public void noteOn() {
-		vcf.noteOn();
-	}
-
-	public void noteOff() {
-		vcf.noteOff();
+	/**
+	 * 
+	 * @author wonka
+	 * @since 23/09/2013
+	 */
+	public void toggleNote() {
+		if (vcf.isNoteOn()) {
+			vcf.noteOff();
+		} else {
+			vcf.noteOn();
+		}
 	}
 }

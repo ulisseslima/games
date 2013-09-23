@@ -15,6 +15,14 @@ public class Cuber {
 		return NumberUtils.map(n, range, newRange);
 	}
 
+	public static int map(int n, Range<Integer> range, Range<Integer> newRange) {
+		Range<Double> r = new Range<>((double) range.getStart(),
+				(double) range.getEnd());
+		Range<Double> nr = new Range<>((double) newRange.getStart(),
+				(double) newRange.getEnd());
+		return (int) NumberUtils.map(n, r, nr);
+	}
+
 	public static void delay(long millis) {
 		try {
 			Thread.sleep(millis);

@@ -102,6 +102,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		resetState();
 
 		addMouseListener(game.getMouseAdapter());
+		addMouseMotionListener(game.getMouseAdapter());
 
 		// set up message font
 		font = new Font("SansSerif", Font.BOLD, 10);
@@ -171,6 +172,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		startGame();
 	}
 
+	@Override
 	public synchronized void run() {
 		long beforeTime, afterTime, timeDiff, sleepTime;
 		long overSleepTime = 0L;
