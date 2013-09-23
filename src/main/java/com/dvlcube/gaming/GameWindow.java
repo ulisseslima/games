@@ -12,8 +12,8 @@ import javax.swing.JTextField;
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
  * <p>
- * The display includes two textfields for showing the current time and number
- * of boxes. The average FPS/UPS values are drawn in the game's JPanel.
+ * The display includes a textfield for showing the current time. The average
+ * FPS/UPS values are drawn in the game's JPanel.
  * 
  * Pausing/Resuming/Quiting are controlled via the frame's window listener
  * methods. (-not exactly)
@@ -34,7 +34,6 @@ public class GameWindow extends JFrame implements WindowListener {
 	private static volatile long fpsPeriod;
 
 	private RunnableGamePanel gamePanel; // where the game is drawn
-	private JTextField jtfBox; // displays no.of boxes used
 	private JTextField jtfTime; // displays time spent in game
 
 	public GameWindow(long period) {
@@ -57,19 +56,11 @@ public class GameWindow extends JFrame implements WindowListener {
 		JPanel ctrls = new JPanel(); // a row of textfields
 		ctrls.setLayout(new BoxLayout(ctrls, BoxLayout.X_AXIS));
 
-		jtfBox = new JTextField("Boxes used: 0");
-		jtfBox.setEditable(false);
-		ctrls.add(jtfBox);
-
 		jtfTime = new JTextField("Time Spent: 0 secs");
 		jtfTime.setEditable(false);
 		ctrls.add(jtfTime);
 
 		container.add(ctrls, "South");
-	}
-
-	public void setBoxNumber(int no) {
-		jtfBox.setText("Boxes used: " + no);
 	}
 
 	public void setTimeSpent(long t) {

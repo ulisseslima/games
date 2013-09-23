@@ -14,4 +14,12 @@ public class Cuber {
 			Range<Double> newRange) {
 		return NumberUtils.map(n, range, newRange);
 	}
+
+	public static void delay(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

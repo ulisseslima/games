@@ -26,7 +26,7 @@ public class SpaceGame implements Game {
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 
-	private final SpaceCraft spaceCraft = new SpaceCraft(new Coords(300, 300));
+	private final SpaceCraft spaceCraft = new SpaceCraft(new Coords(150, 150));
 	{
 		polys.add(spaceCraft);
 	}
@@ -45,10 +45,12 @@ public class SpaceGame implements Game {
 	}
 
 	public void doGraphics(Graphics2D g) {
-		for (Coords coords : mouseObs) {
-			g.drawRect(coords.x, coords.y, 2, 2);
-			g.drawString(String.format("%d,%d", coords.x, coords.y),
-					coords.x + 10, coords.y - 10);
+		synchronized (this) {
+			for (Coords coords : mouseObs) {
+				g.drawRect(coords.x, coords.y, 2, 2);
+				g.drawString(String.format("%d,%d", coords.x, coords.y),
+						coords.x + 10, coords.y - 10);
+			}
 		}
 
 		g.drawRect(x, y, 10, 10);
