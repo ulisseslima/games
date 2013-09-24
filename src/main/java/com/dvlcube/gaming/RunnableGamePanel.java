@@ -103,6 +103,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		addMouseListener(game.getMouseAdapter());
 		addMouseMotionListener(game.getMouseAdapter());
+		addMouseWheelListener(game.getMouseAdapter());
 
 		// set up message font
 		font = new Font("SansSerif", Font.BOLD, 10);

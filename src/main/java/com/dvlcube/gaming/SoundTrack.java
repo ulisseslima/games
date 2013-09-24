@@ -1,6 +1,7 @@
 package com.dvlcube.gaming;
 
-import com.craigl.softsynth.BasicOscillator;
+import com.craigl.softsynth.AdvancedOscillator;
+import com.craigl.softsynth.AdvancedOscillator.MOD_TYPE;
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.craigl.softsynth.SamplePlayer;
 import com.craigl.softsynth.VCF;
@@ -11,18 +12,20 @@ import com.craigl.softsynth.VCF;
  */
 public class SoundTrack {
 
-	public final BasicOscillator osc;
+	public final AdvancedOscillator osc;
 	public final VCF vcf;
 	private SamplePlayer player;
 
 	public SoundTrack() {
-		osc = new BasicOscillator();
+		osc = new AdvancedOscillator();
 
 		// Set the frequency
 		osc.setFrequency(100);
 
 		// Set the waveshape
 		osc.setWaveshape(WAVESHAPE.SQU);
+		osc.setModulationType(MOD_TYPE.AM);
+		osc.setModulationDepth(1.0);
 
 		vcf = new VCF();
 

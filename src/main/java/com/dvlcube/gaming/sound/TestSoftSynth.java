@@ -3,6 +3,7 @@ package com.dvlcube.gaming.sound;
 import com.craigl.softsynth.BasicOscillator;
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.craigl.softsynth.SamplePlayer;
+import com.craigl.softsynth.SoftSynth;
 import com.craigl.softsynth.VCF;
 import com.dvlcube.gaming.util.Cuber;
 
@@ -13,8 +14,8 @@ import com.dvlcube.gaming.util.Cuber;
  */
 public class TestSoftSynth {
 	public static void main(String[] args) {
-		// SoftSynth.main(new String[] { "4" });
-		exampleFour();
+		SoftSynth.main(new String[] { "10" });
+		// exampleFour();
 	}
 
 	public static void exampleFour() {
