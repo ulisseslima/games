@@ -25,10 +25,11 @@ public class Cuber {
 		return (int) NumberUtils.map(n, r, nr);
 	}
 
-	public static int mapi(int n, Range<Integer> range, Range<Double> newRange) {
+	public static double mapi(int n, Range<Integer> range,
+			Range<Double> newRange) {
 		Range<Double> r = new Range<>((double) range.getStart(),
 				(double) range.getEnd());
-		return (int) NumberUtils.map(n, r, newRange);
+		return NumberUtils.map(n, r, newRange);
 	}
 
 	public static void delay(long millis) {
