@@ -67,16 +67,6 @@ public class TestSoftSynth {
 
 		osc.setFrequency(69);
 
-		for (int i = 0; i < 10; i++) {
-			osc.setFrequency(68 - i);
-			Cuber.delay(60);
-		}
-
-		for (int i = 0; i < 100; i++) {
-			osc.setFrequency(58 + i);
-			Cuber.delay(5);
-		}
-
 		vcf.setAttackTimeInMS(500);
 		vcf.setReleaseTimeInMS(500);
 		vcf.setCutoffFrequencyInHz(200);

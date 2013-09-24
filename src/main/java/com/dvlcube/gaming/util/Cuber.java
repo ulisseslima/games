@@ -25,7 +25,23 @@ public class Cuber {
 		return (int) NumberUtils.map(n, r, nr);
 	}
 
-	public static double mapi(int n, Range<Integer> range,
+	public static int mapddi(double n, Range<Double> range,
+			Range<Integer> newRange) {
+		Range<Double> nr = new Range<>((double) newRange.getStart(),
+				(double) newRange.getEnd());
+		return (int) NumberUtils.map(n, range, nr);
+	}
+
+	public static int mapdii(double n, Range<Integer> range,
+			Range<Integer> newRange) {
+		Range<Double> r = new Range<>((double) range.getStart(),
+				(double) range.getEnd());
+		Range<Double> nr = new Range<>((double) newRange.getStart(),
+				(double) newRange.getEnd());
+		return (int) NumberUtils.map(n, r, nr);
+	}
+
+	public static double mapiid(int n, Range<Integer> range,
 			Range<Double> newRange) {
 		Range<Double> r = new Range<>((double) range.getStart(),
 				(double) range.getEnd());
