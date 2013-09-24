@@ -1,5 +1,7 @@
 package com.dvlcube.gaming.util;
 
+import java.awt.Graphics2D;
+
 /**
  * @author wonka
  * @since 21/09/2013
@@ -23,11 +25,33 @@ public class Cuber {
 		return (int) NumberUtils.map(n, r, nr);
 	}
 
+	public static int mapi(int n, Range<Integer> range, Range<Double> newRange) {
+		Range<Double> r = new Range<>((double) range.getStart(),
+				(double) range.getEnd());
+		return (int) NumberUtils.map(n, r, newRange);
+	}
+
 	public static void delay(long millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Draws a string.
+	 * 
+	 * @param x
+	 * @param y
+	 * @param g
+	 * @param string
+	 * @param args
+	 * @author wonka
+	 * @since 23/09/2013
+	 */
+	public static void draws(int x, int y, Graphics2D g, String string,
+			Object... args) {
+		g.drawString(String.format(string, args), x, y);
 	}
 }
