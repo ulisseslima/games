@@ -1,9 +1,7 @@
 package com.dvlcube.gaming;
 
+import static com.dvlcube.gaming.util.Cuber.mapd;
 import static com.dvlcube.gaming.util.Cuber.map;
-import static com.dvlcube.gaming.util.Cuber.mapddi;
-import static com.dvlcube.gaming.util.Cuber.mapdii;
-import static com.dvlcube.gaming.util.Cuber.mapiid;
 import static com.dvlcube.gaming.util.Cuber.r;
 
 import java.awt.Graphics2D;
@@ -25,7 +23,7 @@ import com.dvlcube.gaming.util.Range;
  * @author wonka
  * @since 22/09/2013
  */
-public class SoundTrack {
+public class DefaultSoundTrack {
 
 	public final AdvancedOscillator osc;
 	public final VCF vcf;
@@ -46,7 +44,7 @@ public class SoundTrack {
 			AdvancedOscillator.CENTS_DETUNE_MIN,
 			AdvancedOscillator.CENTS_DETUNE_MAX);
 
-	public SoundTrack() {
+	public DefaultSoundTrack() {
 		osc = new AdvancedOscillator();
 
 		// Set the frequency
@@ -112,7 +110,7 @@ public class SoundTrack {
 		int offset = 10, y = 50;
 
 		Range<Integer> indicatorRange = r(-10, 10);
-		int controllers = 9;
+		int controllers = 10;
 		int[] ys = new int[controllers];
 		int vSpacing = 15;
 
@@ -126,49 +124,62 @@ public class SoundTrack {
 		double frequency = osc.getFrequency();
 		g.drawString(String.format("frequency (q-/w+/mouse x): %f", frequency),
 				offset, y);
-		ys[0] = mapdii(frequency, r(0, screenW), indicatorRange);
+		ys[0] = map(frequency, r(0, screenW), indicatorRange);
+
 		y += vSpacing;
 		int attackTime = vcf.getAttackTime();
 		g.drawString(String.format("attack time (a-/s+/mouse x + mb 1): %d",
 				attackTime), offset, y);
-		ys[1] = mapdii(attackTime, r(0, screenW), indicatorRange);
+		ys[1] = map(attackTime, r(0, screenW), indicatorRange);
+
 		y += vSpacing;
 		int decayMS = vcf.getDecayMS();
 		g.drawString(String.format("decay time (z-/x+): %d", decayMS), offset,
 				y);
 		ys[2] = map(decayMS, millisRange, indicatorRange);
+
 		y += vSpacing;
 		double sustainLevel = vcf.getSustainLevel();
 		g.drawString(String.format("sustain level (e-/r+): %f", sustainLevel),
 				offset, y);
-		ys[3] = mapddi(sustainLevel, sustainRange, indicatorRange);
+		ys[3] = map(sustainLevel, sustainRange, indicatorRange);
+
 		y += vSpacing;
 		int releaseMS = vcf.getReleaseMS();
 		g.drawString(String.format("release time (d-/f+/mouse y + mb 1): %d",
 				releaseMS), offset, y);
 		ys[4] = map(releaseMS, millisRange, indicatorRange);
+
 		y += vSpacing;
 		double cutoffFrequencyInHz = vcf.getCutoffFrequencyInHz();
 		g.drawString(String.format(
 				"cutoff frequency (c-/v+/mouse x + mb 2): %f",
 				cutoffFrequencyInHz), offset, y);
-		ys[5] = mapddi(cutoffFrequencyInHz, cutRange, indicatorRange);
+		ys[5] = map(cutoffFrequencyInHz, cutRange, indicatorRange);
+
 		y += vSpacing;
 		double resonance = vcf.getResonance();
 		g.drawString(String.format("resonance (t-/y+): %f", resonance), offset,
 				y);
-		ys[6] = mapdii(resonance, defaultRange, indicatorRange);
+		ys[6] = map(resonance, defaultRange, indicatorRange);
+
 		y += vSpacing;
 		double depth = vcf.getDepth();
 		g.drawString(
 				String.format("depth range (g-/h+/mouse y + mb 2): %f", depth),
 				offset, y);
-		ys[7] = mapddi(depth, depthRange, indicatorRange);
+		ys[7] = map(depth, depthRange, indicatorRange);
+
 		y += vSpacing;
 		double modDepth = osc.getModulationDepth();
 		g.drawString(String.format("mod depth (b-/n+/mouse y): %f", modDepth),
 				offset, y);
-		ys[8] = mapddi(modDepth, modRange, indicatorRange);
+		ys[8] = map(modDepth, modRange, indicatorRange);
+
+		double detune = osc.getDetuneMultiplier();
+		g.drawString(String.format("detune (u-/i+/mouse wheel): %f", detune),
+				offset, y);
+		ys[9] = map(detune, detuneRange, indicatorRange);
 
 		y += vSpacing;
 		g.drawString(String.format("note %s", vcf.isNoteOn() ? "on" : "off"),
@@ -196,7 +207,7 @@ public class SoundTrack {
 	public void mouseMoved(MouseEvent e, int screenW, int screenH) {
 		int x = e.getX(), y = e.getY();
 
-		double depth = mapiid(y, r(screenH, 0), modRange);
+		double depth = mapd(y, r(screenH, 0), modRange);
 		osc.setModulationDepth(depth);
 		osc.setFrequency(x);
 	}
@@ -237,8 +248,8 @@ public class SoundTrack {
 			vcf.setAttackTimeInMS(map(x, r(0, screenW), millisRange));
 			vcf.setReleaseTimeInMS(map(y, r(0, screenH), millisRange));
 		} else if (SwingUtilities.isRightMouseButton(e)) {
-			vcf.setCutoffFrequencyInHz(mapiid(x, r(0, screenH), cutRange));
-			vcf.setDepth(mapiid(y, r(0, screenH), depthRange));
+			vcf.setCutoffFrequencyInHz(mapd(x, r(0, screenH), cutRange));
+			vcf.setDepth(mapd(y, r(0, screenH), depthRange));
 		} else if (SwingUtilities.isMiddleMouseButton(e)) {
 
 		}

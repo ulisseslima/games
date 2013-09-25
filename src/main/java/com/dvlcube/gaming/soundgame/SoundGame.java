@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import com.dvlcube.gaming.Game;
-import com.dvlcube.gaming.SoundTrack;
+import com.dvlcube.gaming.DefaultSoundTrack;
 
 /**
  * @author wonka
@@ -18,7 +18,7 @@ public class SoundGame implements Game {
 	public boolean debug = true;
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
-	private SoundTrack sound = new SoundTrack();
+	private DefaultSoundTrack sound = new DefaultSoundTrack();
 
 	/**
 	 * Screen

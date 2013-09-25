@@ -22,9 +22,6 @@ import javax.swing.JTextField;
  * 
  * Using Java 3D's timer: J3DTimer.getValue() nanosecs rather than millisecs for
  * the period
- * 
- * Average FPS / UPS 20 50 80 100 Win 98: 20/20 48/50 81/83 96/100 Win 2000:
- * 20/20 43/50 59/83 58/100 // slow machine Win XP: 20/20 50/50 83/83 100/100
  */
 public class GameWindow extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
@@ -67,29 +64,36 @@ public class GameWindow extends JFrame implements WindowListener {
 		jtfTime.setText("Time Spent: " + t + " secs");
 	}
 
+	@Override
 	public void windowActivated(WindowEvent e) {
 		gamePanel.resumeGame();
 	}
 
+	@Override
 	public void windowDeactivated(WindowEvent e) {
 		gamePanel.pauseGame();
 	}
 
+	@Override
 	public void windowDeiconified(WindowEvent e) {
 		gamePanel.resumeGame();
 	}
 
+	@Override
 	public void windowIconified(WindowEvent e) {
 		gamePanel.pauseGame();
 	}
 
+	@Override
 	public void windowClosing(WindowEvent e) {
 		gamePanel.stopGame();
 	}
 
+	@Override
 	public void windowClosed(WindowEvent e) {
 	}
 
+	@Override
 	public void windowOpened(WindowEvent e) {
 	}
 
