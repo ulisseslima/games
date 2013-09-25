@@ -159,6 +159,13 @@ public class AdvancedOscillator extends BasicOscillator {
 	}
 
 	/**
+	 * @return the detuneMultiplier
+	 */
+	public double getDetuneMultiplier() {
+		return detuneMultiplier;
+	}
+
+	/**
 	 * Set the waveshape for the LFO
 	 * 
 	 * @param waveshape
