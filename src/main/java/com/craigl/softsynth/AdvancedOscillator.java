@@ -21,6 +21,14 @@ public class AdvancedOscillator extends BasicOscillator {
 
 	private static final int CENTS_PER_OCTAVE = 1200;
 
+	private double frequency;
+	private BasicOscillator lfo = new BasicOscillator();
+	private MOD_TYPE modulationType;
+	private double modulationDepth;
+	private double rangeMultiplier;
+	private double detuneMultiplier;
+	private int detuneCents;
+
 	/**
 	 * Modulation type enumeration
 	 */
@@ -153,16 +161,26 @@ public class AdvancedOscillator extends BasicOscillator {
 				: detuneCents;
 		detuneCents = (detuneCents > CENTS_DETUNE_MAX) ? CENTS_DETUNE_MAX
 				: detuneCents;
+		this.detuneCents = detuneCents;
 
 		detuneMultiplier = Math.pow(2.0,
-				((double) detuneCents / CENTS_PER_OCTAVE));
+				((double) this.detuneCents / CENTS_PER_OCTAVE));
 	}
 
 	/**
-	 * @return the detuneMultiplier
+	 * @return the detuneCents
 	 */
-	public double getDetuneMultiplier() {
-		return detuneMultiplier;
+	public int getDetuneCents() {
+		return detuneCents;
+	}
+
+	/**
+	 * @param detuneCents
+	 * @author wonka
+	 * @since 25/09/2013
+	 */
+	public void addDetuneCents(int detuneCents) {
+		setDetuneInCents(getDetuneCents() + detuneCents);
 	}
 
 	/**
@@ -243,13 +261,4 @@ public class AdvancedOscillator extends BasicOscillator {
 		}
 		return SamplePlayer.BUFFER_SIZE;
 	}
-
-	// Instance data
-	private double frequency;
-	private BasicOscillator lfo = new BasicOscillator();
-	private MOD_TYPE modulationType;
-	private double modulationDepth;
-	private double rangeMultiplier;
-	private double detuneMultiplier;
-
 }

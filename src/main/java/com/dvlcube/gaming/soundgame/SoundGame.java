@@ -7,8 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.DefaultSoundTrack;
+import com.dvlcube.gaming.Game;
 
 /**
  * @author wonka

@@ -127,7 +127,6 @@ public class SoftSynth {
 
 		// Detune by half step each loop
 		for (int i = 0; i < 12; i++) {
-
 			delay(1000 * 1);
 			osc.setDetuneInCents(100 * (i + 1));
 		}

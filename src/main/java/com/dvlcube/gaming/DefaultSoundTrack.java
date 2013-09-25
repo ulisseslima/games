@@ -1,7 +1,7 @@
 package com.dvlcube.gaming;
 
-import static com.dvlcube.gaming.util.Cuber.mapd;
 import static com.dvlcube.gaming.util.Cuber.map;
+import static com.dvlcube.gaming.util.Cuber.mapd;
 import static com.dvlcube.gaming.util.Cuber.r;
 
 import java.awt.Graphics2D;
@@ -116,9 +116,14 @@ public class DefaultSoundTrack {
 
 		g.drawString(String.format("wave (1 saw, 2 sine, 3 square): %s", osc
 				.getWaveshape().name()), offset, y);
+
 		y += vSpacing;
 		g.drawString(String.format("mod (4 am, 5 fm, 6 none): %s", osc
 				.getModulationType().name()), offset, y);
+
+		y += vSpacing;
+		g.drawString(String.format("note %s", vcf.isNoteOn() ? "on" : "off"),
+				offset, y);
 		/**/
 		y += vSpacing;
 		double frequency = osc.getFrequency();
@@ -176,14 +181,12 @@ public class DefaultSoundTrack {
 				offset, y);
 		ys[8] = map(modDepth, modRange, indicatorRange);
 
-		double detune = osc.getDetuneMultiplier();
-		g.drawString(String.format("detune (u-/i+/mouse wheel): %f", detune),
+		y += vSpacing;
+		int detune = osc.getDetuneCents();
+		g.drawString(String.format("detune (u-/i+/mouse wheel): %d", detune),
 				offset, y);
 		ys[9] = map(detune, detuneRange, indicatorRange);
 
-		y += vSpacing;
-		g.drawString(String.format("note %s", vcf.isNoteOn() ? "on" : "off"),
-				offset, y);
 		y += vSpacing * 2;
 		int[] xs = new int[controllers];
 		int cOffset = 0;
@@ -229,9 +232,9 @@ public class DefaultSoundTrack {
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int wheelRotation = e.getWheelRotation();
 		if (wheelRotation < 0) {
-			// up
+			osc.addDetuneCents(10);
 		} else if (wheelRotation > 0) {
-			// down
+			osc.addDetuneCents(-5);
 		}
 	}
 
@@ -315,6 +318,12 @@ public class DefaultSoundTrack {
 			break;
 		case KeyEvent.VK_N:
 			osc.addModulationDepth(0.01);
+			break;
+		case KeyEvent.VK_U:
+			osc.addDetuneCents(-100);
+			break;
+		case KeyEvent.VK_I:
+			osc.addDetuneCents(100);
 			break;
 		case KeyEvent.VK_1:
 			osc.setWaveshape(WAVESHAPE.SAW);
