@@ -1,5 +1,7 @@
 package com.dvlcube.gaming;
 
+import java.awt.Graphics2D;
+
 /**
  * @author wonka
  * @since 21/09/2013
@@ -30,4 +32,11 @@ public interface GamePolygon {
 	int getY();
 
 	int getAngle();
+
+	/**
+	 * @param g
+	 * @author wonka
+	 * @since 26/09/2013
+	 */
+	void draw(Graphics2D g);
 }

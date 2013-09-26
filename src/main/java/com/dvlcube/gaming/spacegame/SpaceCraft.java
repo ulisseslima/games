@@ -1,5 +1,6 @@
 package com.dvlcube.gaming.spacegame;
 
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import com.dvlcube.gaming.Coords;
@@ -197,5 +198,10 @@ class SpaceCraft extends Polygon implements GamePolygon {
 		int targetPosition = (coords.x + coords.y) / 2;
 
 		angle = targetPosition - currentPosition;
+	}
+
+	@Override
+	public void draw(Graphics2D g) {
+		g.drawString(String.format("%dº", angle), x + 10, y + 10);
 	}
 }

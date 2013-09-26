@@ -55,12 +55,12 @@ public class SpaceGame implements Game {
 			polygon.update();
 		}
 		if (soundTrack.osc.getFrequency() < frequencyGoal) {
-			soundTrack.osc.addFrequency(5.5);
+			soundTrack.osc.addFrequency(2.5);
 			soundTrack.osc.addModulationDepth(0.1);
 			if (soundTrack.osc.getFrequency() > frequencyGoal)
 				frequencyGoal = 1;
 		} else {
-			soundTrack.osc.addFrequency(-5.5);
+			soundTrack.osc.addFrequency(-2.5);
 			soundTrack.osc.addModulationDepth(-0.1);
 			if (soundTrack.osc.getFrequency() < frequencyGoal)
 				frequencyGoal = 40;
@@ -80,8 +80,7 @@ public class SpaceGame implements Game {
 			g.rotate(fixedAngle, polyX, polyY);
 			g.drawPolygon((Polygon) polygon);
 			g.rotate(-fixedAngle, polyX, polyY);
-			g.drawString(String.format("%dº", polyAngle), polyX + 10,
-					polyY + 10);
+			polygon.draw(g);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.dvlcube.gaming.spacegame;
 
+import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.Random;
 
@@ -155,24 +156,26 @@ class Asteroid extends Polygon implements GamePolygon {
 		switch (n) {
 		case 0:
 			up();
-			velocity--;
-			if (velocity < 15)
-				velocity = 0;
 			break;
 		case 1:
 			left();
+			velocity--;
 			break;
 		case 2:
 			right();
+			velocity--;
 			break;
 		default:
 		case 3:
 			down();
 			velocity++;
-			if (velocity > 15)
-				velocity = 0;
 			break;
 		}
+
+		if (velocity < -15)
+			velocity = -15;
+		else if (velocity > 15)
+			velocity = 15;
 	}
 
 	@Override
@@ -188,5 +191,10 @@ class Asteroid extends Polygon implements GamePolygon {
 	@Override
 	public int getAngle() {
 		return angle;
+	}
+
+	@Override
+	public void draw(Graphics2D g) {
+		g.drawString(String.format("%d m/s", velocity), x + 10, y + 10);
 	}
 }
