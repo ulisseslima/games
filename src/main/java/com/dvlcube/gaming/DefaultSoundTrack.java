@@ -48,12 +48,12 @@ public class DefaultSoundTrack {
 		osc = new AdvancedOscillator();
 
 		// Set the frequency
-		osc.setFrequency(100);
+		osc.setFrequency(0);
 
 		// Set the waveshape
 		osc.setWaveshape(WAVESHAPE.SQU);
 		osc.setModulationType(MOD_TYPE.AM);
-		osc.setModulationDepth(1.0);
+		osc.setModulationDepth(0);
 		osc.setDetuneInCents(0);
 
 		vcf = new VCF();

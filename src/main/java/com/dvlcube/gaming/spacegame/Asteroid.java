@@ -1,20 +1,26 @@
 package com.dvlcube.gaming.spacegame;
 
 import java.awt.Polygon;
+import java.util.Random;
 
 import com.dvlcube.gaming.Coords;
-import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.GamePolygon;
 
 /**
  * @author wonka
- * @since 21/09/2013
+ * @since 26/09/2013
  */
-class SpaceCraft extends Polygon implements GamePolygon {
+class Asteroid extends Polygon implements GamePolygon {
 
 	private static final long serialVersionUID = 6842909318229368081L;
-	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
 	public boolean debug = false;
+	private Random random = new Random();
+
+	/**
+	 * Screen
+	 */
+	private final int SC_W = 1024 / 2;
+	private final int SC_H = 768 / 2;
 
 	private int x;
 	private int y;
@@ -22,40 +28,38 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	private int h = 10;
 
 	public int angle;
-	public int velocity;
+	public int velocity = 1;
 	public int weight;
 	public int force;
 	public boolean moving;
-	public Coords destination = new Coords(x, y);
 
 	private int xs[] = calcXs(x, w);
 	private int ys[] = calcYs(y, h);
 	private int n = xs.length;
 
 	public final int[] calcXs(int x, int w) {
-		return new int[] { x, x + (w / 2), x + w };
+		return new int[] { x, x, x + (w / 2), x + w, x + w, x + (w / 2) };
 	}
 
 	public final int[] calcYs(int y, int h) {
-		return new int[] { y + h * 2, y, y + h * 2 };
+		return new int[] { y + h, y, y - h, y, y + h, y + h * 2 };
 	}
 
-	public SpaceCraft(Coords coords) {
+	public Asteroid(Coords coords) {
 		x(coords.x);
 		y(coords.y);
-		destination = new Coords(x, y);
 		super.xpoints = xs;
 		super.ypoints = ys;
 		super.npoints = n;
 	}
 
-	public SpaceCraft() {
+	public Asteroid() {
 		super.xpoints = xs;
 		super.ypoints = ys;
 		super.npoints = n;
 	}
 
-	public SpaceCraft(int w, int h) {
+	public Asteroid(int w, int h) {
 		super.xpoints = xs;
 		super.ypoints = ys;
 		super.npoints = n;
@@ -73,6 +77,20 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	@Override
 	public void y(int y) {
 		this.y = y;
+		if (this.y > SC_H) {
+			this.y = 0;
+			// this.x = this.x / 2;
+		} else if (this.y < 0) {
+			this.y = SC_H;
+		}
+
+		if (this.x > SC_W) {
+			this.x = 0;
+			// this.y = this.x / 2;
+		} else if (this.x < 0) {
+			this.x = SC_W;
+		}
+
 		ys = calcYs(y, h);
 		super.ypoints = ys;
 	}
@@ -121,52 +139,40 @@ class SpaceCraft extends Polygon implements GamePolygon {
 
 	@Override
 	public void go(int x, int y) {
-		destination = new Coords(x, y);
-		face(destination);
 	}
 
 	@Override
 	public void update() {
-		if (!destination.is(x, y)) {
-			accelerate();
-			face(destination);
-			moving = true;
+		angle += velocity;
+		if (angle > 360)
+			angle = 0;
+		if (angle < 0)
+			angle = 360;
 
-			if (this.x < destination.x) {
-				right();
-			} else if (this.x > destination.x) {
-				left();
-			}
+		moving = true;
 
-			if (this.y < destination.y) {
-				down();
-			} else if (this.y > destination.y) {
-				up();
-			}
-		} else {
-			moving = false;
-			decelerate();
+		int n = random.nextInt(5);
+		switch (n) {
+		case 0:
+			up();
+			velocity--;
+			if (velocity < 15)
+				velocity = 0;
+			break;
+		case 1:
+			left();
+			break;
+		case 2:
+			right();
+			break;
+		default:
+		case 3:
+			down();
+			velocity++;
+			if (velocity > 15)
+				velocity = 0;
+			break;
 		}
-	}
-
-	/**
-	 * 
-	 * @author wonka
-	 * @since 26/09/2013
-	 */
-	private void decelerate() {
-		soundTrack.osc.setFrequency(0);
-		soundTrack.osc.setModulationDepth(0);
-	}
-
-	/**
-	 * 
-	 * @author wonka
-	 * @since 26/09/2013
-	 */
-	private void accelerate() {
-		soundTrack.osc.addFrequency(0.4);
-		soundTrack.osc.setModulationDepth(1);
 	}
 
 	@Override
@@ -182,20 +188,5 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	@Override
 	public int getAngle() {
 		return angle;
-	}
-
-	/**
-	 * Face towards destination.
-	 * 
-	 * @param coords
-	 *            destination.
-	 * @author wonka
-	 * @since 22/09/2013
-	 */
-	public void face(Coords coords) {
-		int currentPosition = (x + y) / 2;
-		int targetPosition = (coords.x + coords.y) / 2;
-
-		angle = targetPosition - currentPosition;
 	}
 }

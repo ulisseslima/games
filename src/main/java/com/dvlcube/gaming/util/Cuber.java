@@ -2,6 +2,8 @@ package com.dvlcube.gaming.util;
 
 import java.awt.Graphics2D;
 
+import com.dvlcube.gaming.Coords;
+
 /**
  * @author wonka
  * @since 21/09/2013
@@ -33,6 +35,10 @@ public class Cuber {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static Coords xy(int x, int y) {
+		return new Coords(x, y);
 	}
 
 	/**

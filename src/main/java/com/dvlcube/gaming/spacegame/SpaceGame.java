@@ -1,5 +1,7 @@
 package com.dvlcube.gaming.spacegame;
 
+import static com.dvlcube.gaming.util.Cuber.xy;
+
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.KeyAdapter;
@@ -8,8 +10,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.dvlcube.gaming.Coords;
+import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.GamePolygon;
 
@@ -19,42 +24,51 @@ import com.dvlcube.gaming.GamePolygon;
  */
 public class SpaceGame implements Game {
 	public boolean debug = false;
-	private int x;
-	private int y = 100;
-	private List<Coords> mouseObs = new ArrayList<Coords>();
+	private Random random = new Random();
+
+	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
 	private List<GamePolygon> polys = new ArrayList<GamePolygon>();
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
-
 	private final SpaceCraft spaceCraft = new SpaceCraft(new Coords(150, 150));
+
+	/**
+	 * Effective screen size
+	 */
+	private final int SC_W = 1024 / 2;
+	private final int SC_H = 768 / 2;
+
+	private int frequencyGoal = 40;
+
 	{
 		polys.add(spaceCraft);
+		soundTrack.osc.setWaveshape(WAVESHAPE.SIN);
+		for (int i = 0; i < 10; i++) {
+			int x = random.nextInt(SC_W), y = random.nextInt(SC_H);
+			polys.add(new Asteroid(xy(x, y)));
+		}
 	}
 
+	@Override
 	public void doLogic() {
-		x++;
-		if (x > 360)
-			x = 0;
-
-		if (mouseObs.size() > 10)
-			mouseObs.remove(0);
-
 		for (GamePolygon polygon : polys) {
 			polygon.update();
 		}
+		if (soundTrack.osc.getFrequency() < frequencyGoal) {
+			soundTrack.osc.addFrequency(5.5);
+			soundTrack.osc.addModulationDepth(0.1);
+			if (soundTrack.osc.getFrequency() > frequencyGoal)
+				frequencyGoal = 1;
+		} else {
+			soundTrack.osc.addFrequency(-5.5);
+			soundTrack.osc.addModulationDepth(-0.1);
+			if (soundTrack.osc.getFrequency() < frequencyGoal)
+				frequencyGoal = 40;
+		}
 	}
 
+	@Override
 	public void doGraphics(Graphics2D g) {
-		synchronized (this) {
-			for (Coords coords : mouseObs) {
-				g.drawRect(coords.x, coords.y, 2, 2);
-				g.drawString(String.format("%d,%d", coords.x, coords.y),
-						coords.x + 10, coords.y - 10);
-			}
-		}
-
-		g.drawRect(x, y, 10, 10);
-
 		for (GamePolygon polygon : polys) {
 			int polyX = polygon.getX();
 			int polyY = polygon.getY();
@@ -64,7 +78,7 @@ public class SpaceGame implements Game {
 				System.out.printf("filling %d,%d at %fº\n", polyX, polyY,
 						fixedAngle);
 			g.rotate(fixedAngle, polyX, polyY);
-			g.fillPolygon((Polygon) polygon);
+			g.drawPolygon((Polygon) polygon);
 			g.rotate(-fixedAngle, polyX, polyY);
 			g.drawString(String.format("%dº", polyAngle), polyX + 10,
 					polyY + 10);
@@ -75,7 +89,6 @@ public class SpaceGame implements Game {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			int x = e.getX() / 2, y = e.getY() / 2;
-			mouseObs.add(new Coords(x, y));
 			spaceCraft.go(x, y);
 		}
 
@@ -108,14 +121,17 @@ public class SpaceGame implements Game {
 		}
 	}
 
+	@Override
 	public KeyAdapter getKeyAdapter() {
 		return keyboard;
 	}
 
+	@Override
 	public MouseAdapter getMouseAdapter() {
 		return mouse;
 	}
 
+	@Override
 	public void reset() {
 	}
 }
