@@ -1,0 +1,21 @@
+package com.dvlcube.gaming;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+
+/**
+ * @author wonka
+ * @since 27/09/2013
+ */
+public interface Controllable extends GameElement {
+	void keyPressed(KeyEvent e);
+
+	void mouseDragged(MouseEvent e, int screenW, int screenH);
+
+	void mouseWheelMoved(MouseWheelEvent e);
+
+	void mousePressed(MouseEvent e);
+
+	void mouseMoved(MouseEvent e, int x, int y);
+}

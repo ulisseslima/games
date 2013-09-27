@@ -1,12 +1,15 @@
 package com.dvlcube.gaming.soundgame;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.List;
 
+import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
 
@@ -76,5 +79,15 @@ public class SoundGame implements Game {
 
 	@Override
 	public void reset() {
+	}
+
+	@Override
+	public Dimension getDimension() {
+		return new Dimension(SC_W, SC_H);
+	}
+
+	@Override
+	public List<Controllable> getControllables() {
+		return null;
 	}
 }

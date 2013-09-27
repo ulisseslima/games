@@ -2,6 +2,7 @@ package com.dvlcube.gaming.spacegame;
 
 import static com.dvlcube.gaming.util.Cuber.xy;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.KeyAdapter;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
+import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Coords;
 import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
@@ -132,5 +134,15 @@ public class SpaceGame implements Game {
 
 	@Override
 	public void reset() {
+	}
+
+	@Override
+	public Dimension getDimension() {
+		return new Dimension(SC_W, SC_H);
+	}
+
+	@Override
+	public List<Controllable> getControllables() {
+		return null;
 	}
 }

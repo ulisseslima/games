@@ -1,8 +1,10 @@
 package com.dvlcube.gaming;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.util.List;
 
 /**
  * 
@@ -46,4 +48,8 @@ public interface Game {
 	 * @since 21/09/2013
 	 */
 	void reset();
+
+	Dimension getDimension();
+
+	List<Controllable> getControllables();
 }

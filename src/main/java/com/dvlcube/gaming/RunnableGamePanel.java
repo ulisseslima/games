@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
-import com.dvlcube.gaming.spacegame.SpaceGame;
+import com.dvlcube.gaming.ponggame.PongGame;
 import com.sun.j3d.utils.timer.J3DTimer;
 
 /**
@@ -75,7 +75,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
 	private GameWindow window;
-	private final Game game = new SpaceGame();
+	private final Game game = new PongGame();
 
 	// used at game termination
 	private boolean gameOver = false;
