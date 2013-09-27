@@ -19,6 +19,9 @@ public class Paddle extends Rectangle implements Controllable {
 	private static final long serialVersionUID = -6768121714516610954L;
 	public boolean debug = false;
 	private Game game;
+	public Integer score = 0;
+	private int scW;
+	private int scH;
 
 	public Paddle(Point point, Dimension dimension) {
 		super(point, dimension);
@@ -31,36 +34,32 @@ public class Paddle extends Rectangle implements Controllable {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.draw(this);
+		g.drawString(score.toString(), x, scH - 20);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -91,5 +90,7 @@ public class Paddle extends Rectangle implements Controllable {
 	@Override
 	public void setSource(Game game) {
 		this.game = game;
+		scW = game.getDimension().width;
+		scH = game.getDimension().height;
 	}
 }

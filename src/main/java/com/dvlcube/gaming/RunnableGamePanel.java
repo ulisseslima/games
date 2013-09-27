@@ -323,7 +323,6 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 			long timeNow = J3DTimer.getValue();
 			// ns --> secs
 			timeSpentInGame = (int) ((timeNow - gameStartTime) / 1000000000L);
-			window.setTimeSpent(timeSpentInGame);
 
 			long realElapsedTime = timeNow - prevStatsTime; // time since last
 															// stats collection

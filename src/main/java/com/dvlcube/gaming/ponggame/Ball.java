@@ -7,8 +7,11 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dvlcube.gaming.Controllable;
+import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
 
 /**
@@ -18,12 +21,16 @@ import com.dvlcube.gaming.Game;
 public class Ball extends Rectangle implements Controllable {
 
 	private static final long serialVersionUID = 3929278993084690115L;
+	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
 	public boolean debug = false;
-	private Game game;
+	private PongGame game;
+	private List<Paddle> paddles = new ArrayList<>();
 	private int scW;
 	private int scH;
 	private int xDirection = 1;
 	private int yDirection = 1;
+	private int velocity = 1;
+	public static int maxVelocity = 10;
 
 	public Ball(Point point, Dimension dimension) {
 		super(point, dimension);
@@ -35,8 +42,8 @@ public class Ball extends Rectangle implements Controllable {
 
 	@Override
 	public void update() {
-		x += xDirection;
-		y += yDirection;
+		x += velocity * xDirection;
+		y += velocity * yDirection;
 		collide();
 		correctBounds();
 	}
@@ -47,13 +54,45 @@ public class Ball extends Rectangle implements Controllable {
 	 * @since 27/09/2013
 	 */
 	private void collide() {
-		for (Controllable element : game.getControllables()) {
-			if (!this.equals(element)) {
-				if (this.intersects((Rectangle) element)) {
-					xDirection *= -1;
-				}
+		for (Paddle paddle : paddles) {
+			if (this.intersects(paddle)) {
+				xDirection *= -1;
+				blip();
+				accelerate();
+			} else {
+				goSilent();
 			}
 		}
+	}
+
+	private void pop() {
+		double f = soundTrack.osc.getFrequency();
+		if (f != 10) {
+			soundTrack.osc.setFrequency(10);
+			soundTrack.osc.setModulationDepth(0.5);
+		}
+	}
+
+	private void blip() {
+		double f = soundTrack.osc.getFrequency();
+		if (f < 40) {
+			soundTrack.osc.setFrequency(40);
+			soundTrack.osc.setModulationDepth(1.0);
+		}
+	}
+
+	private void goSilent() {
+		double f = soundTrack.osc.getFrequency();
+		if (f > 0) {
+			soundTrack.osc.setFrequency(0);
+			soundTrack.osc.setModulationDepth(0);
+		}
+	}
+
+	private void accelerate() {
+		velocity++;
+		if (velocity > maxVelocity)
+			velocity = maxVelocity;
 	}
 
 	/**
@@ -63,16 +102,52 @@ public class Ball extends Rectangle implements Controllable {
 	 * @since 27/09/2013
 	 */
 	private void correctBounds() {
+		boolean popped = false;
+		boolean touchedWall = false;
 		if (x > scW) {
 			xDirection = -1;
+			pop();
+			popped = true;
+			touchedWall = true;
 		} else if (x < 0) {
 			xDirection = 1;
+			pop();
+			popped = true;
+			touchedWall = true;
 		}
 
 		if (y > scH) {
 			yDirection = -1;
+			pop();
+			popped = true;
 		} else if (y < yDirection) {
 			yDirection = 1;
+			pop();
+			popped = true;
+		}
+
+		if (!popped) {
+			goSilent();
+		}
+
+		if (touchedWall) {
+			givePoint();
+		}
+	}
+
+	/**
+	 * @author wonka
+	 * @since 27/09/2013
+	 */
+	private void givePoint() {
+		Paddle player1 = paddles.get(0);
+		Paddle player2 = paddles.get(1);
+
+		int p1Diff = player1.x - x;
+		if (p1Diff < 100 && p1Diff > -100) {
+			player2.score++;
+		} else {
+			player1.score++;
 		}
 	}
 
@@ -132,7 +207,12 @@ public class Ball extends Rectangle implements Controllable {
 
 	@Override
 	public void setSource(Game game) {
-		this.game = game;
+		this.game = (PongGame) game;
+		for (Controllable controllable : game.getControllables()) {
+			if (controllable instanceof Paddle) {
+				paddles.add((Paddle) controllable);
+			}
+		}
 		scW = game.getDimension().width;
 		scH = game.getDimension().height;
 	}

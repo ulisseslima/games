@@ -106,4 +106,9 @@ public class PongGame implements Game {
 	public List<Controllable> getControllables() {
 		return elements;
 	}
+
+	@Override
+	public DefaultSoundTrack getSoundTrack() {
+		return soundTrack;
+	}
 }

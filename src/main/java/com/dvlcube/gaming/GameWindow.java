@@ -4,9 +4,7 @@ import java.awt.Container;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
@@ -49,19 +47,6 @@ public class GameWindow extends JFrame implements WindowListener {
 
 		gamePanel = new RunnableGamePanel(this, period);
 		container.add(gamePanel, "Center");
-
-		JPanel ctrls = new JPanel(); // a row of textfields
-		ctrls.setLayout(new BoxLayout(ctrls, BoxLayout.X_AXIS));
-
-		jtfTime = new JTextField("Time Spent: 0 secs");
-		jtfTime.setEditable(false);
-		ctrls.add(jtfTime);
-
-		container.add(ctrls, "South");
-	}
-
-	public void setTimeSpent(long t) {
-		jtfTime.setText("Time Spent: " + t + " secs");
 	}
 
 	@Override

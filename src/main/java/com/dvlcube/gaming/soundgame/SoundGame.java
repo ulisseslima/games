@@ -90,4 +90,9 @@ public class SoundGame implements Game {
 	public List<Controllable> getControllables() {
 		return null;
 	}
+
+	@Override
+	public DefaultSoundTrack getSoundTrack() {
+		return sound;
+	}
 }
