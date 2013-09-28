@@ -58,6 +58,16 @@ public class BeatsGame extends Game {
 		public void mousePressed(MouseEvent e) {
 			sequencer.mousePressed(e, scale(e.getX()), scale(e.getY()));
 		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			sequencer.mouseDragged(e, scale(e.getX()), scale(e.getY()));
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			sequencer.mouseReleased(e, scale(e.getX()), scale(e.getY()));
+		}
 	}
 
 	public class Keyboard extends KeyAdapter {

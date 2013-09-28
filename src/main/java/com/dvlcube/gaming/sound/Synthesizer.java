@@ -266,6 +266,10 @@ public class Synthesizer extends DefaultDrawable implements Controllable {
 		}
 	}
 
+	@Override
+	public void mouseReleased(MouseEvent e, int mx, int my) {
+	}
+
 	/**
 	 * @param e
 	 * @author wonka

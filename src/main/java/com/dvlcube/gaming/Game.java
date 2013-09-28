@@ -1,10 +1,14 @@
 package com.dvlcube.gaming;
 
+import static com.dvlcube.gaming.util.Cuber.r;
+
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.util.List;
+
+import com.dvlcube.gaming.util.Range;
 
 /**
  * 
@@ -15,10 +19,14 @@ public abstract class Game {
 
 	public boolean debug = false;
 	public double scale = 1;
-	public Dimension screen = null;
+	public final Dimension screen;
+	public final Range<Integer> vRange;
+	public final Range<Integer> hRange;
 
 	public Game(Dimension screen) {
 		this.screen = screen;
+		vRange = r(0, screen.height);
+		hRange = r(0, screen.width);
 	}
 
 	public Game(Dimension screen, double scale) {

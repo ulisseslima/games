@@ -18,14 +18,6 @@ import com.dvlcube.gaming.sound.Synthesizer;
  * @since 20/09/2013
  */
 public class SoundGame extends Game {
-	public SoundGame(Dimension screen) {
-		super(screen);
-	}
-
-	public SoundGame(Dimension screen, double scale) {
-		super(screen, scale);
-	}
-
 	public boolean debug = true;
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
@@ -33,6 +25,14 @@ public class SoundGame extends Game {
 
 	{
 		sound.setSource(this);
+	}
+
+	public SoundGame(Dimension screen) {
+		super(screen);
+	}
+
+	public SoundGame(Dimension screen, double scale) {
+		super(screen, scale);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class SoundGame extends Game {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			sound.mousePressed(e, e.getX() / 2, e.getY() / 2);
+			sound.mousePressed(e, scale(e.getX()), scale(e.getY()));
 		}
 
 		@Override

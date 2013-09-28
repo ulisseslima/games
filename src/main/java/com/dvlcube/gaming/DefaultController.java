@@ -33,7 +33,11 @@ public abstract class DefaultController extends DefaultDrawable implements
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
+	public void mouseDragged(MouseEvent e, int mx, int my) {
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e, int mx, int my) {
 	}
 
 	@Override

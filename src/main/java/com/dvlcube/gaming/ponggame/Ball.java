@@ -158,26 +158,22 @@ public class Ball extends Rectangle implements Controllable {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
-		// TODO Auto-generated method stub
+	}
 
+	@Override
+	public void mouseReleased(MouseEvent e, int mx, int my) {
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e, int mx, int my) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

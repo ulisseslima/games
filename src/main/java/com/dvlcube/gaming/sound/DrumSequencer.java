@@ -16,9 +16,13 @@
  */
 package com.dvlcube.gaming.sound;
 
+import static com.dvlcube.gaming.util.Cuber.mapf;
+import static com.dvlcube.gaming.util.Cuber.r;
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -29,9 +33,12 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+import javax.swing.SwingUtilities;
 
 import com.dvlcube.gaming.Checkbox;
 import com.dvlcube.gaming.DefaultController;
+import com.dvlcube.gaming.Knob;
+import com.dvlcube.gaming.util.Range;
 
 /**
  * Adapted from an example from Head First Java.
@@ -85,7 +92,7 @@ public class DrumSequencer extends DefaultController {
 		 * @author wonka
 		 * @since 28/09/2013
 		 */
-		public static boolean mousePressed(MouseEvent e, int mx, int my) {
+		public static boolean tickChanged(MouseEvent e, int mx, int my) {
 			for (Instrument instrument : Instrument.values()) {
 				for (Checkbox checkbox : instrument.ticks) {
 					if (checkbox.toggled(e, mx, my)) {
@@ -101,16 +108,21 @@ public class DrumSequencer extends DefaultController {
 	private Sequence sequence;
 	private Sequencer sequencer;
 	private boolean playing;
+	private float tempoFactor;
+	private List<Knob> knobs = new ArrayList<>();
+	private Knob tempoKnob = new TempoKnob();
+	private Integer mouseYStartDrag = null;
 
 	public DrumSequencer() {
 		setUpMidi();
+		knobs.add(tempoKnob);
 	}
 
 	public float downTempo() {
-		float tempoFactor = sequencer.getTempoFactor();
-		float factor = (float) (tempoFactor * .97);
+		float tempoFac = sequencer.getTempoFactor();
+		float factor = (float) (tempoFac * .97);
 		sequencer.setTempoFactor(factor);
-		return factor;
+		return tempoFactor = factor;
 	}
 
 	/**
@@ -118,10 +130,10 @@ public class DrumSequencer extends DefaultController {
 	 * default is 1.0, so we're adjusting +/-3% per click.
 	 */
 	public float upTempo() {
-		float tempoFactor = sequencer.getTempoFactor();
-		float factor = (float) (tempoFactor * 1.03);
+		float tempoFac = sequencer.getTempoFactor();
+		float factor = (float) (tempoFac * 1.03);
 		sequencer.setTempoFactor(factor);
-		return factor;
+		return tempoFactor = factor;
 	}
 
 	@Override
@@ -133,6 +145,10 @@ public class DrumSequencer extends DefaultController {
 				tick.draw(g);
 			}
 			yOffset += ySpacing;
+		}
+
+		for (Knob knob : knobs) {
+			knob.draw(g, xOffset, yOffset);
 		}
 	}
 
@@ -211,20 +227,31 @@ public class DrumSequencer extends DefaultController {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e, int mx, int my) {
-		if (Instrument.mousePressed(e, mx, my)) {
+		if (Instrument.tickChanged(e, mx, my)) {
 			buildTrackAndStart();
 		}
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
-		// TODO Auto-generated method stub
-		super.mouseDragged(e, screenW, screenH);
+	public void mouseDragged(MouseEvent e, int mx, int my) {
+		int y = e.getY();
+		if (mouseYStartDrag == null)
+			mouseYStartDrag = y;
+		int yDiff = y - mouseYStartDrag;
+
+		boolean left = SwingUtilities.isLeftMouseButton(e);
+		if (left) {
+			tempoKnob.setValue(yDiff, game.vRange);
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e, int mx, int my) {
+		mouseYStartDrag = null;
 	}
 
 	@Override
@@ -252,5 +279,52 @@ public class DrumSequencer extends DefaultController {
 	private void stop() {
 		sequencer.stop();
 		playing = false;
+	}
+
+	private class TempoKnob implements Knob {
+		private DrumSequencer $ = DrumSequencer.this;
+		private Range<Float> range = r(0f, 5f);
+
+		@Override
+		public String getName() {
+			return TempoKnob.class.getSimpleName();
+		}
+
+		@Override
+		public Number getValue() {
+			return $.tempoFactor;
+		}
+
+		@Override
+		public Number setValue(Number number) {
+			$.sequencer.setTempoFactor(number.floatValue());
+			return $.tempoFactor = $.sequencer.getTempoFactor();
+		}
+
+		@Override
+		public Number setValue(Number number, Range<? extends Number> range) {
+			float mappedValue = mapf(number, range, this.range);
+			return setValue(mappedValue);
+		}
+
+		@Override
+		public Number increase() {
+			return $.upTempo();
+		}
+
+		@Override
+		public Number decrease() {
+			return $.downTempo();
+		}
+
+		@Override
+		public Range<Float> getRange() {
+			return range;
+		}
+
+		@Override
+		public void draw(Graphics2D g, int x, int y) {
+			g.drawString(getName() + ": " + getValue(), x, y);
+		}
 	}
 }

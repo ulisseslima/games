@@ -11,7 +11,9 @@ import java.awt.event.MouseWheelEvent;
 public interface Controllable extends GameElement {
 	void keyPressed(KeyEvent e);
 
-	void mouseDragged(MouseEvent e, int screenW, int screenH);
+	void mouseDragged(MouseEvent e, int mx, int my);
+
+	void mouseReleased(MouseEvent e, int mx, int my);
 
 	void mouseWheelMoved(MouseWheelEvent e);
 

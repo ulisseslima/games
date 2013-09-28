@@ -22,6 +22,13 @@ public class Cuber {
 						.doubleValue());
 	}
 
+	public static float mapf(Number n, Range<? extends Number> range,
+			Range<? extends Number> newRange) {
+		return (float) NumberUtils.map(n.doubleValue(), range.getStart()
+				.doubleValue(), range.getEnd().doubleValue(), newRange
+				.getStart().doubleValue(), newRange.getEnd().doubleValue());
+	}
+
 	public static int map(Number n, Range<? extends Number> range,
 			Range<? extends Number> newRange) {
 		return (int) NumberUtils.map(n.doubleValue(), range.getStart()
