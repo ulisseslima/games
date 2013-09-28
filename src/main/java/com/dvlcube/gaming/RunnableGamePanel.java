@@ -11,7 +11,7 @@ import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
 
-import com.dvlcube.gaming.ponggame.PongGame;
+import com.dvlcube.gaming.beatsgame.BeatsGame;
 
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
@@ -20,6 +20,8 @@ import com.dvlcube.gaming.ponggame.PongGame;
  * and UPS
  */
 public class RunnableGamePanel extends JPanel implements Runnable {
+	private static final int SCALE = 2;
+
 	private static final long serialVersionUID = 1L;
 
 	private static final int PANEL_WIDTH = 1024;
@@ -74,7 +76,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
 	private GameWindow window;
-	private final Game game = new PongGame();
+	private final Game game = new BeatsGame();
 
 	// used at game termination
 	private boolean gameOver = false;
@@ -82,8 +84,10 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private FontMetrics metrics;
 
 	// off screen rendering
-	private Graphics graphics;
+	private Graphics g;
 	private Image dbImage = null;
+
+	private boolean debug = false;
 	public static final Color bgColor = new Color(60, 60, 60);
 	public static final Color fgColor = new Color(8, 130, 230);
 
@@ -237,34 +241,33 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 	private void gameRender() {
 		if (dbImage == null) {
-			dbImage = createImage(PANEL_WIDTH / 2, PANEL_HEIGHT / 2);
+			dbImage = createImage(PANEL_WIDTH / SCALE, PANEL_HEIGHT / SCALE);
 			if (dbImage == null) {
 				System.out.println("dbImage is null");
 				return;
 			} else
-				graphics = dbImage.getGraphics();
+				g = dbImage.getGraphics();
 		}
 
 		// clear the background
-		graphics.setColor(bgColor);
-		graphics.fillRect(0, 0, PANEL_WIDTH / 2, PANEL_HEIGHT / 2);
+		g.setColor(bgColor);
+		g.fillRect(0, 0, PANEL_WIDTH / SCALE, PANEL_HEIGHT / SCALE);
 
-		graphics.setColor(fgColor);
-		graphics.setFont(font);
+		g.setColor(fgColor);
+		g.setFont(font);
 
 		// report frame count & average FPS and UPS at top left
-		// dbg.drawString("Frame Count " + frameCount, 10, 25);
-		graphics.drawString(
-				"Average FPS/UPS: " + decimalFormat.format(averageFPS) + ", "
-						+ decimalFormat.format(averageUPS), 20, 25);
+		if (debug)
+			g.drawString("Average FPS/UPS: " + decimalFormat.format(averageFPS)
+					+ ", " + decimalFormat.format(averageUPS), 20, 25);
 
-		graphics.setColor(fgColor);
+		g.setColor(fgColor);
 
 		// draw game elements
-		game.doGraphics((Graphics2D) graphics);
+		game.doGraphics((Graphics2D) g);
 
 		if (gameOver)
-			gameOverMessage(graphics);
+			gameOverMessage(g);
 	}
 
 	/**

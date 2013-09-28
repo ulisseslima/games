@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dvlcube.gaming.Controllable;
-import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
+import com.dvlcube.gaming.sound.Synthesizer;
 
 /**
  * @author wonka
@@ -21,7 +21,7 @@ import com.dvlcube.gaming.Game;
 public class Ball extends Rectangle implements Controllable {
 
 	private static final long serialVersionUID = 3929278993084690115L;
-	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
+	private Synthesizer soundTrack = new Synthesizer();
 	public boolean debug = false;
 	private PongGame game;
 	private List<Paddle> paddles = new ArrayList<>();
@@ -175,7 +175,7 @@ public class Ball extends Rectangle implements Controllable {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e, int mx, int my) {
 		// TODO Auto-generated method stub
 
 	}

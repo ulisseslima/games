@@ -16,9 +16,9 @@ import java.util.Random;
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Coords;
-import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.GamePolygon;
+import com.dvlcube.gaming.sound.Synthesizer;
 
 /**
  * @author wonka
@@ -28,7 +28,7 @@ public class SpaceGame implements Game {
 	public boolean debug = false;
 	private Random random = new Random();
 
-	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
+	private Synthesizer soundTrack = new Synthesizer();
 	private List<GamePolygon> polys = new ArrayList<GamePolygon>();
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();

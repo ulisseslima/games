@@ -1,4 +1,4 @@
-package com.dvlcube.gaming;
+package com.dvlcube.gaming.sound;
 
 import static com.dvlcube.gaming.util.Cuber.map;
 import static com.dvlcube.gaming.util.Cuber.mapd;
@@ -17,13 +17,15 @@ import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.craigl.softsynth.EnvelopeGenerator;
 import com.craigl.softsynth.SamplePlayer;
 import com.craigl.softsynth.VCF;
+import com.dvlcube.gaming.Controllable;
+import com.dvlcube.gaming.DefaultDrawable;
 import com.dvlcube.gaming.util.Range;
 
 /**
  * @author wonka
  * @since 22/09/2013
  */
-public class DefaultSoundTrack {
+public class Synthesizer extends DefaultDrawable implements Controllable {
 
 	public final AdvancedOscillator osc;
 	public final VCF vcf;
@@ -44,7 +46,7 @@ public class DefaultSoundTrack {
 			AdvancedOscillator.CENTS_DETUNE_MIN,
 			AdvancedOscillator.CENTS_DETUNE_MAX);
 
-	public DefaultSoundTrack() {
+	public Synthesizer() {
 		osc = new AdvancedOscillator();
 
 		// Set the frequency
@@ -106,7 +108,9 @@ public class DefaultSoundTrack {
 	 * @param screenW
 	 * @since 24/09/2013
 	 */
-	public void drawOverlay(Graphics2D g, int screenW, int screenH) {
+	@Override
+	public void draw(Graphics2D g) {
+		int screenW = game.getDimension().width;
 		int offset = 10, y = 50;
 
 		Range<Integer> indicatorRange = r(-10, 10);
@@ -207,6 +211,7 @@ public class DefaultSoundTrack {
 	 * @author wonka
 	 * @since 24/09/2013
 	 */
+	@Override
 	public void mouseMoved(MouseEvent e, int screenW, int screenH) {
 		int x = e.getX(), y = e.getY();
 
@@ -216,11 +221,12 @@ public class DefaultSoundTrack {
 	}
 
 	/**
-	 * @param e
+	 * @param mx
 	 * @author wonka
 	 * @since 24/09/2013
 	 */
-	public void mousePressed(MouseEvent e) {
+	@Override
+	public void mousePressed(MouseEvent e, int mx, int my) {
 		toggleNote();
 	}
 
@@ -229,6 +235,7 @@ public class DefaultSoundTrack {
 	 * @author wonka
 	 * @since 24/09/2013
 	 */
+	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int wheelRotation = e.getWheelRotation();
 		if (wheelRotation < 0) {
@@ -245,6 +252,7 @@ public class DefaultSoundTrack {
 	 * @author wonka
 	 * @since 24/09/2013
 	 */
+	@Override
 	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
 		int x = e.getX(), y = e.getY();
 		if (SwingUtilities.isLeftMouseButton(e)) {
@@ -263,6 +271,7 @@ public class DefaultSoundTrack {
 	 * @author wonka
 	 * @since 25/09/2013
 	 */
+	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_Q:
@@ -344,5 +353,10 @@ public class DefaultSoundTrack {
 			osc.setModulationType(MOD_TYPE.NONE);
 			break;
 		}
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
 	}
 }

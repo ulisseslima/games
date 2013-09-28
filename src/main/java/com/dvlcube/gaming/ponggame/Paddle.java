@@ -58,7 +58,7 @@ public class Paddle extends Rectangle implements Controllable {
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e, int mx, int my) {
 		// TODO Auto-generated method stub
 	}
 

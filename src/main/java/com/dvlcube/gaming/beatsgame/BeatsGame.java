@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.soundgame;
+package com.dvlcube.gaming.beatsgame;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -6,22 +6,21 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 import java.util.List;
 
 import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Game;
-import com.dvlcube.gaming.sound.Synthesizer;
+import com.dvlcube.gaming.sound.DrumSequencer;
 
 /**
  * @author wonka
  * @since 20/09/2013
  */
-public class SoundGame implements Game {
+public class BeatsGame implements Game {
 	public boolean debug = true;
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
-	private Synthesizer sound = new Synthesizer();
+	private DrumSequencer sequencer = new DrumSequencer();
 
 	/**
 	 * Screen
@@ -30,7 +29,7 @@ public class SoundGame implements Game {
 	private final int SC_H = 768;
 
 	{
-		sound.setSource(this);
+		sequencer.setSource(this);
 	}
 
 	@Override
@@ -39,35 +38,20 @@ public class SoundGame implements Game {
 
 	@Override
 	public void doGraphics(Graphics2D g) {
-		sound.draw(g);
+		sequencer.draw(g);
 	}
 
 	public class Mouse extends MouseAdapter {
 		@Override
-		public void mouseMoved(MouseEvent e) {
-			sound.mouseMoved(e, SC_W, SC_H);
-		}
-
-		@Override
 		public void mousePressed(MouseEvent e) {
-			sound.mousePressed(e, e.getX() / 2, e.getY() / 2);
-		}
-
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			sound.mouseWheelMoved(e);
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			sound.mouseDragged(e, SC_W, SC_H);
+			sequencer.mousePressed(e, e.getX() / 2, e.getY() / 2);
 		}
 	}
 
 	public class Keyboard extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			sound.keyPressed(e);
+			sequencer.keyPressed(e);
 		}
 	}
 

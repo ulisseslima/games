@@ -4,8 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import com.dvlcube.gaming.Coords;
-import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.GamePolygon;
+import com.dvlcube.gaming.sound.Synthesizer;
 
 /**
  * @author wonka
@@ -14,7 +14,7 @@ import com.dvlcube.gaming.GamePolygon;
 class SpaceCraft extends Polygon implements GamePolygon {
 
 	private static final long serialVersionUID = 6842909318229368081L;
-	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
+	private Synthesizer soundTrack = new Synthesizer();
 	public boolean debug = false;
 
 	private int x;

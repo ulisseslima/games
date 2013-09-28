@@ -15,7 +15,7 @@ public interface Controllable extends GameElement {
 
 	void mouseWheelMoved(MouseWheelEvent e);
 
-	void mousePressed(MouseEvent e);
+	void mousePressed(MouseEvent e, int mx, int my);
 
 	void mouseMoved(MouseEvent e, int x, int y);
 }
