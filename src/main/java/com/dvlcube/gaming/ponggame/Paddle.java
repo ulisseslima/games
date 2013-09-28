@@ -90,7 +90,7 @@ public class Paddle extends Rectangle implements Controllable {
 	@Override
 	public void setSource(Game game) {
 		this.game = game;
-		scW = game.getDimension().width;
-		scH = game.getDimension().height;
+		scW = game.screen.width;
+		scH = game.screen.height;
 	}
 }

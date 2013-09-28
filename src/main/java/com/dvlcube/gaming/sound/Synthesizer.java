@@ -110,7 +110,7 @@ public class Synthesizer extends DefaultDrawable implements Controllable {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		int screenW = game.getDimension().width;
+		int screenW = game.screen.width;
 		int offset = 10, y = 50;
 
 		Range<Integer> indicatorRange = r(-10, 10);

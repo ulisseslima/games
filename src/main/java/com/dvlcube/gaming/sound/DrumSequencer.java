@@ -40,6 +40,9 @@ import com.dvlcube.gaming.DefaultController;
  */
 public class DrumSequencer extends DefaultController {
 
+	public static final int DEFAULT_TICKS = 16;
+	public static final int DEFAULT_CHECKBOX_X_OFFSET = 100;
+
 	/**
 	 * These represent the actual drum "keys". the drum channel is like a piano
 	 * except each "key" on the piano is a different drum. So the number 35 is
@@ -64,7 +67,8 @@ public class DrumSequencer extends DefaultController {
 		OPEN_HI_CONGA("Open Hi Conga", 63);
 		public String name;
 		public int key;
-		public List<Checkbox> ticks = Checkbox.list(16, 100, this.ordinal());
+		public List<Checkbox> ticks = Checkbox.list(DEFAULT_TICKS,
+				DEFAULT_CHECKBOX_X_OFFSET, this.ordinal());
 
 		Instrument(String name, int note) {
 			this.name = name;
@@ -74,7 +78,9 @@ public class DrumSequencer extends DefaultController {
 		/**
 		 * @param e
 		 * @param mx
+		 *            mouse x
 		 * @param my
+		 *            mouse y
 		 * @return whether this element was toggled as a result of a click.
 		 * @author wonka
 		 * @since 28/09/2013
@@ -137,7 +143,6 @@ public class DrumSequencer extends DefaultController {
 	 * supposed to play on that beat, put in a zero
 	 */
 	public void buildTrackAndStart() {
-
 		sequence.deleteTrack(track); // get rid of the old track,
 		track = sequence.createTrack(); // make a fresh one
 
@@ -169,6 +174,7 @@ public class DrumSequencer extends DefaultController {
 			 */
 			sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
 			sequencer.start();
+			playing = true;
 			sequencer.setTempoInBPM(120);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -216,6 +222,12 @@ public class DrumSequencer extends DefaultController {
 	}
 
 	@Override
+	public void mouseDragged(MouseEvent e, int screenW, int screenH) {
+		// TODO Auto-generated method stub
+		super.mouseDragged(e, screenW, screenH);
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
@@ -231,11 +243,14 @@ public class DrumSequencer extends DefaultController {
 	 */
 	private void togglePlay() {
 		if (playing) {
-			sequencer.stop();
-			playing = false;
+			stop();
 		} else {
 			buildTrackAndStart();
-			playing = true;
 		}
+	}
+
+	private void stop() {
+		sequencer.stop();
+		playing = false;
 	}
 }

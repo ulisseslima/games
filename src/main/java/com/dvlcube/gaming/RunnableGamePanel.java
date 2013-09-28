@@ -20,7 +20,7 @@ import com.dvlcube.gaming.beatsgame.BeatsGame;
  * and UPS
  */
 public class RunnableGamePanel extends JPanel implements Runnable {
-	private static final int SCALE = 2;
+	private static final double SCALE = 0.5;
 
 	private static final long serialVersionUID = 1L;
 
@@ -76,7 +76,8 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
 	private GameWindow window;
-	private final Game game = new BeatsGame();
+	private final Game game = new BeatsGame(new Dimension(PANEL_WIDTH,
+			PANEL_HEIGHT), SCALE);
 
 	// used at game termination
 	private boolean gameOver = false;
@@ -241,7 +242,8 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 	private void gameRender() {
 		if (dbImage == null) {
-			dbImage = createImage(PANEL_WIDTH / SCALE, PANEL_HEIGHT / SCALE);
+			dbImage = createImage(game.scale(PANEL_WIDTH),
+					game.scale(PANEL_HEIGHT));
 			if (dbImage == null) {
 				System.out.println("dbImage is null");
 				return;
@@ -251,7 +253,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		// clear the background
 		g.setColor(bgColor);
-		g.fillRect(0, 0, PANEL_WIDTH / SCALE, PANEL_HEIGHT / SCALE);
+		g.fillRect(0, 0, game.scale(PANEL_WIDTH), game.scale(PANEL_HEIGHT));
 
 		g.setColor(fgColor);
 		g.setFont(font);

@@ -24,29 +24,40 @@ import com.dvlcube.gaming.sound.Synthesizer;
  * @author wonka
  * @since 20/09/2013
  */
-public class SpaceGame implements Game {
-	public boolean debug = false;
+public class SpaceGame extends Game {
 	private Random random = new Random();
-
 	private Synthesizer soundTrack = new Synthesizer();
 	private List<GamePolygon> polys = new ArrayList<GamePolygon>();
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 	private final SpaceCraft spaceCraft = new SpaceCraft(new Coords(150, 150));
+	private int frequencyGoal = 40;
 
 	/**
-	 * Effective screen size
+	 * @param screen
+	 * @param scale
+	 * @author wonka
+	 * @since 28/09/2013
 	 */
-	private final int SC_W = 1024 / 2;
-	private final int SC_H = 768 / 2;
+	public SpaceGame(Dimension screen, double scale) {
+		super(screen, scale);
+	}
 
-	private int frequencyGoal = 40;
+	/**
+	 * @param screen
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public SpaceGame(Dimension screen) {
+		super(screen);
+	}
 
 	{
 		polys.add(spaceCraft);
 		soundTrack.osc.setWaveshape(WAVESHAPE.SIN);
 		for (int i = 0; i < 10; i++) {
-			int x = random.nextInt(SC_W), y = random.nextInt(SC_H);
+			int x = random.nextInt(screen.width), y = random
+					.nextInt(screen.height);
 			polys.add(new Asteroid(xy(x, y)));
 		}
 	}
@@ -77,7 +88,7 @@ public class SpaceGame implements Game {
 			int polyAngle = polygon.getAngle();
 			double fixedAngle = Math.toRadians(polyAngle);
 			if (debug)
-				System.out.printf("filling %d,%d at %fº\n", polyX, polyY,
+				System.out.printf("filling %d,%d at %fï¿½\n", polyX, polyY,
 						fixedAngle);
 			g.rotate(fixedAngle, polyX, polyY);
 			g.drawPolygon((Polygon) polygon);
@@ -134,11 +145,6 @@ public class SpaceGame implements Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public Dimension getDimension() {
-		return new Dimension(SC_W, SC_H);
 	}
 
 	@Override

@@ -213,7 +213,7 @@ public class Ball extends Rectangle implements Controllable {
 				paddles.add((Paddle) controllable);
 			}
 		}
-		scW = game.getDimension().width;
-		scH = game.getDimension().height;
+		scW = game.screen.width;
+		scH = game.screen.height;
 	}
 }

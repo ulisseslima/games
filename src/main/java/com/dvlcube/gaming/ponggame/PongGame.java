@@ -17,21 +17,12 @@ import com.dvlcube.gaming.GameElement;
  * @author wonka
  * @since 26/09/2013
  */
-public class PongGame implements Game {
-	public boolean debug = false;
-
-	/**
-	 * Effective screen size
-	 */
-	public final int SC_W = 1024 / 2;
-	public final int SC_H = 768 / 2;
+public class PongGame extends Game {
 
 	private final List<Controllable> elements = new ArrayList<Controllable>();
 	private MouseAdapter mouse = new Mouse();
-	private KeyAdapter keyboard = new Keyboard();
-
 	private Controllable player1 = new Paddle(new Point(10, 10));
-	private Controllable player2 = new Paddle(new Point(SC_W
+	private Controllable player2 = new Paddle(new Point(screen.width
 			- (10 + player1.width()), 10));
 	private Controllable ball = new Ball(new Point(player1.x() + 10,
 			player1.y() + 10));
@@ -40,6 +31,25 @@ public class PongGame implements Game {
 		add(player1);
 		add(player2);
 		add(ball);
+	}
+
+	/**
+	 * @param screen
+	 * @param scale
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public PongGame(Dimension screen, double scale) {
+		super(screen, scale);
+	}
+
+	/**
+	 * @param screen
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public PongGame(Dimension screen) {
+		super(screen);
 	}
 
 	@Override
@@ -69,19 +79,16 @@ public class PongGame implements Game {
 	public class Mouse extends MouseAdapter {
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			int x = e.getX() / 2, y = e.getY() / 2;
+			int x = scale(e.getX()), y = scale(e.getY());
 			for (Controllable element : elements) {
 				element.mouseMoved(e, x, y);
 			}
 		}
 	}
 
-	public class Keyboard extends KeyAdapter {
-	}
-
 	@Override
 	public KeyAdapter getKeyAdapter() {
-		return keyboard;
+		return null;
 	}
 
 	@Override
@@ -91,11 +98,6 @@ public class PongGame implements Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public Dimension getDimension() {
-		return new Dimension(SC_W, SC_H);
 	}
 
 	@Override

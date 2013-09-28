@@ -16,17 +16,29 @@ import com.dvlcube.gaming.sound.DrumSequencer;
  * @author wonka
  * @since 20/09/2013
  */
-public class BeatsGame implements Game {
-	public boolean debug = true;
+public class BeatsGame extends Game {
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 	private DrumSequencer sequencer = new DrumSequencer();
 
 	/**
-	 * Screen
+	 * @param screen
+	 * @param scale
+	 * @author wonka
+	 * @since 28/09/2013
 	 */
-	private final int SC_W = 1024;
-	private final int SC_H = 768;
+	public BeatsGame(Dimension screen, double scale) {
+		super(screen, scale);
+	}
+
+	/**
+	 * @param screen
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public BeatsGame(Dimension screen) {
+		super(screen);
+	}
 
 	{
 		sequencer.setSource(this);
@@ -44,7 +56,7 @@ public class BeatsGame implements Game {
 	public class Mouse extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			sequencer.mousePressed(e, e.getX() / 2, e.getY() / 2);
+			sequencer.mousePressed(e, scale(e.getX()), scale(e.getY()));
 		}
 	}
 
@@ -67,11 +79,6 @@ public class BeatsGame implements Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public Dimension getDimension() {
-		return new Dimension(SC_W, SC_H);
 	}
 
 	@Override
