@@ -9,9 +9,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
 import com.dvlcube.gaming.Controllable;
-import com.dvlcube.gaming.DefaultSoundTrack;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.GameElement;
 
@@ -28,7 +26,6 @@ public class PongGame implements Game {
 	public final int SC_W = 1024 / 2;
 	public final int SC_H = 768 / 2;
 
-	private DefaultSoundTrack soundTrack = new DefaultSoundTrack();
 	private final List<Controllable> elements = new ArrayList<Controllable>();
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
@@ -40,7 +37,6 @@ public class PongGame implements Game {
 			player1.y() + 10));
 
 	{
-		soundTrack.osc.setWaveshape(WAVESHAPE.SIN);
 		add(player1);
 		add(player2);
 		add(ball);
@@ -105,10 +101,5 @@ public class PongGame implements Game {
 	@Override
 	public List<Controllable> getControllables() {
 		return elements;
-	}
-
-	@Override
-	public DefaultSoundTrack getSoundTrack() {
-		return soundTrack;
 	}
 }

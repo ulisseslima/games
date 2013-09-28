@@ -145,9 +145,4 @@ public class SpaceGame implements Game {
 	public List<Controllable> getControllables() {
 		return null;
 	}
-
-	@Override
-	public DefaultSoundTrack getSoundTrack() {
-		return soundTrack;
-	}
 }

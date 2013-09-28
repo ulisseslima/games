@@ -12,8 +12,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import com.sun.j3d.utils.timer.J3DTimer;
-
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
  * <p>
@@ -22,10 +20,6 @@ import com.sun.j3d.utils.timer.J3DTimer;
  * flush its display buffer. Without the sync( ) call, the animation may be only
  * partially updated, creating a "tearing" effect. My thanks to Kyle Husmann for
  * pointing this out.
- * 
- * programmers using J2SE 5.0 may choose to do a global search and replace on
- * the Java 3D timer version of WormChase, changing every J3DTimer.getValue( )
- * call to System.nanoTime( ).
  */
 public class GamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1299991756757114278L;
@@ -132,13 +126,14 @@ public class GamePanel extends JPanel implements Runnable {
 	 * Overruns in update/renders will cause extra updates to be carried out so
 	 * UPS tild== requested FPS
 	 */
+	@Override
 	public void run() {
 		long beforeTime, afterTime, timeDiff, sleepTime;
 		long overSleepTime = 0L;
 		int noDelays = 0;
 		long excess = 0L;
 
-		beforeTime = J3DTimer.getValue();
+		beforeTime = System.nanoTime();
 
 		running = true;
 		while (running) {
@@ -146,7 +141,7 @@ public class GamePanel extends JPanel implements Runnable {
 			gameRender();
 			paintScreen();
 
-			afterTime = J3DTimer.getValue();
+			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 			sleepTime = (period - timeDiff) - overSleepTime;
 
@@ -155,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
 					Thread.sleep(sleepTime / 1000000L); // nano -> ms
 				} catch (InterruptedException ex) {
 				}
-				overSleepTime = (J3DTimer.getValue() - afterTime) - sleepTime;
+				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
 			} else { // sleepTime <= 0; frame took longer than the period
 				excess -= sleepTime; // store excess time value
 				overSleepTime = 0L;
@@ -166,7 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 
-			beforeTime = J3DTimer.getValue();
+			beforeTime = System.nanoTime();
 
 			/*
 			 * If frame animation is taking too long, update the game state

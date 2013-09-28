@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import javax.swing.JPanel;
 
 import com.dvlcube.gaming.ponggame.PongGame;
-import com.sun.j3d.utils.timer.J3DTimer;
 
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
@@ -180,7 +179,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		int noDelays = 0;
 		long excess = 0L;
 
-		gameStartTime = J3DTimer.getValue();
+		gameStartTime = System.nanoTime();
 		prevStatsTime = gameStartTime;
 		beforeTime = gameStartTime;
 
@@ -191,7 +190,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 			gameRender();
 			paintScreen();
 
-			afterTime = J3DTimer.getValue();
+			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
 			sleepTime = (GameWindow.getFpsPeriod() - timeDiff) - overSleepTime;
 
@@ -200,7 +199,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 					Thread.sleep(sleepTime / 1000000L); // nano -> ms
 				} catch (InterruptedException ex) {
 				}
-				overSleepTime = (J3DTimer.getValue() - afterTime) - sleepTime;
+				overSleepTime = (System.nanoTime() - afterTime) - sleepTime;
 			} else { // sleepTime <= 0; the frame took longer than the period
 				excess -= sleepTime; // store excess time value
 				overSleepTime = 0L;
@@ -211,7 +210,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 				}
 			}
 
-			beforeTime = J3DTimer.getValue();
+			beforeTime = System.nanoTime();
 
 			/*
 			 * If frame animation is taking too long, update the game state
@@ -320,7 +319,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		// record stats every MAX_STATS_INTERVAL
 		if (statsInterval >= MAX_STATS_INTERVAL) {
-			long timeNow = J3DTimer.getValue();
+			long timeNow = System.nanoTime();
 			// ns --> secs
 			timeSpentInGame = (int) ((timeNow - gameStartTime) / 1000000000L);
 

@@ -52,6 +52,4 @@ public interface Game {
 	Dimension getDimension();
 
 	List<Controllable> getControllables();
-
-	DefaultSoundTrack getSoundTrack();
 }

@@ -5,7 +5,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
-import javax.swing.JTextField;
 
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
@@ -17,19 +16,13 @@ import javax.swing.JTextField;
  * methods. (-not exactly)
  * 
  * Uses active rendering to update the JPanel.
- * 
- * Using Java 3D's timer: J3DTimer.getValue() nanosecs rather than millisecs for
- * the period
  */
 public class GameWindow extends JFrame implements WindowListener {
 	private static final long serialVersionUID = 1L;
 
 	private static int FPS = 60;
-
 	private static volatile long fpsPeriod;
-
 	private RunnableGamePanel gamePanel; // where the game is drawn
-	private JTextField jtfTime; // displays time spent in game
 
 	public GameWindow(long period) {
 		super("Some Game");
@@ -95,7 +88,6 @@ public class GameWindow extends JFrame implements WindowListener {
 		fpsPeriod = period;
 		// TODO fix fps reporting do adjust when fps changes
 		System.out.println("fps: " + fps + "; period: " + period + " ms");
-
 		new GameWindow(period * 1000000L); // ms --> nanosecs
 	}
 
