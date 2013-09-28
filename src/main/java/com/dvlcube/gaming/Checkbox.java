@@ -69,4 +69,20 @@ public class Checkbox extends DefaultController {
 		}
 		return checkboxes;
 	}
+
+	/**
+	 * @param e
+	 * @param mx
+	 * @param my
+	 * @return whether this element was toggled as a result of a click.
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public boolean toggled(MouseEvent e, int mx, int my) {
+		if (isInside(mx, my)) {
+			toggle();
+			return true;
+		}
+		return false;
+	}
 }

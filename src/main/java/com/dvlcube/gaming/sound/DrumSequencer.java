@@ -75,15 +75,19 @@ public class DrumSequencer extends DefaultController {
 		 * @param e
 		 * @param mx
 		 * @param my
+		 * @return whether this element was toggled as a result of a click.
 		 * @author wonka
 		 * @since 28/09/2013
 		 */
-		public static void mousePressed(MouseEvent e, int mx, int my) {
+		public static boolean mousePressed(MouseEvent e, int mx, int my) {
 			for (Instrument instrument : Instrument.values()) {
 				for (Checkbox checkbox : instrument.ticks) {
-					checkbox.mousePressed(e, mx, my);
+					if (checkbox.toggled(e, mx, my)) {
+						return true;
+					}
 				}
 			}
+			return false;
 		}
 	}
 
@@ -206,7 +210,9 @@ public class DrumSequencer extends DefaultController {
 
 	@Override
 	public void mousePressed(MouseEvent e, int mx, int my) {
-		Instrument.mousePressed(e, mx, my);
+		if (Instrument.mousePressed(e, mx, my)) {
+			buildTrackAndStart();
+		}
 	}
 
 	@Override
