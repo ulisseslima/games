@@ -7,11 +7,10 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.lang.reflect.Constructor;
 import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
-
-import com.dvlcube.gaming.beatsgame.BeatsGame;
 
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
@@ -19,11 +18,10 @@ import com.dvlcube.gaming.beatsgame.BeatsGame;
  * The game's drawing surface. It shows: - the game - the current average FPS
  * and UPS
  */
-public class RunnableGamePanel extends JPanel implements Runnable {
+public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
+	private boolean updateListeners = false;
 	private static final double SCALE = 0.5;
-
 	private static final long serialVersionUID = 1L;
-
 	private static final int PANEL_WIDTH = 1024;
 	private static final int PANEL_HEIGHT = 768;
 
@@ -61,7 +59,6 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private double averageUPS = 0.0;
 
 	private DecimalFormat decimalFormat = new DecimalFormat("0.##"); // 2 dp
-	// private DecimalFormat timedf = new DecimalFormat("0.####"); // 4 dp
 
 	/**
 	 * the thread that performs the animation
@@ -76,8 +73,9 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
 	private GameWindow window;
-	private final Game game = new BeatsGame(new Dimension(PANEL_WIDTH,
+	private BIOS bios = new CubeBIOS(this, new Dimension(PANEL_WIDTH,
 			PANEL_HEIGHT), SCALE);
+	private Game game;
 
 	// used at game termination
 	private boolean gameOver = false;
@@ -101,13 +99,9 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		setFocusable(true);
 		requestFocus(); // the JPanel now has focus, so receives key events
-		readyForTermination();
 
 		resetState();
-
-		addMouseListener(game.getMouseAdapter());
-		addMouseMotionListener(game.getMouseAdapter());
-		addMouseWheelListener(game.getMouseAdapter());
+		readyForTermination();
 
 		// set up message font
 		font = new Font("SansSerif", Font.BOLD, 10);
@@ -126,11 +120,24 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	 * create game components
 	 */
 	private void resetState() {
-		game.reset();
+		if (game != null)
+			game.reset();
 	}
 
 	private void readyForTermination() {
-		addKeyListener(game.getKeyAdapter());
+		if (game != null) {
+			addKeyListener(game.getKeyAdapter());
+			addMouseListener(game.getMouseAdapter());
+			addMouseMotionListener(game.getMouseAdapter());
+			addMouseWheelListener(game.getMouseAdapter());
+			removeMouseListener(bios.getMouseAdapter());
+			removeMouseMotionListener(bios.getMouseAdapter());
+		} else {
+			addMouseListener(bios.getMouseAdapter());
+			addMouseMotionListener(bios.getMouseAdapter());
+		}
+		addKeyListener(bios.getKeyAdapter());
+		updateListeners = false;
 	}
 
 	@Override
@@ -167,6 +174,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	/**
 	 * called when the JFrame is closing
 	 */
+	@Override
 	public void stopGame() {
 		isRunning = false;
 	}
@@ -191,6 +199,8 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		isRunning = true;
 
 		while (isRunning) {
+			if (updateListeners)
+				readyForTermination();
 			gameUpdate();
 			gameRender();
 			paintScreen();
@@ -235,15 +245,17 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 	}
 
 	private void gameUpdate() {
-		if (!isPaused && !gameOver) {
-			game.doLogic();
+		bios.doLogic();
+		if (game != null) {
+			if (!isPaused && !gameOver) {
+				game.doLogic();
+			}
 		}
 	}
 
 	private void gameRender() {
 		if (dbImage == null) {
-			dbImage = createImage(game.scale(PANEL_WIDTH),
-					game.scale(PANEL_HEIGHT));
+			dbImage = createImage(scale(PANEL_WIDTH), scale(PANEL_HEIGHT));
 			if (dbImage == null) {
 				System.out.println("dbImage is null");
 				return;
@@ -253,7 +265,7 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		// clear the background
 		g.setColor(bgColor);
-		g.fillRect(0, 0, game.scale(PANEL_WIDTH), game.scale(PANEL_HEIGHT));
+		g.fillRect(0, 0, scale(PANEL_WIDTH), scale(PANEL_HEIGHT));
 
 		g.setColor(fgColor);
 		g.setFont(font);
@@ -265,8 +277,12 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 
 		g.setColor(fgColor);
 
-		// draw game elements
-		game.doGraphics((Graphics2D) g);
+		if (game == null) {
+			bios.doGraphics((Graphics2D) g);
+		} else {
+			// draw game elements
+			game.doGraphics((Graphics2D) g);
+		}
 
 		if (gameOver)
 			gameOverMessage(g);
@@ -386,4 +402,28 @@ public class RunnableGamePanel extends JPanel implements Runnable {
 		System.out.println("Time Spent: " + timeSpentInGame + " secs");
 	}
 
+	public int scale(double value) {
+		return (int) (value * SCALE);
+	}
+
+	@Override
+	public void loadGame(Class<? extends Game> gameClass) {
+		try {
+			Constructor<? extends Game> constructor = gameClass.getConstructor(
+					Dimension.class, Double.TYPE);
+			game = constructor.newInstance(new Dimension(PANEL_WIDTH,
+					PANEL_HEIGHT), SCALE);
+			updateListeners = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void gameSelect() {
+		updateListeners = true;
+		if (game != null)
+			game.terminate();
+		game = null;
+	}
 }

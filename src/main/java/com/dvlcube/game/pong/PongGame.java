@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.ponggame;
+package com.dvlcube.game.pong;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -22,7 +22,7 @@ public class PongGame extends Game {
 	private final List<Controllable> elements = new ArrayList<Controllable>();
 	private MouseAdapter mouse = new Mouse();
 	private Controllable player1 = new Paddle(new Point(10, 10));
-	private Controllable player2 = new Paddle(new Point(screen.width
+	private Controllable player2 = new Paddle(new Point(scale(screen.width)
 			- (10 + player1.width()), 10));
 	private Controllable ball = new Ball(new Point(player1.x() + 10,
 			player1.y() + 10));
@@ -31,6 +31,7 @@ public class PongGame extends Game {
 		add(player1);
 		add(player2);
 		add(ball);
+		addTerminatables(ball);
 	}
 
 	/**

@@ -1,20 +1,21 @@
-package com.dvlcube.gaming.spacegame;
+package com.dvlcube.game.space;
 
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import com.dvlcube.gaming.Coords;
 import com.dvlcube.gaming.GamePolygon;
+import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.sound.Synthesizer;
 
 /**
  * @author wonka
  * @since 21/09/2013
  */
-class SpaceCraft extends Polygon implements GamePolygon {
+class SpaceCraft extends Polygon implements GamePolygon, Terminatable {
 
 	private static final long serialVersionUID = 6842909318229368081L;
-	private Synthesizer soundTrack = new Synthesizer();
+	private Synthesizer synth = new Synthesizer();
 	public boolean debug = false;
 
 	private int x;
@@ -156,8 +157,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	 * @since 26/09/2013
 	 */
 	private void decelerate() {
-		soundTrack.osc.setFrequency(0);
-		soundTrack.osc.setModulationDepth(0);
+		synth.osc.setFrequency(0);
+		synth.osc.setModulationDepth(0);
 	}
 
 	/**
@@ -166,8 +167,8 @@ class SpaceCraft extends Polygon implements GamePolygon {
 	 * @since 26/09/2013
 	 */
 	private void accelerate() {
-		soundTrack.osc.addFrequency(0.4);
-		soundTrack.osc.setModulationDepth(1);
+		synth.osc.addFrequency(0.4);
+		synth.osc.setModulationDepth(1);
 	}
 
 	@Override
@@ -202,6 +203,12 @@ class SpaceCraft extends Polygon implements GamePolygon {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawString(String.format("%dº", angle), x + 10, y + 10);
+		g.drawString(String.format("%dï¿½", angle), x + 10, y + 10);
+	}
+
+	@Override
+	public void terminate() {
+		synth.terminate();
+		synth = null;
 	}
 }

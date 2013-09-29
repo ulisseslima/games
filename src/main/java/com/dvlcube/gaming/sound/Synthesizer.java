@@ -18,17 +18,19 @@ import com.craigl.softsynth.EnvelopeGenerator;
 import com.craigl.softsynth.SamplePlayer;
 import com.craigl.softsynth.VCF;
 import com.dvlcube.gaming.Controllable;
-import com.dvlcube.gaming.DefaultDrawable;
+import com.dvlcube.gaming.DrawableObject;
+import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.util.Range;
 
 /**
  * @author wonka
  * @since 22/09/2013
  */
-public class Synthesizer extends DefaultDrawable implements Controllable {
+public class Synthesizer extends DrawableObject implements Controllable,
+		Terminatable {
 
-	public final AdvancedOscillator osc;
-	public final VCF vcf;
+	public AdvancedOscillator osc;
+	public VCF vcf;
 	private SamplePlayer player;
 
 	public static final Range<Integer> millisRange = r(
@@ -361,6 +363,13 @@ public class Synthesizer extends DefaultDrawable implements Controllable {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void terminate() {
+		osc = null;
+		vcf = null;
+		player.stopPlayer();
+		player = null;
 	}
 }

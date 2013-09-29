@@ -11,7 +11,7 @@ import java.util.List;
  * @author wonka
  * @since 27/09/2013
  */
-public class Checkbox extends DefaultController {
+public class Checkbox extends ControllableObject {
 
 	public static final int DEFAULT_WIDTH = 10;
 	public static final int DEFAULT_HEIGHT = 10;

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dvlcube.gaming.util.Range;
@@ -15,13 +16,15 @@ import com.dvlcube.gaming.util.Range;
  * @author wonka
  * @since 21/09/2013
  */
-public abstract class Game {
+public abstract class Game implements Terminatable {
 
 	public boolean debug = false;
+	public boolean terminating = false;
 	public double scale = 1;
 	public final Dimension screen;
 	public final Range<Integer> vRange;
 	public final Range<Integer> hRange;
+	protected List<Terminatable> terminatables = new ArrayList<>();
 
 	public Game(Dimension screen) {
 		this.screen = screen;
@@ -85,5 +88,33 @@ public abstract class Game {
 	 */
 	public int scale(double value) {
 		return (int) (value * scale);
+	}
+
+	public String getTitle() {
+		return this.getClass().getSimpleName();
+	}
+
+	@Override
+	public void terminate() {
+		System.out.println(this + " terminating");
+		terminating = true;
+		for (Terminatable terminatable : terminatables) {
+			terminatable.terminate();
+		}
+	}
+
+	/**
+	 * @param ball2
+	 * @author wonka
+	 * @since 29/09/2013
+	 */
+	public void addTerminatables(Object... terminatable) {
+		for (Object object : terminatable) {
+			if (object instanceof Terminatable)
+				terminatables.add((Terminatable) object);
+			else
+				throw new IllegalArgumentException(object
+						+ " is not terminatable");
+		}
 	}
 }

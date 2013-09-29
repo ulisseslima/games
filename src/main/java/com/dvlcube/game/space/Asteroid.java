@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.spacegame;
+package com.dvlcube.game.space;
 
 import java.awt.Graphics2D;
 import java.awt.Polygon;

@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.ponggame;
+package com.dvlcube.game.pong;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -89,7 +89,7 @@ public class Paddle extends Rectangle implements Controllable {
 	@Override
 	public void setSource(Game game) {
 		this.game = game;
-		scW = game.screen.width;
-		scH = game.screen.height;
+		scW = game.scale(game.screen.width);
+		scH = game.scale(game.screen.height);
 	}
 }

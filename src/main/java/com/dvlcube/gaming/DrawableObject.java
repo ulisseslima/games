@@ -7,7 +7,7 @@ import java.awt.Point;
  * @author wonka
  * @since 27/09/2013
  */
-public abstract class DefaultDrawable implements Drawable {
+public abstract class DrawableObject implements Drawable {
 	protected Game game;
 	public int width;
 	public int height;
@@ -15,22 +15,22 @@ public abstract class DefaultDrawable implements Drawable {
 	public int y;
 	public int axis = 0;
 
-	public DefaultDrawable() {
+	public DrawableObject() {
 	}
 
-	public DefaultDrawable(Dimension dimension, Point point) {
+	public DrawableObject(Dimension dimension, Point point) {
 		this.width = dimension.width;
 		this.height = dimension.height;
 		this.x = point.x;
 		this.y = point.y;
 	}
 
-	public DefaultDrawable(Point point) {
+	public DrawableObject(Point point) {
 		this.x = point.x;
 		this.y = point.y;
 	}
 
-	public DefaultDrawable(Dimension dimension) {
+	public DrawableObject(Dimension dimension) {
 		this.width = dimension.width;
 		this.height = dimension.height;
 	}

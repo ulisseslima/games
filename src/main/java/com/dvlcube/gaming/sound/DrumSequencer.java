@@ -36,8 +36,9 @@ import javax.sound.midi.Track;
 import javax.swing.SwingUtilities;
 
 import com.dvlcube.gaming.Checkbox;
-import com.dvlcube.gaming.DefaultController;
+import com.dvlcube.gaming.ControllableObject;
 import com.dvlcube.gaming.Knob;
+import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.util.Range;
 
 /**
@@ -45,7 +46,7 @@ import com.dvlcube.gaming.util.Range;
  * 
  * @author Wonka
  */
-public class DrumSequencer extends DefaultController {
+public class DrumSequencer extends ControllableObject implements Terminatable {
 
 	public static final int DEFAULT_TICKS = 16;
 	public static final int DEFAULT_CHECKBOX_X_OFFSET = 100;
@@ -189,6 +190,8 @@ public class DrumSequencer extends DefaultController {
 			 * continuous looping.
 			 */
 			sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+			if (!sequencer.isOpen())
+				sequencer.open();
 			sequencer.start();
 			playing = true;
 			sequencer.setTempoInBPM(120);
@@ -277,7 +280,8 @@ public class DrumSequencer extends DefaultController {
 	}
 
 	private void stop() {
-		sequencer.stop();
+		if (sequencer.isOpen())
+			sequencer.stop();
 		playing = false;
 	}
 
@@ -326,5 +330,11 @@ public class DrumSequencer extends DefaultController {
 		public void draw(Graphics2D g, int x, int y) {
 			g.drawString(getName() + ": " + getValue(), x, y);
 		}
+	}
+
+	@Override
+	public void terminate() {
+		sequencer.close();
+		sequencer = null;
 	}
 }

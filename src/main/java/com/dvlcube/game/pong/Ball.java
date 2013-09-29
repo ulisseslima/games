@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.ponggame;
+package com.dvlcube.game.pong;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -12,16 +12,17 @@ import java.util.List;
 
 import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Game;
+import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.sound.Synthesizer;
 
 /**
  * @author wonka
  * @since 26/09/2013
  */
-public class Ball extends Rectangle implements Controllable {
+public class Ball extends Rectangle implements Controllable, Terminatable {
 
 	private static final long serialVersionUID = 3929278993084690115L;
-	private Synthesizer soundTrack = new Synthesizer();
+	private Synthesizer synth = new Synthesizer();
 	public boolean debug = false;
 	private PongGame game;
 	private List<Paddle> paddles = new ArrayList<>();
@@ -66,26 +67,26 @@ public class Ball extends Rectangle implements Controllable {
 	}
 
 	private void pop() {
-		double f = soundTrack.osc.getFrequency();
+		double f = synth.osc.getFrequency();
 		if (f != 10) {
-			soundTrack.osc.setFrequency(10);
-			soundTrack.osc.setModulationDepth(0.5);
+			synth.osc.setFrequency(10);
+			synth.osc.setModulationDepth(0.5);
 		}
 	}
 
 	private void blip() {
-		double f = soundTrack.osc.getFrequency();
+		double f = synth.osc.getFrequency();
 		if (f < 40) {
-			soundTrack.osc.setFrequency(40);
-			soundTrack.osc.setModulationDepth(1.0);
+			synth.osc.setFrequency(40);
+			synth.osc.setModulationDepth(1.0);
 		}
 	}
 
 	private void goSilent() {
-		double f = soundTrack.osc.getFrequency();
+		double f = synth.osc.getFrequency();
 		if (f > 0) {
-			soundTrack.osc.setFrequency(0);
-			soundTrack.osc.setModulationDepth(0);
+			synth.osc.setFrequency(0);
+			synth.osc.setModulationDepth(0);
 		}
 	}
 
@@ -209,7 +210,13 @@ public class Ball extends Rectangle implements Controllable {
 				paddles.add((Paddle) controllable);
 			}
 		}
-		scW = game.screen.width;
-		scH = game.screen.height;
+		scW = game.scale(game.screen.width);
+		scH = game.scale(game.screen.height);
+	}
+
+	@Override
+	public void terminate() {
+		synth.terminate();
+		synth = null;
 	}
 }

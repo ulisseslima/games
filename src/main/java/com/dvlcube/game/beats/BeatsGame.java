@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.beatsgame;
+package com.dvlcube.game.beats;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -42,6 +42,7 @@ public class BeatsGame extends Game {
 
 	{
 		sequencer.setSource(this);
+		addTerminatables(sequencer);
 	}
 
 	@Override
@@ -56,24 +57,28 @@ public class BeatsGame extends Game {
 	public class Mouse extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent e) {
-			sequencer.mousePressed(e, scale(e.getX()), scale(e.getY()));
+			if (!terminating)
+				sequencer.mousePressed(e, scale(e.getX()), scale(e.getY()));
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			sequencer.mouseDragged(e, scale(e.getX()), scale(e.getY()));
+			if (!terminating)
+				sequencer.mouseDragged(e, scale(e.getX()), scale(e.getY()));
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			sequencer.mouseReleased(e, scale(e.getX()), scale(e.getY()));
+			if (!terminating)
+				sequencer.mouseReleased(e, scale(e.getX()), scale(e.getY()));
 		}
 	}
 
 	public class Keyboard extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			sequencer.keyPressed(e);
+			if (!terminating)
+				sequencer.keyPressed(e);
 		}
 	}
 

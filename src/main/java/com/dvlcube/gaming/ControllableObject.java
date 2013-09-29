@@ -10,21 +10,22 @@ import java.awt.event.MouseWheelEvent;
  * @author wonka
  * @since 27/09/2013
  */
-public abstract class DefaultController extends DefaultDrawable implements
+public abstract class ControllableObject extends DrawableObject implements
 		Controllable {
+	public boolean hasMouseOver = false;
 
-	public DefaultController() {
+	public ControllableObject() {
 	}
 
-	public DefaultController(Dimension dimension, Point point) {
+	public ControllableObject(Dimension dimension, Point point) {
 		super(dimension, point);
 	}
 
-	public DefaultController(Point point) {
+	public ControllableObject(Point point) {
 		super(point);
 	}
 
-	public DefaultController(Dimension dimension) {
+	public ControllableObject(Dimension dimension) {
 		super(dimension);
 	}
 
@@ -50,5 +51,19 @@ public abstract class DefaultController extends DefaultDrawable implements
 
 	@Override
 	public void mouseMoved(MouseEvent e, int x, int y) {
+		hasMouseOver = isInside(x, y);
+	}
+
+	/**
+	 * @param mx
+	 *            mouse x
+	 * @param my
+	 *            mouse y
+	 * @return true if the coordinates are within this drawable bounds.
+	 * @author wonka
+	 * @since 28/09/2013
+	 */
+	public boolean activated(int mx, int my) {
+		return hasMouseOver = isInside(mx, my);
 	}
 }

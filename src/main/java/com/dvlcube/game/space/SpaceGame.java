@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.spacegame;
+package com.dvlcube.game.space;
 
 import static com.dvlcube.gaming.util.Cuber.xy;
 
@@ -26,7 +26,7 @@ import com.dvlcube.gaming.sound.Synthesizer;
  */
 public class SpaceGame extends Game {
 	private Random random = new Random();
-	private Synthesizer soundTrack = new Synthesizer();
+	private Synthesizer synth = new Synthesizer();
 	private List<GamePolygon> polys = new ArrayList<GamePolygon>();
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
@@ -53,8 +53,9 @@ public class SpaceGame extends Game {
 	}
 
 	{
+		addTerminatables(synth);
 		polys.add(spaceCraft);
-		soundTrack.osc.setWaveshape(WAVESHAPE.SIN);
+		synth.osc.setWaveshape(WAVESHAPE.SIN);
 		for (int i = 0; i < 10; i++) {
 			int x = random.nextInt(screen.width), y = random
 					.nextInt(screen.height);
@@ -67,15 +68,15 @@ public class SpaceGame extends Game {
 		for (GamePolygon polygon : polys) {
 			polygon.update();
 		}
-		if (soundTrack.osc.getFrequency() < frequencyGoal) {
-			soundTrack.osc.addFrequency(2.5);
-			soundTrack.osc.addModulationDepth(0.1);
-			if (soundTrack.osc.getFrequency() > frequencyGoal)
+		if (synth.osc.getFrequency() < frequencyGoal) {
+			synth.osc.addFrequency(2.5);
+			synth.osc.addModulationDepth(0.1);
+			if (synth.osc.getFrequency() > frequencyGoal)
 				frequencyGoal = 1;
 		} else {
-			soundTrack.osc.addFrequency(-2.5);
-			soundTrack.osc.addModulationDepth(-0.1);
-			if (soundTrack.osc.getFrequency() < frequencyGoal)
+			synth.osc.addFrequency(-2.5);
+			synth.osc.addModulationDepth(-0.1);
+			if (synth.osc.getFrequency() < frequencyGoal)
 				frequencyGoal = 40;
 		}
 	}

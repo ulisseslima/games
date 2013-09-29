@@ -1,7 +1,11 @@
 package com.craigl.softsynth;
 
 import java.util.Arrays;
-import javax.sound.sampled.*;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 
 /**
  * Sample Player Class based on the javax.sound.sampled package.
@@ -20,15 +24,16 @@ import javax.sound.sampled.*;
  * @author craiglindley
  */
 
-public class SamplePlayer extends Thread implements SampleProviderIntfc  {
-	
-	// Count of zeroed buffers to return before switching to real sample provider
+public class SamplePlayer extends Thread implements SampleProviderIntfc {
+
+	// Count of zeroed buffers to return before switching to real sample
+	// provider
 	private static final int TEMP_BUFFER_COUNT = 20;
-	
+
 	// AudioFormat parameters
-	public  static final int     SAMPLE_RATE = 22050;
-	private static final int     SAMPLE_SIZE = 16;
-	private static final int     CHANNELS = 1;
+	public static final int SAMPLE_RATE = 22050;
+	private static final int SAMPLE_SIZE = 16;
+	private static final int CHANNELS = 1;
 	private static final boolean SIGNED = true;
 	private static final boolean BIG_ENDIAN = true;
 
@@ -38,26 +43,38 @@ public class SamplePlayer extends Thread implements SampleProviderIntfc  {
 
 	// Sample time values
 	public static final double SAMPLE_TIME_IN_SECS = 1.0 / SAMPLE_RATE;
-	public static final double BUFFER_TIME_IN_SECS = SAMPLE_TIME_IN_SECS * SAMPLES_PER_BUFFER;
+	public static final double BUFFER_TIME_IN_SECS = SAMPLE_TIME_IN_SECS
+			* SAMPLES_PER_BUFFER;
+
+	private AudioFormat format;
+	private DataLine.Info info;
+	private SourceDataLine auline;
+	private boolean hasRun;
+	private boolean done;
+	private int bufferCount;
+	private byte[] sampleData = new byte[BUFFER_SIZE];
+	private SampleProviderIntfc provider;
+	private SampleProviderIntfc realProvider;
 
 	/**
 	 * SamplePlayer Class Constructor
 	 */
 	public SamplePlayer() {
-		
+
 		// Create the audio format we wish to use
-		format = new AudioFormat(SAMPLE_RATE, SAMPLE_SIZE, CHANNELS, SIGNED, BIG_ENDIAN);
+		format = new AudioFormat(SAMPLE_RATE, SAMPLE_SIZE, CHANNELS, SIGNED,
+				BIG_ENDIAN);
 
 		// Create dataline info object describing line format
 		info = new DataLine.Info(SourceDataLine.class, format);
-		
+
 		// Clear buffer initially
 		Arrays.fill(sampleData, (byte) 0);
-		
+
 		// Set temp provider so zeroed buffers are consumed initially
 		provider = this;
 	}
-	
+
 	/**
 	 * Process a buffer full of samples pulled from the sample provider
 	 * <p>
@@ -66,29 +83,32 @@ public class SamplePlayer extends Thread implements SampleProviderIntfc  {
 	 * has been processed, SamplePlayer switches to its real sample provider.<br>
 	 * This is necessary to prevent glitches on startup.
 	 * 
-	 * @param buffer Buffer in which the samples are to be processed
+	 * @param buffer
+	 *            Buffer in which the samples are to be processed
 	 * 
 	 * @return Count of number of bytes processed
 	 */
-	public int getSamples(byte [] buffer) {
+	@Override
+	public int getSamples(byte[] buffer) {
 
 		bufferCount++;
 		if (bufferCount >= TEMP_BUFFER_COUNT) {
 			// Audio system flushed so switch to real sample provider
 			provider = realProvider;
 		}
-		return BUFFER_SIZE;		
+		return BUFFER_SIZE;
 	}
-	
+
 	/**
 	 * Start the SamplePlayer thread.
 	 * <p>
 	 * This thread will continue to run until either<br>
 	 * the done flag gets set or the sample provider runs<br>
-	 * out of samples. 
+	 * out of samples.
 	 * <p>
 	 * NOTE: once the thread ends it cannot be restarted.
-	 */ 
+	 */
+	@Override
 	public void run() {
 
 		done = false;
@@ -100,62 +120,63 @@ public class SamplePlayer extends Thread implements SampleProviderIntfc  {
 			auline.open(format);
 			auline.start();
 
-			while ((nBytesRead != -1) && (! done)) {
+			while ((nBytesRead != -1) && (!done)) {
 				nBytesRead = provider.getSamples(sampleData);
 				if (nBytesRead > 0) {
 					auline.write(sampleData, 0, nBytesRead);
 				}
 			}
-		} catch(Exception e) {
-			e.printStackTrace();				
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			auline.drain();
-			auline.close();							
+			auline.close();
 		}
-	}		
-	
+	}
+
 	/**
 	 * Method to start the sample player
-	 */ 
+	 */
 	public void startPlayer() {
-		
+
 		if (hasRun) {
-			System.err.println("Illegal to restart a Thread once it has been stopped");
+			System.err
+					.println("Illegal to restart a Thread once it has been stopped");
 			return;
 		}
 		if (realProvider != null) {
-			// Indicate this thread has run 
+			// Indicate this thread has run
 			hasRun = true;
 
 			// Starter up
-			start();	
+			start();
 		}
 	}
-	
+
 	/**
 	 * Method to stop the sample player
-	 */ 
+	 */
 	public void stopPlayer() {
 		done = true;
 	}
-	
+
 	/**
 	 * Setup the real provider of samples
 	 * 
-	 * @param provider The provider of samples for the SamplePlayer.
+	 * @param provider
+	 *            The provider of samples for the SamplePlayer.
 	 */
 	public void setSampleProvider(SampleProviderIntfc provider) {
 		realProvider = provider;
 	}
-	
-	// Instance data
-	private AudioFormat format;
-	private DataLine.Info info;
-	private SourceDataLine auline;
-	private boolean hasRun;
-	private boolean done;
-	private int bufferCount;
-	private byte [] sampleData = new byte[BUFFER_SIZE];
-	private SampleProviderIntfc provider;
-	private SampleProviderIntfc realProvider;
+
+	/**
+	 * 
+	 * @author wonka
+	 * @return the sound line.
+	 * @since 29/09/2013
+	 */
+	public SourceDataLine getLine() {
+		return auline;
+	}
 }

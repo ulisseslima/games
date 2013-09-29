@@ -1,4 +1,4 @@
-package com.dvlcube.gaming.soundgame;
+package com.dvlcube.game.sound;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -21,10 +21,11 @@ public class SoundGame extends Game {
 	public boolean debug = true;
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
-	private Synthesizer sound = new Synthesizer();
+	private Synthesizer synth = new Synthesizer();
 
 	{
-		sound.setSource(this);
+		synth.setSource(this);
+		addTerminatables(synth);
 	}
 
 	public SoundGame(Dimension screen) {
@@ -41,35 +42,35 @@ public class SoundGame extends Game {
 
 	@Override
 	public void doGraphics(Graphics2D g) {
-		sound.draw(g);
+		synth.draw(g);
 	}
 
 	public class Mouse extends MouseAdapter {
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			sound.mouseMoved(e, screen.width, screen.height);
+			synth.mouseMoved(e, screen.width, screen.height);
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			sound.mousePressed(e, scale(e.getX()), scale(e.getY()));
+			synth.mousePressed(e, scale(e.getX()), scale(e.getY()));
 		}
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			sound.mouseWheelMoved(e);
+			synth.mouseWheelMoved(e);
 		}
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			sound.mouseDragged(e, screen.width, screen.height);
+			synth.mouseDragged(e, screen.width, screen.height);
 		}
 	}
 
 	public class Keyboard extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			sound.keyPressed(e);
+			synth.keyPressed(e);
 		}
 	}
 
