@@ -83,8 +83,6 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	private Image dbImage = null;
 
 	private boolean debug = false;
-	public static final Color bgColor = new Color(60, 60, 60);
-	public static final Color fgColor = new Color(8, 130, 230);
 
 	public RunnableGamePanel(GameWindow window, long period) {
 		this.fpsPeriod = period;
@@ -258,10 +256,10 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 		}
 
 		// clear the background
-		g.setColor(bgColor);
+		g.setColor(BG_COLOR);
 		g.fillRect(0, 0, scale(PANEL_WIDTH), scale(PANEL_HEIGHT));
 
-		g.setColor(fgColor);
+		g.setColor(FG_COLOR);
 		g.setFont(font);
 
 		// report frame count & average FPS and UPS at top left
@@ -270,7 +268,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 					"Average FPS/UPS: " + decimalFormat.format(averageFPS) + ", " + decimalFormat.format(averageUPS),
 					20, 25);
 
-		g.setColor(fgColor);
+		g.setColor(FG_COLOR);
 
 		if (game == null) {
 			bios.doGraphics((Graphics2D) g);

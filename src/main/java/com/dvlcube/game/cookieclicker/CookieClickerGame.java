@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 import com.dvlcube.gaming.Action;
 import com.dvlcube.gaming.Game;
-import com.dvlcube.gaming.MenuItem;
+import com.dvlcube.gaming.GamePanel;
 import com.dvlcube.gaming.RunnableGamePanel;
 
 /**
@@ -22,12 +22,12 @@ import com.dvlcube.gaming.RunnableGamePanel;
  * @since 29/09/2013
  */
 public class CookieClickerGame extends Game {
-	public static final float VERSION = 1.0f;
+	public static final float VERSION = 0.2f;
 
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 
-	private long displayedCookies = 0;
+	private long cookiesDisplay = 0;
 	private long cookies = 0;
 	private long lastSecond = -1;
 	private final Cookie cookie;
@@ -62,34 +62,41 @@ public class CookieClickerGame extends Game {
 					return false;
 				}
 			};
-			addObject(new MenuItem(action, d, new Point(x, y), producer.name));
+			addObject(new ProducerMenuItem(action, d, new Point(x, y), producer));
 			y += d.height + spacing;
 		}
 	}
 
 	@Override
 	public void doLogic() {
+		super.doLogic();
+
 		if (RunnableGamePanel.GAME_SECONDS != lastSecond) {
 			lastSecond = RunnableGamePanel.GAME_SECONDS;
 			cookies += CookieProducer.doProduce();
-			super.doLogic();
 		}
-		if (displayedCookies < cookies) {
-			long diff = cookies - displayedCookies;
+
+		if (cookiesDisplay < cookies) {
+			long diff = cookies - cookiesDisplay;
 			long increase = (diff * 10) / 100;
 			if (increase < 1)
 				increase = 1;
-			displayedCookies += increase;
+			cookiesDisplay += increase;
 		}
 
-		if (displayedCookies > cookies)
-			displayedCookies = cookies;
+		if (cookiesDisplay > cookies)
+			cookiesDisplay = cookies;
 	}
 
 	@Override
 	public void doGraphics(Graphics2D g) {
 		super.doGraphics(g);
-		g.drawString(df(displayedCookies), cookie.x, cookie.y - (cookie.height));
+
+		String fcookies = df(cookiesDisplay);
+		int spacing = 10;
+		int stringWidth = g.getFontMetrics().stringWidth(fcookies) / 2;
+		g.setColor(GamePanel.FG_COLOR);
+		g.drawString(fcookies, (cookie.x + cookie.width / 2) - stringWidth, cookie.y - spacing);
 	}
 
 	@Override
