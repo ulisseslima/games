@@ -47,15 +47,13 @@ class GameMenu extends MenuItem {
 	 * @author wonka
 	 * @since 28/09/2013
 	 */
-	public GameMenu(Dimension dimension, Point point, String title,
-			Class<? extends Game> gameClass) {
-		super(dimension, point, title);
+	public GameMenu(Dimension dimension, Point point, String title, Class<? extends Game> gameClass) {
+		super(null, dimension, point, title);
 		this.gameClass = gameClass;
 	}
 
-	public GameMenu(Dimension dimension, Point point,
-			Class<? extends Game> gameClass) {
-		super(dimension, point, gameClass.getSimpleName());
+	public GameMenu(Dimension dimension, Point point, Class<? extends Game> gameClass) {
+		super(null, dimension, point, gameClass.getSimpleName());
 		this.gameClass = gameClass;
 	}
 }

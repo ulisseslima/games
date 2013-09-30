@@ -6,9 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
-import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.sound.DrumSequencer;
 
@@ -42,7 +40,7 @@ public class BeatsGame extends Game {
 
 	{
 		sequencer.setSource(this);
-		addTerminatables(sequencer);
+		addObject(sequencer);
 	}
 
 	@Override
@@ -94,10 +92,5 @@ public class BeatsGame extends Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public List<Controllable> getControllables() {
-		return null;
 	}
 }

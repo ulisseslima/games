@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.craigl.softsynth.BasicOscillator.WAVESHAPE;
-import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Coords;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.GamePolygon;
@@ -25,6 +24,8 @@ import com.dvlcube.gaming.sound.Synthesizer;
  * @since 20/09/2013
  */
 public class SpaceGame extends Game {
+	public static final float VERSION = 2.1f;
+
 	private Random random = new Random();
 	private Synthesizer synth = new Synthesizer();
 	private List<GamePolygon> polys = new ArrayList<GamePolygon>();
@@ -53,12 +54,11 @@ public class SpaceGame extends Game {
 	}
 
 	{
-		addTerminatables(synth);
+		addObject(synth);
 		polys.add(spaceCraft);
 		synth.osc.setWaveshape(WAVESHAPE.SIN);
 		for (int i = 0; i < 10; i++) {
-			int x = random.nextInt(screen.width), y = random
-					.nextInt(screen.height);
+			int x = random.nextInt(screen.width), y = random.nextInt(screen.height);
 			polys.add(new Asteroid(xy(x, y)));
 		}
 	}
@@ -89,8 +89,7 @@ public class SpaceGame extends Game {
 			int polyAngle = polygon.getAngle();
 			double fixedAngle = Math.toRadians(polyAngle);
 			if (debug)
-				System.out.printf("filling %d,%d at %f�\n", polyX, polyY,
-						fixedAngle);
+				System.out.printf("filling %d,%d at %f�\n", polyX, polyY, fixedAngle);
 			g.rotate(fixedAngle, polyX, polyY);
 			g.drawPolygon((Polygon) polygon);
 			g.rotate(-fixedAngle, polyX, polyY);
@@ -146,10 +145,5 @@ public class SpaceGame extends Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public List<Controllable> getControllables() {
-		return null;
 	}
 }

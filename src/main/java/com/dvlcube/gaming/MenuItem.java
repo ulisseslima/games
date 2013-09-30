@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 
 /**
  * @author wonka
@@ -18,8 +19,9 @@ public class MenuItem extends ControllableObject {
 	public Color bgColor = new Color(60, 60, 60);
 	public Color fgColor = new Color(8, 130, 230);
 
-	public MenuItem(Dimension dimension, Point point, String label) {
+	public MenuItem(Action action, Dimension dimension, Point point, String label) {
 		super(dimension, point);
+		this.action = action;
 		this.label = label;
 	}
 
@@ -65,5 +67,11 @@ public class MenuItem extends ControllableObject {
 
 	@Override
 	public void update() {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e, int mx, int my) {
+		if (activated(mx, my))
+			doAction();
 	}
 }

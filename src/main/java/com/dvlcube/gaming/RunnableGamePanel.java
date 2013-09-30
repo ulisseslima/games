@@ -15,8 +15,7 @@ import javax.swing.JPanel;
 /**
  * From: Andrew Davison, April 2005, ad@fivedots.coe.psu.ac.th
  * <p>
- * The game's drawing surface. It shows: - the game - the current average FPS
- * and UPS
+ * The game's drawing surface. It shows: - the game - the current average FPS and UPS
  */
 public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	private boolean updateListeners = false;
@@ -31,8 +30,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 	private static final int NO_DELAYS_PER_YIELD = 16;
 	/*
-	 * Number of frames with a delay of 0 ms before the animation thread yields
-	 * to other running threads.
+	 * Number of frames with a delay of 0 ms before the animation thread yields to other running threads.
 	 */
 	private static int MAX_FRAME_SKIPS = 5;
 	// no. of frames that can be skipped in any one animation loop
@@ -46,7 +44,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	private long prevStatsTime;
 	private long totalElapsedTime = 0L;
 	private long gameStartTime;
-	private int timeSpentInGame = 0; // in seconds
+	public static int GAME_SECONDS = 0; // in seconds
 
 	private long frameCount = 0;
 	private double fpsStore[];
@@ -58,7 +56,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	private double upsStore[];
 	private double averageUPS = 0.0;
 
-	private DecimalFormat decimalFormat = new DecimalFormat("0.##"); // 2 dp
+	private DecimalFormat decimalFormat = new DecimalFormat("0.##");
 
 	/**
 	 * the thread that performs the animation
@@ -72,9 +70,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 	private long fpsPeriod; // period between drawing in _nanosecs_
 
-	private GameWindow window;
-	private BIOS bios = new CubeBIOS(this, new Dimension(PANEL_WIDTH,
-			PANEL_HEIGHT), SCALE);
+	private BIOS bios = new CubeBIOS(this, new Dimension(PANEL_WIDTH, PANEL_HEIGHT), SCALE);
 	private Game game;
 
 	// used at game termination
@@ -91,7 +87,6 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	public static final Color fgColor = new Color(8, 130, 230);
 
 	public RunnableGamePanel(GameWindow window, long period) {
-		this.window = window;
 		this.fpsPeriod = period;
 
 		setBackground(Color.white);
@@ -228,9 +223,8 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 			beforeTime = System.nanoTime();
 
 			/*
-			 * If frame animation is taking too long, update the game state
-			 * without rendering it, to get the updates/sec nearer to the
-			 * required FPS.
+			 * If frame animation is taking too long, update the game state without rendering it, to get the
+			 * updates/sec nearer to the required FPS.
 			 */
 			int skips = 0;
 			while ((excess > fpsPeriod) && (skips < MAX_FRAME_SKIPS)) {
@@ -272,8 +266,9 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 		// report frame count & average FPS and UPS at top left
 		if (debug)
-			g.drawString("Average FPS/UPS: " + decimalFormat.format(averageFPS)
-					+ ", " + decimalFormat.format(averageUPS), 20, 25);
+			g.drawString(
+					"Average FPS/UPS: " + decimalFormat.format(averageFPS) + ", " + decimalFormat.format(averageUPS),
+					20, 25);
 
 		g.setColor(fgColor);
 
@@ -319,18 +314,17 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	}
 
 	/**
-	 * The statistics: - the summed periods for all the iterations in this
-	 * interval (period is the amount of time a single frame iteration should
-	 * take), the actual elapsed time in this interval, the error between these
-	 * two numbers;
+	 * The statistics: - the summed periods for all the iterations in this interval (period is the amount of
+	 * time a single frame iteration should take), the actual elapsed time in this interval, the error between
+	 * these two numbers;
 	 * 
 	 * - the total frame count, which is the total number of calls to run();
 	 * 
-	 * - the frames skipped in this interval, the total number of frames
-	 * skipped. A frame skip is a game update without a corresponding render;
+	 * - the frames skipped in this interval, the total number of frames skipped. A frame skip is a game
+	 * update without a corresponding render;
 	 * 
-	 * - the FPS (frames/sec) and UPS (updates/sec) for this interval, the
-	 * average FPS & UPS over the last NUM_FPSs intervals.
+	 * - the FPS (frames/sec) and UPS (updates/sec) for this interval, the average FPS & UPS over the last
+	 * NUM_FPSs intervals.
 	 * 
 	 * The data is collected every MAX_STATS_INTERVAL (1 sec).
 	 */
@@ -342,7 +336,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 		if (statsInterval >= MAX_STATS_INTERVAL) {
 			long timeNow = System.nanoTime();
 			// ns --> secs
-			timeSpentInGame = (int) ((timeNow - gameStartTime) / 1000000000L);
+			GAME_SECONDS = (int) ((timeNow - gameStartTime) / 1000000000L);
 
 			long realElapsedTime = timeNow - prevStatsTime; // time since last
 															// stats collection
@@ -380,13 +374,11 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 				averageUPS = totalUPS / NUM_FPS;
 			}
 			/*
-			 * System.out.println(timedf.format( (double)
-			 * statsInterval/1000000000L) + " " + timedf.format((double)
-			 * realElapsedTime/1000000000L) + "s " + df.format(timingError) +
-			 * "% " + frameCount + "c " + framesSkipped + "/" +
-			 * totalFramesSkipped + " skip; " + df.format(actualFPS) + " " +
-			 * df.format(averageFPS) + " afps; " + df.format(actualUPS) + " " +
-			 * df.format(averageUPS) + " aups" );
+			 * System.out.println(timedf.format( (double) statsInterval/1000000000L) + " " +
+			 * timedf.format((double) realElapsedTime/1000000000L) + "s " + df.format(timingError) + "% " +
+			 * frameCount + "c " + framesSkipped + "/" + totalFramesSkipped + " skip; " + df.format(actualFPS)
+			 * + " " + df.format(averageFPS) + " afps; " + df.format(actualUPS) + " " + df.format(averageUPS)
+			 * + " aups" );
 			 */
 			framesSkipped = 0;
 			prevStatsTime = timeNow;
@@ -395,11 +387,10 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	}
 
 	private void printStats() {
-		System.out.println("Frame Count/Loss: " + frameCount + " / "
-				+ totalFramesSkipped);
+		System.out.println("Frame Count/Loss: " + frameCount + " / " + totalFramesSkipped);
 		System.out.println("Average FPS: " + decimalFormat.format(averageFPS));
 		System.out.println("Average UPS: " + decimalFormat.format(averageUPS));
-		System.out.println("Time Spent: " + timeSpentInGame + " secs");
+		System.out.println("Time Spent: " + GAME_SECONDS + " secs");
 	}
 
 	public int scale(double value) {
@@ -409,10 +400,8 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 	@Override
 	public void loadGame(Class<? extends Game> gameClass) {
 		try {
-			Constructor<? extends Game> constructor = gameClass.getConstructor(
-					Dimension.class, Double.TYPE);
-			game = constructor.newInstance(new Dimension(PANEL_WIDTH,
-					PANEL_HEIGHT), SCALE);
+			Constructor<? extends Game> constructor = gameClass.getConstructor(Dimension.class, Double.TYPE);
+			game = constructor.newInstance(new Dimension(PANEL_WIDTH, PANEL_HEIGHT), SCALE);
 			updateListeners = true;
 		} catch (Exception e) {
 			e.printStackTrace();

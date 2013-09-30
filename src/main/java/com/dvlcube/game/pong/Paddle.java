@@ -18,9 +18,7 @@ import com.dvlcube.gaming.Game;
 public class Paddle extends Rectangle implements Controllable {
 	private static final long serialVersionUID = -6768121714516610954L;
 	public boolean debug = false;
-	private Game game;
 	public Integer score = 0;
-	private int scW;
 	private int scH;
 
 	public Paddle(Point point, Dimension dimension) {
@@ -88,8 +86,11 @@ public class Paddle extends Rectangle implements Controllable {
 
 	@Override
 	public void setSource(Game game) {
-		this.game = game;
-		scW = game.scale(game.screen.width);
 		scH = game.scale(game.screen.height);
+	}
+
+	@Override
+	public boolean doAction() {
+		return false;
 	}
 }

@@ -10,9 +10,9 @@ import java.awt.event.MouseWheelEvent;
  * @author wonka
  * @since 27/09/2013
  */
-public abstract class ControllableObject extends DrawableObject implements
-		Controllable {
+public abstract class ControllableObject extends DrawableObject implements Controllable {
 	public boolean hasMouseOver = false;
+	protected Action action;
 
 	public ControllableObject() {
 	}
@@ -65,5 +65,12 @@ public abstract class ControllableObject extends DrawableObject implements
 	 */
 	public boolean activated(int mx, int my) {
 		return hasMouseOver = isInside(mx, my);
+	}
+
+	@Override
+	public boolean doAction() {
+		if (action != null)
+			return action.doAction();
+		return false;
 	}
 }

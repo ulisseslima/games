@@ -7,9 +7,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.dvlcube.game.beats.BeatsGame;
+import com.dvlcube.game.cookieclicker.CookieClickerGame;
 import com.dvlcube.game.pong.PongGame;
 import com.dvlcube.game.sound.SoundGame;
 import com.dvlcube.game.space.SpaceGame;
@@ -19,6 +21,7 @@ import com.dvlcube.game.space.SpaceGame;
  * @since 28/09/2013
  */
 public class CubeBIOS extends BIOS {
+	public static final float VERSION = 1.1f;
 
 	/**
 	 * @param screen
@@ -40,15 +43,19 @@ public class CubeBIOS extends BIOS {
 	}
 
 	{
+		Set<Class<? extends Game>> classes = new HashSet<>();
+		classes.add(BeatsGame.class);
+		classes.add(PongGame.class);
+		classes.add(SoundGame.class);
+		classes.add(SpaceGame.class);
+		classes.add(CookieClickerGame.class);
+
 		Dimension d = MenuItem.DEFAULT_DIMENSION;
 		int x = 10, y = 10, spacing = 5;
-		gameMenus.add(new GameMenu(d, new Point(x, y), BeatsGame.class));
-		y += d.height + spacing;
-		gameMenus.add(new GameMenu(d, new Point(x, y), PongGame.class));
-		y += d.height + spacing;
-		gameMenus.add(new GameMenu(d, new Point(x, y), SoundGame.class));
-		y += d.height + spacing;
-		gameMenus.add(new GameMenu(d, new Point(x, y), SpaceGame.class));
+		for (Class<? extends Game> gameClass : classes) {
+			gameMenus.add(new GameMenu(d, new Point(x, y), gameClass));
+			y += d.height + spacing;
+		}
 	}
 
 	private MouseAdapter mouse = new Mouse();
@@ -78,11 +85,6 @@ public class CubeBIOS extends BIOS {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public List<Controllable> getControllables() {
-		return null;
 	}
 
 	private class Mouse extends MouseAdapter {

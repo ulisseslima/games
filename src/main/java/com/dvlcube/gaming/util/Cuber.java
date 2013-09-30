@@ -1,6 +1,7 @@
 package com.dvlcube.gaming.util;
 
 import java.awt.Graphics2D;
+import java.text.DecimalFormat;
 
 import com.dvlcube.gaming.Coords;
 
@@ -9,31 +10,25 @@ import com.dvlcube.gaming.Coords;
  * @since 21/09/2013
  */
 public class Cuber {
+	public static final DecimalFormat df = new DecimalFormat("#,##0.##");
 
 	public static <T> Range<T> r(T start, T end) {
 		return new Range<T>(start, end);
 	}
 
-	public static double mapd(Number n, Range<? extends Number> range,
-			Range<? extends Number> newRange) {
-		return NumberUtils.map(n.doubleValue(), range.getStart().doubleValue(),
-				range.getEnd().doubleValue(),
-				newRange.getStart().doubleValue(), newRange.getEnd()
-						.doubleValue());
-	}
-
-	public static float mapf(Number n, Range<? extends Number> range,
-			Range<? extends Number> newRange) {
-		return (float) NumberUtils.map(n.doubleValue(), range.getStart()
-				.doubleValue(), range.getEnd().doubleValue(), newRange
+	public static double mapd(Number n, Range<? extends Number> range, Range<? extends Number> newRange) {
+		return NumberUtils.map(n.doubleValue(), range.getStart().doubleValue(), range.getEnd().doubleValue(), newRange
 				.getStart().doubleValue(), newRange.getEnd().doubleValue());
 	}
 
-	public static int map(Number n, Range<? extends Number> range,
-			Range<? extends Number> newRange) {
-		return (int) NumberUtils.map(n.doubleValue(), range.getStart()
-				.doubleValue(), range.getEnd().doubleValue(), newRange
-				.getStart().doubleValue(), newRange.getEnd().doubleValue());
+	public static float mapf(Number n, Range<? extends Number> range, Range<? extends Number> newRange) {
+		return (float) NumberUtils.map(n.doubleValue(), range.getStart().doubleValue(), range.getEnd().doubleValue(),
+				newRange.getStart().doubleValue(), newRange.getEnd().doubleValue());
+	}
+
+	public static int map(Number n, Range<? extends Number> range, Range<? extends Number> newRange) {
+		return (int) NumberUtils.map(n.doubleValue(), range.getStart().doubleValue(), range.getEnd().doubleValue(),
+				newRange.getStart().doubleValue(), newRange.getEnd().doubleValue());
 	}
 
 	public static void delay(long millis) {
@@ -48,6 +43,10 @@ public class Cuber {
 		return new Coords(x, y);
 	}
 
+	public static String df(double number) {
+		return df.format(number);
+	}
+
 	/**
 	 * Draws a string.
 	 * 
@@ -59,8 +58,25 @@ public class Cuber {
 	 * @author wonka
 	 * @since 23/09/2013
 	 */
-	public static void draws(int x, int y, Graphics2D g, String string,
-			Object... args) {
+	public static void draws(int x, int y, Graphics2D g, String string, Object... args) {
 		g.drawString(String.format(string, args), x, y);
+	}
+
+	/**
+	 * @param name
+	 *            name to convert.
+	 * @return A "static" name (e.g. STATIC_NAME) to a text string (e.g. Static Name)
+	 * @author wonka
+	 * @since 29/09/2013
+	 */
+	public static String staticToString(String name) {
+		StringBuilder builder = new StringBuilder();
+		String[] narr = name.split("_");
+		for (String string : narr) {
+			char firstLetter = string.charAt(0);
+			String rest = string.substring(1).toLowerCase();
+			builder.append(" ").append(firstLetter + rest);
+		}
+		return builder.toString().replaceFirst(" ", "");
 	}
 }

@@ -26,26 +26,19 @@ import com.dvlcube.gaming.util.Range;
  * @author wonka
  * @since 22/09/2013
  */
-public class Synthesizer extends DrawableObject implements Controllable,
-		Terminatable {
+public class Synthesizer extends DrawableObject implements Controllable, Terminatable {
 
 	public AdvancedOscillator osc;
 	public VCF vcf;
 	private SamplePlayer player;
 
-	public static final Range<Integer> millisRange = r(
-			EnvelopeGenerator.MS_MIN, EnvelopeGenerator.MS_MAX);
-	public static final Range<Double> cutRange = r(VCF.MIN_CUTOFF,
-			VCF.MAX_CUTOFF);
-	public static final Range<Double> depthRange = r(VCF.MIN_DEPTH,
-			VCF.MAX_DEPTH);
-	public static final Range<Double> modRange = r(
-			AdvancedOscillator.MOD_DEPTH_MIN, AdvancedOscillator.MOD_DEPTH_MAX);
-	public static final Range<Double> sustainRange = r(
-			EnvelopeGenerator.SUSTAIN_MIN, EnvelopeGenerator.SUSTAIN_MAX);
+	public static final Range<Integer> millisRange = r(EnvelopeGenerator.MS_MIN, EnvelopeGenerator.MS_MAX);
+	public static final Range<Double> cutRange = r(VCF.MIN_CUTOFF, VCF.MAX_CUTOFF);
+	public static final Range<Double> depthRange = r(VCF.MIN_DEPTH, VCF.MAX_DEPTH);
+	public static final Range<Double> modRange = r(AdvancedOscillator.MOD_DEPTH_MIN, AdvancedOscillator.MOD_DEPTH_MAX);
+	public static final Range<Double> sustainRange = r(EnvelopeGenerator.SUSTAIN_MIN, EnvelopeGenerator.SUSTAIN_MAX);
 	public static final Range<Integer> defaultRange = r(-5000, 5000);
-	public static final Range<Integer> detuneRange = r(
-			AdvancedOscillator.CENTS_DETUNE_MIN,
+	public static final Range<Integer> detuneRange = r(AdvancedOscillator.CENTS_DETUNE_MIN,
 			AdvancedOscillator.CENTS_DETUNE_MAX);
 
 	public Synthesizer() {
@@ -120,77 +113,62 @@ public class Synthesizer extends DrawableObject implements Controllable,
 		int[] ys = new int[controllers];
 		int vSpacing = 15;
 
-		g.drawString(String.format("wave (1 saw, 2 sine, 3 square): %s", osc
-				.getWaveshape().name()), offset, y);
+		g.drawString(String.format("wave (1 saw, 2 sine, 3 square): %s", osc.getWaveshape().name()), offset, y);
 
 		y += vSpacing;
-		g.drawString(String.format("mod (4 am, 5 fm, 6 none): %s", osc
-				.getModulationType().name()), offset, y);
+		g.drawString(String.format("mod (4 am, 5 fm, 6 none): %s", osc.getModulationType().name()), offset, y);
 
 		y += vSpacing;
-		g.drawString(String.format("note %s", vcf.isNoteOn() ? "on" : "off"),
-				offset, y);
+		g.drawString(String.format("note %s", vcf.isNoteOn() ? "on" : "off"), offset, y);
 		/**/
 		y += vSpacing;
 		double frequency = osc.getFrequency();
-		g.drawString(String.format("frequency (q-/w+/mouse x): %f", frequency),
-				offset, y);
+		g.drawString(String.format("frequency (q-/w+/mouse x): %f", frequency), offset, y);
 		ys[0] = map(frequency, r(0, screenW), indicatorRange);
 
 		y += vSpacing;
 		int attackTime = vcf.getAttackTime();
-		g.drawString(String.format("attack time (a-/s+/mouse x + mb 1): %d",
-				attackTime), offset, y);
+		g.drawString(String.format("attack time (a-/s+/mouse x + mb 1): %d", attackTime), offset, y);
 		ys[1] = map(attackTime, r(0, screenW), indicatorRange);
 
 		y += vSpacing;
 		int decayMS = vcf.getDecayMS();
-		g.drawString(String.format("decay time (z-/x+): %d", decayMS), offset,
-				y);
+		g.drawString(String.format("decay time (z-/x+): %d", decayMS), offset, y);
 		ys[2] = map(decayMS, millisRange, indicatorRange);
 
 		y += vSpacing;
 		double sustainLevel = vcf.getSustainLevel();
-		g.drawString(String.format("sustain level (e-/r+): %f", sustainLevel),
-				offset, y);
+		g.drawString(String.format("sustain level (e-/r+): %f", sustainLevel), offset, y);
 		ys[3] = map(sustainLevel, sustainRange, indicatorRange);
 
 		y += vSpacing;
 		int releaseMS = vcf.getReleaseMS();
-		g.drawString(String.format("release time (d-/f+/mouse y + mb 1): %d",
-				releaseMS), offset, y);
+		g.drawString(String.format("release time (d-/f+/mouse y + mb 1): %d", releaseMS), offset, y);
 		ys[4] = map(releaseMS, millisRange, indicatorRange);
 
 		y += vSpacing;
 		double cutoffFrequencyInHz = vcf.getCutoffFrequencyInHz();
-		g.drawString(String.format(
-				"cutoff frequency (c-/v+/mouse x + mb 2): %f",
-				cutoffFrequencyInHz), offset, y);
+		g.drawString(String.format("cutoff frequency (c-/v+/mouse x + mb 2): %f", cutoffFrequencyInHz), offset, y);
 		ys[5] = map(cutoffFrequencyInHz, cutRange, indicatorRange);
 
 		y += vSpacing;
 		double resonance = vcf.getResonance();
-		g.drawString(String.format("resonance (t-/y+): %f", resonance), offset,
-				y);
+		g.drawString(String.format("resonance (t-/y+): %f", resonance), offset, y);
 		ys[6] = map(resonance, defaultRange, indicatorRange);
 
 		y += vSpacing;
 		double depth = vcf.getDepth();
-		g.drawString(
-				String.format("depth range (g-/h+/mouse y + mb 2): %f", depth),
-				offset, y);
+		g.drawString(String.format("depth range (g-/h+/mouse y + mb 2): %f", depth), offset, y);
 		ys[7] = map(depth, depthRange, indicatorRange);
 
 		y += vSpacing;
 		double modDepth = osc.getModulationDepth();
-		g.drawString(String.format("mod depth (b-/n+/mouse y): %f", modDepth),
-				offset, y);
+		g.drawString(String.format("mod depth (b-/n+/mouse y): %f", modDepth), offset, y);
 		ys[8] = map(modDepth, modRange, indicatorRange);
 
 		y += vSpacing;
 		int detune = osc.getDetuneCents();
-		g.drawString(String.format("detune (u-/i+/mouse wheel): %d", detune),
-				offset, y);
+		g.drawString(String.format("detune (u-/i+/mouse wheel): %d", detune), offset, y);
 		ys[9] = map(detune, detuneRange, indicatorRange);
 
 		y += vSpacing * 2;
@@ -371,5 +349,10 @@ public class Synthesizer extends DrawableObject implements Controllable,
 		vcf = null;
 		player.stopPlayer();
 		player = null;
+	}
+
+	@Override
+	public boolean doAction() {
+		return false;
 	}
 }

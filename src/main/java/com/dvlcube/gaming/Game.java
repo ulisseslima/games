@@ -5,7 +5,10 @@ import static com.dvlcube.gaming.util.Cuber.r;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +27,8 @@ public abstract class Game implements Terminatable {
 	public final Dimension screen;
 	public final Range<Integer> vRange;
 	public final Range<Integer> hRange;
-	protected List<Terminatable> terminatables = new ArrayList<>();
+	private List<Object> objects = new ArrayList<>();
+	private List<Terminatable> terminatables = new ArrayList<>();
 
 	public Game(Dimension screen) {
 		this.screen = screen;
@@ -42,14 +46,24 @@ public abstract class Game implements Terminatable {
 	 * @author wonka
 	 * @since 21/09/2013
 	 */
-	public abstract void doLogic();
+	public void doLogic() {
+		for (Object element : objects) {
+			if (element instanceof GameElement)
+				((GameElement) element).update();
+		}
+	}
 
 	/**
 	 * @param g
 	 * @author wonka
 	 * @since 21/09/2013
 	 */
-	public abstract void doGraphics(Graphics2D g);
+	public void doGraphics(Graphics2D g) {
+		for (Object element : objects) {
+			if (element instanceof GameElement)
+				((GameElement) element).draw(g);
+		}
+	}
 
 	/**
 	 * @return the mouse adapter.
@@ -72,13 +86,6 @@ public abstract class Game implements Terminatable {
 	 * @since 21/09/2013
 	 */
 	public abstract void reset();
-
-	/**
-	 * @return controllable elements.
-	 * @author wonka
-	 * @since 28/09/2013
-	 */
-	public abstract List<Controllable> getControllables();
 
 	/**
 	 * @param value
@@ -104,17 +111,79 @@ public abstract class Game implements Terminatable {
 	}
 
 	/**
-	 * @param ball2
+	 * @param objects
+	 *            of any kind
 	 * @author wonka
 	 * @since 29/09/2013
 	 */
-	public void addTerminatables(Object... terminatable) {
-		for (Object object : terminatable) {
-			if (object instanceof Terminatable)
+	public void addObject(Object... objects) {
+		for (Object object : objects) {
+			if (object instanceof Terminatable) {
 				terminatables.add((Terminatable) object);
-			else
-				throw new IllegalArgumentException(object
-						+ " is not terminatable");
+				this.objects.add(object);
+			} else if (object instanceof MenuItem) {
+				this.objects.add(object);
+			} else if (object instanceof GameElement) {
+				this.objects.add(object);
+				((GameElement) object).setSource(this);
+			} else
+				throw new IllegalArgumentException("unrecognized game type: " + object.getClass());
 		}
+	}
+
+	public List<Object> getObjects() {
+		return objects;
+	}
+
+	protected void mousePressed(MouseEvent e, int mx, int my) {
+		int sx = scale(e.getX()), sy = scale(e.getY());
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).mousePressed(e, sx, sy);
+		}
+	}
+
+	protected void mouseMoved(MouseEvent e, int x, int y) {
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).mouseMoved(e, scale(e.getX()), scale(e.getY()));
+		}
+	}
+
+	protected void mouseDragged(MouseEvent e, int mx, int my) {
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).mouseDragged(e, scale(e.getX()), scale(e.getY()));
+		}
+	}
+
+	protected void mouseReleased(MouseEvent e, int mx, int my) {
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).mouseReleased(e, scale(e.getX()), scale(e.getY()));
+		}
+	}
+
+	protected void mouseWheelMoved(MouseWheelEvent e) {
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).mouseWheelMoved(e);
+		}
+	}
+
+	protected void keyPressed(KeyEvent e) {
+		for (Object element : getObjects()) {
+			if (element instanceof Controllable)
+				((Controllable) element).keyPressed(e);
+		}
+	}
+
+	/**
+	 * @return the screen working size, after scaling
+	 * @author wonka
+	 * @since 30/09/2013
+	 */
+	public Dimension getScaledScreen() {
+		return new Dimension(scale(screen.width), scale(screen.height));
 	}
 }

@@ -7,9 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.util.List;
 
-import com.dvlcube.gaming.Controllable;
 import com.dvlcube.gaming.Game;
 import com.dvlcube.gaming.sound.Synthesizer;
 
@@ -18,14 +16,15 @@ import com.dvlcube.gaming.sound.Synthesizer;
  * @since 20/09/2013
  */
 public class SoundGame extends Game {
-	public boolean debug = true;
+	public static final float VERSION = 1.0f;
+
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 	private Synthesizer synth = new Synthesizer();
 
 	{
 		synth.setSource(this);
-		addTerminatables(synth);
+		addObject(synth);
 	}
 
 	public SoundGame(Dimension screen) {
@@ -86,10 +85,5 @@ public class SoundGame extends Game {
 
 	@Override
 	public void reset() {
-	}
-
-	@Override
-	public List<Controllable> getControllables() {
-		return null;
 	}
 }

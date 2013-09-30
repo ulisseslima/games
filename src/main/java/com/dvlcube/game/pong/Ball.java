@@ -24,7 +24,6 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 	private static final long serialVersionUID = 3929278993084690115L;
 	private Synthesizer synth = new Synthesizer();
 	public boolean debug = false;
-	private PongGame game;
 	private List<Paddle> paddles = new ArrayList<>();
 	private int scW;
 	private int scH;
@@ -76,15 +75,15 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 
 	private void blip() {
 		double f = synth.osc.getFrequency();
-		if (f < 40) {
-			synth.osc.setFrequency(40);
+		if (f != 100) {
+			synth.osc.setFrequency(100);
 			synth.osc.setModulationDepth(1.0);
 		}
 	}
 
 	private void goSilent() {
 		double f = synth.osc.getFrequency();
-		if (f > 0) {
+		if (f != 0) {
 			synth.osc.setFrequency(0);
 			synth.osc.setModulationDepth(0);
 		}
@@ -204,8 +203,7 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 
 	@Override
 	public void setSource(Game game) {
-		this.game = (PongGame) game;
-		for (Controllable controllable : game.getControllables()) {
+		for (Object controllable : game.getObjects()) {
 			if (controllable instanceof Paddle) {
 				paddles.add((Paddle) controllable);
 			}
@@ -218,5 +216,11 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 	public void terminate() {
 		synth.terminate();
 		synth = null;
+
+	}
+
+	@Override
+	public boolean doAction() {
+		return false;
 	}
 }
