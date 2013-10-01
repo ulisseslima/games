@@ -22,7 +22,7 @@ import com.dvlcube.gaming.RunnableGamePanel;
  * @since 29/09/2013
  */
 public class CookieClickerGame extends Game {
-	public static final float VERSION = 0.2f;
+	public static final float VERSION = 0.3f;
 
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
@@ -49,13 +49,13 @@ public class CookieClickerGame extends Game {
 		});
 		addObject(cookie);
 
-		Dimension d = new Dimension(110, 15);
+		Dimension d = new Dimension(120, 15);
 		int x = scale(screen.width) - (d.width + 10), y = 10, spacing = 5;
 		for (final CookieProducer producer : CookieProducer.values()) {
 			final Action action = new Action() {
 				@Override
 				public boolean doAction() {
-					if (cookies > producer.upgradeCost()) {
+					if (cookies >= producer.upgradeCost()) {
 						cookies -= producer.add();
 						return true;
 					}

@@ -10,7 +10,7 @@ import static com.dvlcube.gaming.util.Cuber.staticToString;
 public enum CookieProducer {
 	CURSOR, GRANDMA, FARM, FACTORY, MINE, SHIPMENT, ALCHEMIY_LAB, PORTAL, TIME_MACHINE, ANTIMATTER_CONDENSER;
 	private long cookies = 0;
-	private double productionRate = 0.8;
+	private double productionRate = 1;
 	private long multiplier = 0;
 	private double price = 15;
 	public final String name;
@@ -31,17 +31,18 @@ public enum CookieProducer {
 		return pow(productionRate);
 	}
 
-	public double getMultiplier() {
+	public long getMultiplier() {
 		return multiplier;
 	}
 
 	public double getPrice() {
-		return pow(price);
+		double o = (ordinal() + 1);
+		return Math.pow(price, o) * (multiplier + 1);
 	}
 
 	public double pow(double n) {
-		double o = (ordinal() + 1) * 0.5;
-		return Math.pow(n * o, o) * multiplier;
+		double o = (ordinal() + 1);
+		return Math.pow(n, o) * multiplier;
 	}
 
 	/**
@@ -52,17 +53,15 @@ public enum CookieProducer {
 	 * @since 29/09/2013
 	 */
 	public double add() {
-		double newPrice = price + (price * 10) / 100;
-		try {
-			multiplier++;
-			return price;
-		} finally {
-			price = newPrice;
-		}
+		double chargePrice = getPrice();
+		price += (price * 50) / 100;
+		multiplier++;
+		productionRate += (pow(productionRate) * (15 + (ordinal()))) / 100;
+		return chargePrice;
 	}
 
 	public double upgradeCost() {
-		return price + (price * 10) / 100;
+		return getPrice();
 	}
 
 	public long produce() {

@@ -79,4 +79,8 @@ public class Cuber {
 		}
 		return builder.toString().replaceFirst(" ", "");
 	}
+
+	public static int strWidth(Graphics2D g, String string) {
+		return g.getFontMetrics().stringWidth(string);
+	}
 }
