@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.dvlcube.game.beats.BeatsGame;
+import com.dvlcube.game.biogame.BioGame;
 import com.dvlcube.game.cookieclicker.CookieClickerGame;
 import com.dvlcube.game.pong.PongGame;
 import com.dvlcube.game.sound.SoundGame;
@@ -49,6 +50,7 @@ public class CubeBIOS extends BIOS {
 		classes.add(SoundGame.class);
 		classes.add(SpaceGame.class);
 		classes.add(CookieClickerGame.class);
+		classes.add(BioGame.class);
 
 		Dimension d = MenuItem.DEFAULT_DIMENSION;
 		int x = 10, y = 10, spacing = 5;

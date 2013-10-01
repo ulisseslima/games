@@ -38,10 +38,12 @@ public class ProducerMenuItem extends MenuItem {
 	@Override
 	public void update() {
 		super.update();
-		infoStrings.clear();
-		infoStrings.add("Cookies: " + producer.getCookies() * producer.getMultiplier());
-		infoStrings.add("Rate: " + df(producer.getProductionRate()));
-		infoStrings.add("Cost: " + df(producer.getPrice()));
+		if (hasMouseOver) {
+			infoStrings.clear();
+			infoStrings.add("Cookies: " + producer.getCookies() * producer.getMultiplier());
+			infoStrings.add("Rate: " + df(producer.getProductionRate()));
+			infoStrings.add("Cost: " + df(producer.getPrice()));
+		}
 	}
 
 	@Override

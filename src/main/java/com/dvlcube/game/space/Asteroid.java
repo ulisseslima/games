@@ -80,14 +80,12 @@ class Asteroid extends Polygon implements GamePolygon {
 		this.y = y;
 		if (this.y > SC_H) {
 			this.y = 0;
-			// this.x = this.x / 2;
 		} else if (this.y < 0) {
 			this.y = SC_H;
 		}
 
 		if (this.x > SC_W) {
 			this.x = 0;
-			// this.y = this.x / 2;
 		} else if (this.x < 0) {
 			this.x = SC_W;
 		}

@@ -1,7 +1,9 @@
 package com.dvlcube.gaming.util;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.text.DecimalFormat;
+import java.util.Random;
 
 import com.dvlcube.gaming.Coords;
 
@@ -11,6 +13,7 @@ import com.dvlcube.gaming.Coords;
  */
 public class Cuber {
 	public static final DecimalFormat df = new DecimalFormat("#,##0.##");
+	public static final Random random = new Random();
 
 	public static <T> Range<T> r(T start, T end) {
 		return new Range<T>(start, end);
@@ -82,5 +85,20 @@ public class Cuber {
 
 	public static int strWidth(Graphics2D g, String string) {
 		return g.getFontMetrics().stringWidth(string);
+	}
+
+	public static Dimension getRandomDimension(int maxw, int maxh) {
+		int rw = random.nextInt(maxw);
+		int rh = random.nextInt(maxh);
+		return new Dimension(rw, rh);
+	}
+
+	public static Dimension getRandomSquare(int side) {
+		int rh = random.nextInt(side);
+		return new Dimension(rh, rh);
+	}
+
+	public static int getRandomRadius(int maxr) {
+		return random.nextInt(maxr);
 	}
 }

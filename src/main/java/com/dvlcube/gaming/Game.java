@@ -4,6 +4,7 @@ import static com.dvlcube.gaming.util.Cuber.r;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.dvlcube.gaming.util.Range;
 
@@ -29,6 +31,7 @@ public abstract class Game implements Terminatable {
 	public final Range<Integer> hRange;
 	private List<Object> objects = new ArrayList<>();
 	private List<Terminatable> terminatables = new ArrayList<>();
+	protected Random random = new Random();
 
 	public Game(Dimension screen) {
 		this.screen = screen;
@@ -182,5 +185,11 @@ public abstract class Game implements Terminatable {
 	 */
 	public Dimension getScaledScreen() {
 		return new Dimension(scale(screen.width), scale(screen.height));
+	}
+
+	public Point getRandomPoint() {
+		int rw = random.nextInt(scale(screen.width));
+		int rh = random.nextInt(scale(screen.height));
+		return new Point(rw, rh);
 	}
 }
