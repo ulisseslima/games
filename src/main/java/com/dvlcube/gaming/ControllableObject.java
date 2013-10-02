@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelEvent;
  * @since 27/09/2013
  */
 public abstract class ControllableObject extends DrawableObject implements Controllable {
+
 	public boolean hasMouseOver = false;
 	public boolean moving = false;
 	public float speed = 1;
@@ -130,5 +131,11 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 	 */
 	public void move(int x, int y) {
 		destination = new Point(x, y);
+	}
+
+	public boolean isBiggerThan(ControllableObject o) {
+		int thisArea = this.width * this.height;
+		int oArea = o.width * o.height;
+		return thisArea > oArea;
 	}
 }

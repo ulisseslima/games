@@ -124,10 +124,8 @@ public abstract class Game implements Terminatable {
 			if (object instanceof Terminatable) {
 				terminatables.add((Terminatable) object);
 			}
-
 			this.objects.add(object);
 			((GameElement) object).setSource(this);
-			// throw new IllegalArgumentException("unrecognized game type: " + object.getClass());
 		}
 	}
 

@@ -27,16 +27,19 @@ import com.dvlcube.gaming.util.Range;
  * @since 22/09/2013
  */
 public class Synthesizer extends DrawableObject implements Controllable, Terminatable {
+	private static final long serialVersionUID = 1L;
 
 	public AdvancedOscillator osc;
 	public VCF vcf;
 	private SamplePlayer player;
 
 	public static final Range<Integer> millisRange = r(EnvelopeGenerator.MS_MIN, EnvelopeGenerator.MS_MAX);
-	public static final Range<Double> cutRange = r(VCF.MIN_CUTOFF, VCF.MAX_CUTOFF);
-	public static final Range<Double> depthRange = r(VCF.MIN_DEPTH, VCF.MAX_DEPTH);
-	public static final Range<Double> modRange = r(AdvancedOscillator.MOD_DEPTH_MIN, AdvancedOscillator.MOD_DEPTH_MAX);
-	public static final Range<Double> sustainRange = r(EnvelopeGenerator.SUSTAIN_MIN, EnvelopeGenerator.SUSTAIN_MAX);
+	public static final Range<java.lang.Double> cutRange = r(VCF.MIN_CUTOFF, VCF.MAX_CUTOFF);
+	public static final Range<java.lang.Double> depthRange = r(VCF.MIN_DEPTH, VCF.MAX_DEPTH);
+	public static final Range<java.lang.Double> modRange = r(AdvancedOscillator.MOD_DEPTH_MIN,
+			AdvancedOscillator.MOD_DEPTH_MAX);
+	public static final Range<java.lang.Double> sustainRange = r(EnvelopeGenerator.SUSTAIN_MIN,
+			EnvelopeGenerator.SUSTAIN_MAX);
 	public static final Range<Integer> defaultRange = r(-5000, 5000);
 	public static final Range<Integer> detuneRange = r(AdvancedOscillator.CENTS_DETUNE_MIN,
 			AdvancedOscillator.CENTS_DETUNE_MAX);

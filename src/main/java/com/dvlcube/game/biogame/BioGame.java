@@ -33,6 +33,14 @@ public class BioGame extends Game {
 	}
 
 	@Override
+	public void doLogic() {
+		super.doLogic();
+		if (random.nextInt(1000) < 2) {
+			addObject(new Biomorph());
+		}
+	}
+
+	@Override
 	public MouseAdapter getMouseAdapter() {
 		return mouse;
 	}

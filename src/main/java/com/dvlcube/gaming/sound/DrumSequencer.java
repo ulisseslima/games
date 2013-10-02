@@ -47,14 +47,14 @@ import com.dvlcube.gaming.util.Range;
  * @author Wonka
  */
 public class DrumSequencer extends ControllableObject implements Terminatable {
+	private static final long serialVersionUID = 1L;
 
 	public static final int DEFAULT_TICKS = 16;
 	public static final int DEFAULT_CHECKBOX_X_OFFSET = 100;
 
 	/**
-	 * These represent the actual drum "keys". the drum channel is like a piano
-	 * except each "key" on the piano is a different drum. So the number 35 is
-	 * the key for the Bass drum, 42 is closed hi-hat, etc.
+	 * These represent the actual drum "keys". the drum channel is like a piano except each "key" on the piano
+	 * is a different drum. So the number 35 is the key for the Bass drum, 42 is closed hi-hat, etc.
 	 */
 	public enum Instrument {
 		BASS_DRUM("Bass Drum", 35), //
@@ -75,8 +75,7 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 		OPEN_HI_CONGA("Open Hi Conga", 63);
 		public String name;
 		public int key;
-		public List<Checkbox> ticks = Checkbox.list(DEFAULT_TICKS,
-				DEFAULT_CHECKBOX_X_OFFSET, this.ordinal());
+		public List<Checkbox> ticks = Checkbox.list(DEFAULT_TICKS, DEFAULT_CHECKBOX_X_OFFSET, this.ordinal());
 
 		Instrument(String name, int note) {
 			this.name = name;
@@ -127,8 +126,8 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 	}
 
 	/**
-	 * The Tempo Factor scales the sequencer's tempo by the factor provided. The
-	 * default is 1.0, so we're adjusting +/-3% per click.
+	 * The Tempo Factor scales the sequencer's tempo by the factor provided. The default is 1.0, so we're
+	 * adjusting +/-3% per click.
 	 */
 	public float upTempo() {
 		float tempoFac = sequencer.getTempoFactor();
@@ -154,10 +153,9 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 	}
 
 	/**
-	 * we'll make a 16-element array to hold the values for one instrument,
-	 * across all 16 beats. If the instrument is supposed to play on that beat,
-	 * the value at that element will be the key. If that instrument is NOT
-	 * supposed to play on that beat, put in a zero
+	 * we'll make a 16-element array to hold the values for one instrument, across all 16 beats. If the
+	 * instrument is supposed to play on that beat, the value at that element will be the key. If that
+	 * instrument is NOT supposed to play on that beat, put in a zero
 	 */
 	public void buildTrackAndStart() {
 		sequence.deleteTrack(track); // get rid of the old track,
@@ -173,21 +171,18 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 				}
 				t++;
 			}
-			track.add(makeEvent(ShortMessage.CONTROL_CHANGE, 1, 127, 0,
-					waitBeforeLooping));
+			track.add(makeEvent(ShortMessage.CONTROL_CHANGE, 1, 127, 0, waitBeforeLooping));
 		}
 
 		/**
-		 * We always want to make sure that there IS an event at beat 16 (it
-		 * goes 0 to 15). Otherwise, the Sequencer might not go the full 16
-		 * beats before it starts over.
+		 * We always want to make sure that there IS an event at beat 16 (it goes 0 to 15). Otherwise, the
+		 * Sequencer might not go the full 16 beats before it starts over.
 		 */
 		track.add(makeEvent(ShortMessage.PROGRAM_CHANGE, 9, 1, 0, 15));
 		try {
 			sequencer.setSequence(sequence);
 			/**
-			 * Let's you specify the number of loop iterations, or in this case,
-			 * continuous looping.
+			 * Let's you specify the number of loop iterations, or in this case, continuous looping.
 			 */
 			sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
 			if (!sequencer.isOpen())
@@ -213,8 +208,8 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 	}
 
 	/**
-	 * The usual MIDI setup stuff for getting the sequencer, the Sequence, and
-	 * the Track. Again. nothing special.
+	 * The usual MIDI setup stuff for getting the sequencer, the Sequence, and the Track. Again. nothing
+	 * special.
 	 */
 	public final void setUpMidi() {
 		try {
@@ -287,7 +282,7 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 
 	private class TempoKnob implements Knob {
 		private DrumSequencer $ = DrumSequencer.this;
-		private Range<Float> range = r(0f, 5f);
+		private Range<java.lang.Float> range = r(0f, 5f);
 
 		@Override
 		public String getName() {
@@ -322,7 +317,7 @@ public class DrumSequencer extends ControllableObject implements Terminatable {
 		}
 
 		@Override
-		public Range<Float> getRange() {
+		public Range<java.lang.Float> getRange() {
 			return range;
 		}
 
