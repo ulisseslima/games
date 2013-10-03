@@ -14,6 +14,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 
 	public boolean hasMouseOver = false;
 	public boolean moving = false;
+	public boolean isGarbage = false;
 	public float speed = 1;
 	public float xybuffer = 0;
 	public int mvcount = 0;

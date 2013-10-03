@@ -108,6 +108,7 @@ public class Biomorph extends ControllableObject {
 		if (this.width < 2) {
 			this.width = 1;
 			this.isDead = true;
+			isGarbage = true;
 		}
 	}
 }

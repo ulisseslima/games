@@ -30,6 +30,7 @@ public abstract class Game implements Terminatable {
 	public final Range<Integer> vRange;
 	public final Range<Integer> hRange;
 	private List<Object> objects = new ArrayList<>();
+	private List<ControllableObject> garbage = new ArrayList<>();
 	private List<Terminatable> terminatables = new ArrayList<>();
 	protected Random random = new Random();
 
@@ -51,8 +52,27 @@ public abstract class Game implements Terminatable {
 	 */
 	public void doLogic() {
 		for (Object element : objects) {
+			if (element instanceof ControllableObject) {
+				ControllableObject controllableObject = (ControllableObject) element;
+				if (controllableObject.isGarbage) {
+					garbage.add(controllableObject);
+				}
+			}
+			gc();
 			if (element instanceof GameElement)
 				((GameElement) element).update();
+		}
+	}
+
+	/**
+	 * Garbage collection.
+	 * 
+	 * @author wonka
+	 * @since 03/10/2013
+	 */
+	private void gc() {
+		for (ControllableObject object : garbage) {
+			objects.remove(object);
 		}
 	}
 
