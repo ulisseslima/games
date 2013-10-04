@@ -5,6 +5,7 @@ import static com.dvlcube.gaming.util.Cuber.r;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -58,10 +59,10 @@ public abstract class Game implements Terminatable {
 					garbage.add(controllableObject);
 				}
 			}
-			gc();
 			if (element instanceof GameElement)
 				((GameElement) element).update();
 		}
+		gc();
 	}
 
 	/**
@@ -85,6 +86,8 @@ public abstract class Game implements Terminatable {
 		for (Object element : objects) {
 			if (element instanceof GameElement)
 				((GameElement) element).draw(g);
+			else if (element instanceof Shape)
+				g.fill(((Shape) element));
 		}
 	}
 
@@ -108,7 +111,9 @@ public abstract class Game implements Terminatable {
 	 * @author wonka
 	 * @since 21/09/2013
 	 */
-	public abstract void reset();
+	public void reset() {
+
+	}
 
 	/**
 	 * @param value
@@ -145,7 +150,8 @@ public abstract class Game implements Terminatable {
 				terminatables.add((Terminatable) object);
 			}
 			this.objects.add(object);
-			((GameElement) object).setSource(this);
+			if (object instanceof GameElement)
+				((GameElement) object).setSource(this);
 		}
 	}
 
