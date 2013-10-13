@@ -216,4 +216,22 @@ public abstract class Game implements Terminatable {
 		int rh = random.nextInt(scale(screen.height));
 		return new Point(rw, rh);
 	}
+
+	/**
+	 * @return scaled screen width.
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	public int sWidth() {
+		return getScaledScreen().width;
+	}
+
+	/**
+	 * @return scaled screen height.
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	public int sHeight() {
+		return getScaledScreen().height;
+	}
 }

@@ -48,23 +48,6 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 		correctBounds();
 	}
 
-	/**
-	 * 
-	 * @author wonka
-	 * @since 27/09/2013
-	 */
-	private void collide() {
-		for (Paddle paddle : paddles) {
-			if (this.intersects(paddle)) {
-				xDirection *= -1;
-				blip();
-				accelerate();
-			} else {
-				goSilent();
-			}
-		}
-	}
-
 	private void pop() {
 		double f = synth.osc.getFrequency();
 		if (f != 10) {
@@ -86,6 +69,22 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 		if (f != 0) {
 			synth.osc.setFrequency(0);
 			synth.osc.setModulationDepth(0);
+		}
+	}
+
+	/**
+	 * @author wonka
+	 * @since 27/09/2013
+	 */
+	private void collide() {
+		for (Paddle paddle : paddles) {
+			if (this.intersects(paddle)) {
+				xDirection *= -1;
+				blip();
+				accelerate();
+			} else {
+				goSilent();
+			}
 		}
 	}
 

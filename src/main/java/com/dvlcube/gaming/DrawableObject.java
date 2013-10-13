@@ -72,22 +72,55 @@ public abstract class DrawableObject implements Drawable {
 	}
 
 	public boolean intersects(ControllableObject o) {
-		int tw = this.width;
-		int th = this.height;
-		int rw = o.width;
-		int rh = o.height;
-		if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
+		int thisw = this.width;
+		int thish = this.height;
+		int otherw = o.width;
+		int otherh = o.height;
+		if (otherw <= 0 || otherh <= 0 || thisw <= 0 || thish <= 0) {
 			return false;
 		}
-		int tx = this.x;
-		int ty = this.y;
-		int rx = o.x;
-		int ry = o.y;
-		rw += rx;
-		rh += ry;
-		tw += tx;
-		th += ty;
+		int thisx = this.x;
+		int thisy = this.y;
+		int otherx = o.x;
+		int othery = o.y;
+		otherw += otherx;
+		otherh += othery;
+		thisw += thisx;
+		thish += thisy;
 		// overflow || intersect
-		return ((rw < rx || rw > tx) && (rh < ry || rh > ty) && (tw < tx || tw > rx) && (th < ty || th > ry));
+		return ((otherw < otherx || otherw > thisx) && (otherh < othery || otherh > thisy)
+				&& (thisw < thisx || thisw > otherx) && (thish < thisy || thish > othery));
+	}
+
+	public Collision collided(ControllableObject o) {
+		int thisw = this.width;
+		int thish = this.height;
+		int otherw = o.width;
+		int otherh = o.height;
+		if (otherw <= 0 || otherh <= 0 || thisw <= 0 || thish <= 0) {
+			return Collision.NO_COLLISION;
+		}
+		int thisx = this.x;
+		int thisy = this.y;
+		int otherx = o.x;
+		int othery = o.y;
+		otherw += otherx;
+		otherh += othery;
+		thisw += thisx;
+		thish += thisy;
+		// overflow || intersect
+		boolean overFlowsOrIntersects = ((otherw < otherx || otherw > thisx) && (otherh < othery || otherh > thisy)
+				&& (thisw < thisx || thisw > otherx) && (thish < thisy || thish > othery));
+
+		if (overFlowsOrIntersects) {
+			int sumx = this.x - o.x;
+			int sumy = this.y - o.y;
+
+			if (sumx > sumy)
+				return Collision.NORTH;
+			else
+				return Collision.WEST;
+		}
+		return Collision.NO_COLLISION;
 	}
 }

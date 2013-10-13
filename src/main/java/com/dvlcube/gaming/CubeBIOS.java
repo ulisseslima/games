@@ -7,9 +7,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.dvlcube.game.arkanoid.ArkanoidGame;
 import com.dvlcube.game.beats.BeatsGame;
 import com.dvlcube.game.biogame.BioGame;
 import com.dvlcube.game.cookieclicker.CookieClickerGame;
@@ -45,7 +46,7 @@ public class CubeBIOS extends BIOS {
 	}
 
 	{
-		Set<Class<? extends Game>> classes = new HashSet<>();
+		List<Class<? extends Game>> classes = new ArrayList<>();
 		classes.add(BeatsGame.class);
 		classes.add(PongGame.class);
 		classes.add(SoundGame.class);
@@ -53,6 +54,7 @@ public class CubeBIOS extends BIOS {
 		classes.add(CookieClickerGame.class);
 		classes.add(BioGame.class);
 		classes.add(EditorGame.class);
+		classes.add(ArkanoidGame.class);
 
 		Dimension d = MenuItem.DEFAULT_DIMENSION;
 		int x = 10, y = 10, spacing = 5;

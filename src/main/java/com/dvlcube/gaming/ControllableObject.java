@@ -22,6 +22,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 	protected Point destination;
 
 	public ControllableObject() {
+		super(new Dimension(100, 10), new Point(10, 10));
 	}
 
 	public ControllableObject(Dimension dimension, Point point) {

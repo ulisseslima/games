@@ -92,13 +92,13 @@ public class EditorGame extends Game {
 			if (SwingUtilities.isLeftMouseButton(e)) {
 				completedRect = false;
 				int sx = scale(e.getX()), sy = scale(e.getY());
-				if (coords[0] < sx) {
+				if (coords[0] < coords[2]) {
 					coords[2] = sx;
 				} else {
 					coords[0] = sx;
 				}
 
-				if (coords[1] < sy)
+				if (coords[1] < coords[3])
 					coords[3] = sy;
 				else
 					coords[1] = sy;
