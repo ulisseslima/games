@@ -23,7 +23,11 @@ public class ArkanoidGame extends Game {
 
 	public int point = 500;
 	public Long score = 0l;
+	public Long hiscore = 0l;
 	public int multiplier = 1;
+
+	public boolean gameEnded = false;
+	public boolean newHiScore = false;
 
 	public int scorex = 10;
 	public int scorey = 10;
@@ -33,20 +37,64 @@ public class ArkanoidGame extends Game {
 	@Override
 	public void doGraphics(Graphics2D g) {
 		super.doGraphics(g);
-		g.drawString(score.toString(), scorex, scorey);
-		g.drawString(multiplier + "x", scorex, scorey + scorey);
+
+		if (gameEnded) {
+			int xPosition = sWidth() / 2;
+			int yPosition = sHeight() / 2;
+			g.drawString("High score: " + hiscore, xPosition, yPosition);
+			g.drawString("Your score: " + score, xPosition, yPosition + 10);
+			g.drawString("(space to start again)", xPosition, yPosition + 20);
+		} else {
+			g.drawString(score.toString(), scorex, scorey);
+			g.drawString(multiplier + "x", scorex, scorey + 10);
+		}
+	}
+
+	@Override
+	public void objectTrashed(ControllableObject controllableObject) {
+		if (controllableObject instanceof Block) {
+			blocks.remove(controllableObject);
+		}
+
+		if (blocks.isEmpty()) {
+			gameEnded = true;
+			endGame();
+		} else {
+			gameEnded = false;
+		}
+	}
+
+	/**
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	private void endGame() {
+		if (score > hiscore) {
+			hiscore = score;
+			newHiScore = true;
+		}
+	}
+
+	private void startGame() {
+		gameEnded = false;
+		createBlocks();
+		multiplier = 1;
+		score = 0l;
+		newHiScore = false;
 	}
 
 	@Override
 	public void collisionEvent(ControllableObject hitter, Object hitObject) {
-		if (hitObject instanceof Block) {
-			score += point * multiplier;
-			multiplier++;
-		} else if (hitObject instanceof Platform) {
-			multiplier = 1;
-		} else if (hitObject instanceof Pit) {
-			multiplier = 1;
-			score -= point;
+		if (!gameEnded) {
+			if (hitObject instanceof Block) {
+				score += point * multiplier;
+				multiplier++;
+			} else if (hitObject instanceof Platform) {
+				multiplier = 1;
+			} else if (hitObject instanceof Pit) {
+				multiplier = 1;
+				score -= point * 3;
+			}
 		}
 	}
 
@@ -137,7 +185,13 @@ public class ArkanoidGame extends Game {
 	private class Keyboard extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			ArkanoidGame.super.keyPressed(e);
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_SPACE:
+				if (gameEnded) {
+					startGame();
+				}
+				break;
+			}
 		}
 	}
 }
