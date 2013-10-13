@@ -47,7 +47,7 @@ public class Ball extends ControllableObject {
 	 */
 	private void collide() {
 		for (Object object : game.getObjects()) {
-			if (object instanceof Block || object instanceof Platform) {
+			if (isFromArkanoid(object)) {
 				Collision collision = collided((ControllableObject) object);
 				switch (collision) {
 				case WEST:
@@ -67,6 +67,10 @@ public class Ball extends ControllableObject {
 				}
 			}
 		}
+	}
+
+	private boolean isFromArkanoid(Object object) {
+		return object instanceof Block || object instanceof Platform || object instanceof Pit;
 	}
 
 	/**

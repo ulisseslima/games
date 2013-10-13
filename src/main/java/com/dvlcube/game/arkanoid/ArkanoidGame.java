@@ -44,6 +44,9 @@ public class ArkanoidGame extends Game {
 			multiplier++;
 		} else if (hitObject instanceof Platform) {
 			multiplier = 1;
+		} else if (hitObject instanceof Pit) {
+			multiplier = 1;
+			score -= point;
 		}
 	}
 
@@ -52,7 +55,7 @@ public class ArkanoidGame extends Game {
 		int margin = 10;
 		// int width = random.nextInt(95) + 5;
 		// int height = random.nextInt(10) + 5;
-		int width = 100;
+		int width = 80;
 		int height = 10;
 
 		for (int x = margin; x < sWidth() - margin;) {
@@ -93,6 +96,14 @@ public class ArkanoidGame extends Game {
 	}
 
 	/**
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	private void createPit() {
+		addObject(new Pit(new Dimension(sWidth(), 1), new Point(0, sHeight() - 1)));
+	}
+
+	/**
 	 * @param screen
 	 * @param scale
 	 * @author wonka
@@ -102,6 +113,7 @@ public class ArkanoidGame extends Game {
 		super(screen, scale);
 		createBlocks();
 		createPlatform();
+		createPit();
 		createBall();
 	}
 
