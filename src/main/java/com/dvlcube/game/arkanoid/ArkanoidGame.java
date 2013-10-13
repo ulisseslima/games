@@ -1,6 +1,7 @@
 package com.dvlcube.game.arkanoid;
 
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -9,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dvlcube.gaming.ControllableObject;
 import com.dvlcube.gaming.Game;
 
 /**
@@ -19,7 +21,31 @@ public class ArkanoidGame extends Game {
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 
+	public int point = 500;
+	public Long score = 0l;
+	public int multiplier = 1;
+
+	public int scorex = 10;
+	public int scorey = 10;
+
 	private List<Block> blocks = new ArrayList<>();
+
+	@Override
+	public void doGraphics(Graphics2D g) {
+		super.doGraphics(g);
+		g.drawString(score.toString(), scorex, scorey);
+		g.drawString(multiplier + "x", scorex, scorey + scorey);
+	}
+
+	@Override
+	public void collisionEvent(ControllableObject hitter, Object hitObject) {
+		if (hitObject instanceof Block) {
+			score += point * multiplier;
+			multiplier++;
+		} else if (hitObject instanceof Platform) {
+			multiplier = 1;
+		}
+	}
 
 	public int createBlocks() {
 		int nblocks = 0;

@@ -57,12 +57,21 @@ public abstract class Game implements Terminatable {
 				ControllableObject controllableObject = (ControllableObject) element;
 				if (controllableObject.isGarbage) {
 					garbage.add(controllableObject);
+					objectTrashed(controllableObject);
 				}
 			}
 			if (element instanceof GameElement)
 				((GameElement) element).update();
 		}
 		gc();
+	}
+
+	/**
+	 * @param controllableObject
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	public void objectTrashed(ControllableObject controllableObject) {
 	}
 
 	/**
@@ -233,5 +242,16 @@ public abstract class Game implements Terminatable {
 	 */
 	public int sHeight() {
 		return getScaledScreen().height;
+	}
+
+	/**
+	 * called when an object "o" collided with object "object".
+	 * 
+	 * @param o
+	 * @param object
+	 * @author wonka
+	 * @since 13/10/2013
+	 */
+	public void collisionEvent(ControllableObject o, Object object) {
 	}
 }

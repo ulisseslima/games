@@ -53,11 +53,13 @@ public class Ball extends ControllableObject {
 				case WEST:
 					xDirection *= -1;
 					destroy(object);
+					game.collisionEvent(this, object);
 					accelerate();
 					break;
 				case NORTH:
 					yDirection *= -1;
 					destroy(object);
+					game.collisionEvent(this, object);
 					accelerate();
 					break;
 				default:
