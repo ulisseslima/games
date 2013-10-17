@@ -34,6 +34,10 @@ public class Cuber {
 				newRange.getStart().doubleValue(), newRange.getEnd().doubleValue());
 	}
 
+	public static float map(Number n, Range<? extends Number> range) {
+		return mapf(n, range, new Range<Float>(0f, 1f));
+	}
+
 	public static void delay(long millis) {
 		try {
 			Thread.sleep(millis);
