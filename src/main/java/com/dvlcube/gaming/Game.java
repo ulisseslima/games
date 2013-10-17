@@ -33,6 +33,7 @@ public abstract class Game implements Terminatable {
 	private List<Object> objects = new ArrayList<>();
 	private List<ControllableObject> garbage = new ArrayList<>();
 	private List<Terminatable> terminatables = new ArrayList<>();
+
 	protected Random random = new Random();
 
 	public Game(Dimension screen) {
@@ -52,18 +53,22 @@ public abstract class Game implements Terminatable {
 	 * @since 21/09/2013
 	 */
 	public void doLogic() {
-		for (Object element : objects) {
-			if (element instanceof ControllableObject) {
-				ControllableObject controllableObject = (ControllableObject) element;
-				if (controllableObject.isGarbage) {
-					garbage.add(controllableObject);
-					objectTrashed(controllableObject);
+		try {
+			for (Object element : objects) {
+				if (element instanceof ControllableObject) {
+					ControllableObject controllableObject = (ControllableObject) element;
+					if (controllableObject.isGarbage) {
+						garbage.add(controllableObject);
+						objectTrashed(controllableObject);
+					}
 				}
+				if (element instanceof GameElement)
+					((GameElement) element).update();
 			}
-			if (element instanceof GameElement)
-				((GameElement) element).update();
+			gc();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		gc();
 	}
 
 	/**
@@ -92,11 +97,15 @@ public abstract class Game implements Terminatable {
 	 * @since 21/09/2013
 	 */
 	public void doGraphics(Graphics2D g) {
-		for (Object element : objects) {
-			if (element instanceof GameElement)
-				((GameElement) element).draw(g);
-			else if (element instanceof Shape)
-				g.fill(((Shape) element));
+		try {
+			for (Object element : objects) {
+				if (element instanceof GameElement)
+					((GameElement) element).draw(g);
+				else if (element instanceof Shape)
+					g.fill(((Shape) element));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -27,7 +27,7 @@ import com.dvlcube.gaming.util.Range;
  * @since 22/09/2013
  */
 public class Synthesizer extends DrawableObject implements Controllable, Terminatable {
-	private static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 
 	public AdvancedOscillator osc;
 	public VCF vcf;

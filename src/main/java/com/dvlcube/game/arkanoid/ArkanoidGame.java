@@ -21,6 +21,8 @@ public class ArkanoidGame extends Game {
 	private MouseAdapter mouse = new Mouse();
 	private KeyAdapter keyboard = new Keyboard();
 
+	private int margin = 10;
+
 	public int point = 500;
 	public Long score = 0l;
 	public Long hiscore = 0l;
@@ -100,30 +102,48 @@ public class ArkanoidGame extends Game {
 
 	public int createBlocks() {
 		int nblocks = 0;
-		int margin = 10;
-		// int width = random.nextInt(95) + 5;
+		int width = random.nextInt(80) + 5;
 		// int height = random.nextInt(10) + 5;
-		int width = 80;
+		// int width = 80;
 		int height = 10;
 
-		for (int x = margin; x < sWidth() - margin;) {
-			for (int y = margin; y < sHeight() / 2;) {
-				// width = random.nextInt(95) + 5;
+		for (int y = margin; y < sHeight() / 2;) {
+			for (int x = margin; x < sWidth() - margin;) {
+				width = random.nextInt(80) + 5;
 				// height = random.nextInt(10) + 5;
 
 				addBlock(width, height, x, y);
 				nblocks++;
-				y += height;
+				x += width;
 			}
-			x += width;
+			y += height;
 		}
 		return nblocks;
 	}
 
 	private void addBlock(int width, int height, int x, int y) {
-		Block block = new Block(new Dimension(width, height), new Point(x, y));
-		blocks.add(block);
-		addObject(block);
+		int correctedWidth = correctWidth(x, width);
+		if (correctedWidth > 0) {
+			Block block = new Block(new Dimension(correctedWidth, height), new Point(x, y));
+			blocks.add(block);
+			addObject(block);
+		}
+	}
+
+	/**
+	 * @param x
+	 * @param width
+	 * @return
+	 * @author wonka
+	 * @since 16/10/2013
+	 */
+	private int correctWidth(int x, int width) {
+		int correctWidth = width;
+		int wsum = x + width;
+		if (wsum > sWidth() - margin) {
+			correctWidth = width - (wsum - (sWidth() - margin));
+		}
+		return correctWidth;
 	}
 
 	/**

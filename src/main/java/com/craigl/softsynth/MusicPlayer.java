@@ -12,43 +12,59 @@ package com.craigl.softsynth;
  * @author craiglindley
  */
 public class MusicPlayer implements SampleProviderIntfc {
-		
+
 	private static final double THIRTY_SECOND_NOTE_DURATION_IN_SECS = 0.08;
 	private static final int REFERENCE_NOTE_NUMBER = 69;
-	private static final int REFERENCE_NOTE_FREQ = 440;	
-	private static final int NOTES_PER_OCTAVE = 12;		
-		
+	private static final int REFERENCE_NOTE_FREQ = 440;
+	private static final int NOTES_PER_OCTAVE = 12;
+
 	/**
 	 * MusicPlayer Class Constructor
 	 * <p>
 	 * Creates and initializes a MusicPlayer instance.
 	 * 
-	 * @param osc Reference to the oscillator instance used to play the tune
-	 * @param vca Reference to the VCA that is controlling note sound durations; if any.
-	 * @param vcf Reference to the VCF that is altering the tune's sound; if any.
-	 * @param notes Array of Note objects containing the tune to play
+	 * @param osc
+	 *            Reference to the oscillator instance used to play the tune
+	 * @param vca
+	 *            Reference to the VCA that is controlling note sound durations; if any.
+	 * @param vcf
+	 *            Reference to the VCF that is altering the tune's sound; if any.
+	 * @param notes
+	 *            Array of Note objects containing the tune to play
 	 */
-	public MusicPlayer(BasicOscillator osc, VCA vca, VCF vcf, Note [] notes) {
-		
+	public MusicPlayer(BasicOscillator osc, VCA vca, VCF vcf, Note[] notes) {
+
 		// Save incoming
 		this.osc = osc;
 		this.vca = vca;
 		this.vcf = vcf;
-		this.notes = notes;	
-		
+		this.notes = notes;
+
 		loopCount = 1;
 	}
-	
+
+	/**
+	 * @param osc
+	 * @param vcf
+	 * @param object
+	 * @author wonka
+	 * @since 16/10/2013
+	 */
+	public MusicPlayer(BasicOscillator osc, VCA vca, VCF vcf) {
+		this(osc, vca, vcf, null);
+	}
+
 	/**
 	 * Set the number of times the tune plays before completing.
 	 * 
-	 * @param loopCount Number of times to play the tune.
+	 * @param loopCount
+	 *            Number of times to play the tune.
 	 */
 	public void setLoopCount(int loopCount) {
-		
+
 		this.loopCount = loopCount;
 	}
-	
+
 	/**
 	 * Method called to play the tune.
 	 * <p>
@@ -100,29 +116,37 @@ public class MusicPlayer implements SampleProviderIntfc {
 		} while (--loopCount > 0);
 	}
 
+	public void playSong(Note[] notes) {
+		this.notes = notes;
+		playSong();
+	}
+
 	/**
 	 * Normally components process the samples in the buffer they are passed<br>
 	 * but here, only a count of the number of times this method has been called<br>
 	 * is processed. The samples returned from this method are from the<br>
 	 * the previous sample provider in the signal chain.
 	 * 
-	 * @param buffer Buffer in which the samples are to be processed
+	 * @param buffer
+	 *            Buffer in which the samples are to be processed
 	 * 
 	 * @return Count of number of bytes processed
 	 */
-	public int getSamples(byte [] buffer) {
+	@Override
+	public int getSamples(byte[] buffer) {
 
 		// Decrement the tic count
 		ticCount--;
-		
+
 		// Return the samples from the previous provider in the chain
 		return provider.getSamples(buffer);
 	}
-	
+
 	/**
 	 * Delay function that monitors the ticCount and returns when it reaches zero.
 	 * 
-	 * @param tics Count of tic (or buffer refills) to delay
+	 * @param tics
+	 *            Count of tic (or buffer refills) to delay
 	 */
 	private void delay(int tics) {
 
@@ -131,7 +155,7 @@ public class MusicPlayer implements SampleProviderIntfc {
 		while (ticCount > 0) {
 			try {
 				Thread.sleep(2);
-			} catch(Exception e) {
+			} catch (Exception e) {
 				// Do nothing
 			}
 		}
@@ -142,32 +166,34 @@ public class MusicPlayer implements SampleProviderIntfc {
 	 * <p>
 	 * See text for details.
 	 * 
-	 * @param mnn Midi note number to resolve
+	 * @param mnn
+	 *            Midi note number to resolve
 	 * 
 	 * @return Frequency in Hz which corresponds to the mnn.
 	 */
-	private double midiNoteNumberToFrequency(int mnn) {		  
-		
+	private double midiNoteNumberToFrequency(int mnn) {
+
 		// Convert a midi note number to a frequency in Hz
 		double soundOffset = (mnn - REFERENCE_NOTE_NUMBER) / (double) NOTES_PER_OCTAVE;
 		return REFERENCE_NOTE_FREQ * Math.pow(2.0, soundOffset);
 	}
-	
+
 	/**
 	 * Calculate the duration of a note in terms of tics (buffer refills).
 	 * 
-	 * @param durationTag Tag from note indicting the duration.
-	 * <p>
-	 * 1 is whole note; 2 is half note; 4 is quarter note; 8 is eighth note<br>
-	 * 16 is sixteenth note; 32 is thirty second note.
+	 * @param durationTag
+	 *            Tag from note indicting the duration.
+	 *            <p>
+	 *            1 is whole note; 2 is half note; 4 is quarter note; 8 is eighth note<br>
+	 *            16 is sixteenth note; 32 is thirty second note.
 	 * 
 	 * @return Tic count corresponding to note duration
 	 */
 	private int getNoteDurationInTics(int durationTag) {
-		
+
 		double seconds;
-		
-		switch(durationTag) {
+
+		switch (durationTag) {
 		case 1:
 			seconds = 32 * THIRTY_SECOND_NOTE_DURATION_IN_SECS;
 			break;
@@ -190,11 +216,12 @@ public class MusicPlayer implements SampleProviderIntfc {
 		}
 		return (int) Math.round(seconds / SamplePlayer.BUFFER_TIME_IN_SECS);
 	}
-	
+
 	/**
 	 * Setup the provider of samples
 	 * 
-	 * @param provider The provider of samples for this MusicPlayer
+	 * @param provider
+	 *            The provider of samples for this MusicPlayer
 	 */
 	public void setSampleProvider(SampleProviderIntfc provider) {
 		this.provider = provider;
@@ -204,7 +231,7 @@ public class MusicPlayer implements SampleProviderIntfc {
 	private BasicOscillator osc;
 	private VCA vca;
 	private VCF vcf;
-	private Note [] notes;
+	private Note[] notes;
 	private int loopCount;
 	private int ticCount;
 	private SampleProviderIntfc provider;
