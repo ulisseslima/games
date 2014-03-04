@@ -84,7 +84,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 	private boolean debug = false;
 
-	public RunnableGamePanel(GameWindow window, long period) {
+	public RunnableGamePanel(MainGameWindow window, long period) {
 		this.fpsPeriod = period;
 
 		setBackground(Color.white);
@@ -200,7 +200,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 			afterTime = System.nanoTime();
 			timeDiff = afterTime - beforeTime;
-			sleepTime = (GameWindow.getFpsPeriod() - timeDiff) - overSleepTime;
+			sleepTime = (MainGameWindow.getFpsPeriod() - timeDiff) - overSleepTime;
 
 			if (sleepTime > 0) { // some time left in this cycle
 				try {
