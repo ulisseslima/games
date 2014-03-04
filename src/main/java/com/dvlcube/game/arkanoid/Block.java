@@ -45,7 +45,7 @@ public class Block extends ControllableObject {
 	 * @since 13/10/2013
 	 */
 	public void disappear() {
-		isGarbage = true;
+		garbage = true;
 	}
 
 	@Override
