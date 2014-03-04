@@ -93,4 +93,9 @@ public class Paddle extends Rectangle implements Controllable {
 	public boolean doAction() {
 		return false;
 	}
+
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
 }

@@ -222,4 +222,9 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 	public boolean doAction() {
 		return false;
 	}
+
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
 }
