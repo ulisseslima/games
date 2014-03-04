@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.dvlcube.gaming.physics.PhysicalObject2D;
+import com.dvlcube.gaming.physics.PhysicalProperties;
 import com.dvlcube.gaming.util.Range;
 
 /**
@@ -24,8 +26,9 @@ import com.dvlcube.gaming.util.Range;
  */
 public abstract class Game implements Terminatable {
 
-	public boolean debug = false;
+	public volatile boolean debug = true;
 	public boolean terminating = false;
+	public boolean ended = false;
 	public double scale = 1;
 	public final Dimension screen;
 	public final Range<Integer> vRange;
@@ -33,6 +36,11 @@ public abstract class Game implements Terminatable {
 	private List<Object> objects = new ArrayList<>();
 	private List<ControllableObject> garbage = new ArrayList<>();
 	private List<Terminatable> terminatables = new ArrayList<>();
+	public static final PhysicalProperties PHYSICAL_PROPERTIES = new PhysicalProperties();
+	{
+		PHYSICAL_PROPERTIES.gravitationalPull = 1;
+		PHYSICAL_PROPERTIES.fixed = true;
+	}
 
 	protected Random random = new Random();
 
@@ -57,11 +65,16 @@ public abstract class Game implements Terminatable {
 			for (Object element : objects) {
 				if (element instanceof ControllableObject) {
 					ControllableObject controllableObject = (ControllableObject) element;
-					if (controllableObject.isGarbage) {
+					if (controllableObject.garbage) {
 						garbage.add(controllableObject);
 						objectTrashed(controllableObject);
+						Debug.println("%s trashed", controllableObject.toString());
 					}
 				}
+
+				if (element instanceof PhysicalObject2D)
+					doPhysics(((PhysicalObject2D) element));
+
 				if (element instanceof GameElement)
 					((GameElement) element).update();
 			}
@@ -69,6 +82,15 @@ public abstract class Game implements Terminatable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @param physicalObject
+	 * @author wonka
+	 * @since 01/03/2014
+	 */
+	private void doPhysics(PhysicalObject2D physicalObject) {
+
 	}
 
 	/**
@@ -89,6 +111,8 @@ public abstract class Game implements Terminatable {
 		for (ControllableObject object : garbage) {
 			objects.remove(object);
 		}
+
+		garbage.clear();
 	}
 
 	/**
@@ -99,10 +123,13 @@ public abstract class Game implements Terminatable {
 	public void doGraphics(Graphics2D g) {
 		try {
 			for (Object element : objects) {
-				if (element instanceof GameElement)
-					((GameElement) element).draw(g);
-				else if (element instanceof Shape)
+				if (element instanceof GameElement) {
+					GameElement gameElement = (GameElement) element;
+					if (gameElement.isVisible())
+						gameElement.draw(g);
+				} else if (element instanceof Shape) {
 					g.fill(((Shape) element));
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -168,6 +195,7 @@ public abstract class Game implements Terminatable {
 				terminatables.add((Terminatable) object);
 			}
 			this.objects.add(object);
+
 			if (object instanceof GameElement)
 				((GameElement) object).setSource(this);
 		}
@@ -262,5 +290,26 @@ public abstract class Game implements Terminatable {
 	 * @since 13/10/2013
 	 */
 	public void collisionEvent(ControllableObject o, Object object) {
+	}
+
+	/**
+	 * @param drawable
+	 * @return number of items destroyed.
+	 * @author wonka
+	 * @since 03/03/2014
+	 */
+	public int destroyAll(Class<?> drawable) {
+		int objsRemoved = 0;
+		try {
+			for (Object object : objects) {
+				if (drawable.isInstance(object)) {
+					objects.remove(object);
+					objsRemoved++;
+				}
+			}
+		} catch (Exception e) {
+
+		}
+		return objsRemoved;
 	}
 }

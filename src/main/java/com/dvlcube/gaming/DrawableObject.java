@@ -123,4 +123,9 @@ public abstract class DrawableObject implements Drawable {
 		}
 		return Collision.NO_COLLISION;
 	}
+
+	@Override
+	public boolean isVisible() {
+		return y() < game.sHeight() && x() < game.sWidth() && (y() + height()) > 0 && (x() + width()) > 0;
+	}
 }

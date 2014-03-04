@@ -14,12 +14,15 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 
 	public boolean hasMouseOver = false;
 	public boolean moving = false;
-	public boolean isGarbage = false;
+	public boolean garbage = false;
 	public float speed = 1;
 	public float xybuffer = 0;
+	public float xbuffer = 0;
+	public float ybuffer = 0;
 	public int mvcount = 0;
 	protected Action action;
 	protected Point destination;
+	public Direction direction = Direction.NOT_MOVING;
 
 	public ControllableObject() {
 		super(new Dimension(100, 10), new Point(10, 10));
@@ -84,7 +87,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 
 	@Override
 	public void update() {
-		move();
+		moveToDestination();
 	}
 
 	/**
@@ -92,7 +95,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 	 * @author wonka
 	 * @since 01/10/2013
 	 */
-	public boolean move() {
+	public boolean moveToDestination() {
 		xybuffer += speed;
 		if (xybuffer >= 1) {
 			mvcount = (int) xybuffer;

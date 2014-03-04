@@ -5,5 +5,4 @@ package com.dvlcube.gaming;
  * @since 27/09/2013
  */
 public interface GameElement extends Updatable, Drawable {
-
 }

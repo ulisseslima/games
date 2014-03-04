@@ -18,4 +18,11 @@ public interface Drawable {
 	int y();
 
 	void setSource(Game game);
+
+	/**
+	 * @return true if the object is visible on the screen.
+	 * @author wonka
+	 * @since 02/03/2014
+	 */
+	boolean isVisible();
 }
