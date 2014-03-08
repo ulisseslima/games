@@ -1,12 +1,13 @@
 package com.dvlcube.game.flappy;
 
+import static com.dvlcube.gaming.util.Cuber.$;
+
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import com.dvlcube.gaming.ControllableObject;
 import com.dvlcube.gaming.Game;
@@ -43,11 +44,11 @@ public class FlappinGame extends Game {
 		if (ended) {
 			int xPosition = sWidth() / 2;
 			int yPosition = sHeight() / 2;
-			g.drawString("High score: " + Score.best, xPosition, yPosition);
-			g.drawString("Your score: " + Score.current, xPosition, yPosition + 10);
-			g.drawString("(space to start again)", xPosition, yPosition + 20);
+			$("High score: " + Score.best).write(xPosition, yPosition);
+			$("Your score: " + Score.current).write(xPosition, yPosition + 10);
+			$("(space to start again)").write(xPosition, yPosition + 20);
 		} else {
-			g.drawString(Score.current.toString(), Score.x, Score.y);
+			$(Score.current.toString()).write(Score.x, Score.y);
 			createPipes();
 		}
 
@@ -156,10 +157,6 @@ public class FlappinGame extends Game {
 	}
 
 	private class Mouse extends MouseAdapter {
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			FlappinGame.super.mouseMoved(e, e.getX(), e.getY());
-		}
 	}
 
 	private class Keyboard extends KeyAdapter {
@@ -194,6 +191,7 @@ public class FlappinGame extends Game {
 
 	class PipeManagement {
 		public float speed = 1;
+		public float minSpeed = 0;
 		public int width = 40;
 		public int xGap = (int) (width * 2.5);
 		public int yGap = 80;
@@ -262,6 +260,13 @@ public class FlappinGame extends Game {
 				case KeyEvent.VK_DOWN:
 					bird.height -= 1;
 					break;
+
+				case KeyEvent.VK_7:
+					pipeMan.speed -= 0.05;
+					break;
+				case KeyEvent.VK_8:
+					pipeMan.speed += 0.05;
+					break;
 				}
 			}
 		}
@@ -286,26 +291,26 @@ public class FlappinGame extends Game {
 					lastDebugCalc = System.currentTimeMillis();
 				}
 
-				int debugXOffset = sWidth() - 150;
-				int debugYOffset = 10;
+				int debugx = sWidth() - 150;
+				int debugy = 10;
 
-				g.drawString("0_TOGGLE DEBUG", debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("BIRD ACCEL: " + acceleration, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("1/2_GRAV. PULL: " + gravPull, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("3/4_BIRD WEIGHT: " + weight, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("5/6_BIRD SPD: " + speed, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("◄/►_BIRD WIDTH: " + bird.width, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("▼/▲_BIRD HEIGHT: " + bird.height, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("ENDED: " + ended, debugXOffset, debugYOffset);
-				debugYOffset += 10;
-				g.drawString("SCALED_H: " + sHeight(), debugXOffset, debugYOffset);
+				$("0_TOGGLE DEBUG").write(debugx, debugy);
+				debugy += 10;
+				$("ENDED: " + ended).write(debugx, debugy);
+				debugy += 10;
+				$("BIRD ACCEL: " + acceleration).write(debugx, debugy);
+				debugy += 10;
+				$("1/2_GRAV. PULL: " + gravPull).write(debugx, debugy);
+				debugy += 10;
+				$("3/4_BIRD WEIGHT: " + weight).write(debugx, debugy);
+				debugy += 10;
+				$("5/6_BIRD SPD: " + speed).write(debugx, debugy);
+				debugy += 10;
+				$("◄/►_BIRD WIDTH: " + bird.width).write(debugx, debugy);
+				debugy += 10;
+				$("▼/▲_BIRD HEIGHT: " + bird.height).write(debugx, debugy);
+				debugy += 10;
+				$("7/8_SPEED: " + pipeMan.speed).write(debugx, debugy);
 			}
 		}
 	}

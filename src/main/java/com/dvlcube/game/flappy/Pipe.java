@@ -33,7 +33,12 @@ public class Pipe extends PhysicalObject2D {
 		super.update();
 
 		if (pipeMan != null && !game.ended) {
-			x -= pipeMan.speed;
+			xbuffer += pipeMan.speed;
+			if (xbuffer > 1) {
+				int mvcount = (int) xbuffer;
+				x -= mvcount;
+				xbuffer %= mvcount;
+			}
 		}
 
 		if (x + width < 0) {
