@@ -13,8 +13,8 @@ import com.dvlcube.gaming.physics.PhysicalObject2D;
  */
 public class Bird extends PhysicalObject2D {
 	{
-		physics.weight = 8;
-		physics.speed = 14;
+		physics.weight = 4;
+		physics.speed = 17;
 	}
 
 	public Bird() {

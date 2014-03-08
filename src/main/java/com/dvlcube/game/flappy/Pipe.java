@@ -63,4 +63,13 @@ public class Pipe extends PhysicalObject2D {
 	public void setPipeMan(PipeManagement pipeMan) {
 		this.pipeMan = pipeMan;
 	}
+
+	/**
+	 * @return the point where the player should gain a point.
+	 * @author wonka
+	 * @since 08/03/2014
+	 */
+	public int getScoreMark() {
+		return (x + (width / 2));
+	}
 }

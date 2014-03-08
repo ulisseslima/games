@@ -27,6 +27,9 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 
 	@Override
 	public void update() {
+		if (game.ended)
+			return;
+
 		for (Object object : game.getObjects()) {
 			if (this == object)
 				continue;

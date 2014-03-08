@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
+import java.util.LinkedList;
 
 import com.dvlcube.gaming.ControllableObject;
 import com.dvlcube.gaming.Game;
@@ -29,6 +30,7 @@ public class FlappinGame extends Game {
 	private Test test = new Test();
 	private PipeManagement pipeMan = new PipeManagement();
 	private Score score = new Score();
+	private volatile LinkedList<Pipe> pipesAhead = new LinkedList<>();
 
 	public boolean newHiScore = false;
 
@@ -40,21 +42,38 @@ public class FlappinGame extends Game {
 	private Pipe lastPipe;
 
 	@Override
+	public void doLogic() {
+		super.doLogic();
+		createPipes();
+
+		Pipe pipeAhead = pipesAhead.peekFirst();
+		if (pipeAhead != null) {
+			if (bird.x + bird.width >= pipeAhead.getScoreMark()) {
+				score.current++;
+				pipesAhead.pop();
+			}
+		}
+	}
+
+	@Override
 	public void doGraphics(Graphics2D g) {
 		super.doGraphics(g);
 
 		if (ended) {
-			int xPosition = sWidth() / 2;
-			int yPosition = sHeight() / 2;
-			$("High score: " + score.best).write(xPosition, yPosition);
-			$("Your score: " + score.current).write(xPosition, yPosition + 10);
-			$("(space to start again)").write(xPosition, yPosition + 20);
+			showGameOverInfo();
 		} else {
 			score.draw();
-			createPipes();
 		}
 
 		test.doGraphics(g);
+	}
+
+	private void showGameOverInfo() {
+		int _x = sWidth() / 2;
+		int _y = sHeight() / 2;
+		$("High score: " + score.best).write(_x, _y);
+		$("Your score: " + score.current).write(_x, _y + 10);
+		$("(space to start again)").write(_x, _y + 20);
 	}
 
 	/**
@@ -66,16 +85,18 @@ public class FlappinGame extends Game {
 	private void createPipes() {
 		if (pipeMan.currX <= sWidth()) {
 			int pipey = 0;
-			Pipe pipeTop = new Pipe(new Dimension(pipeMan.width, pipeMan.randomHeight()), new Point(pipeMan.currX,
-					pipey));
+			Dimension dimension = new Dimension(pipeMan.width, pipeMan.randomHeight());
+			Point point = new Point(pipeMan.currX, pipey);
+			Pipe pipeTop = new Pipe(dimension, point);
 			pipeTop.setPipeMan(pipeMan);
 			addObject(pipeTop);
 			lastPipe = pipeTop;
+			pipesAhead.add(pipeTop);
 
 			int pipeh = pipeTop.height + pipeMan.yGap;
 			if (pipeh > 0) {
-				Dimension dimension = new Dimension(pipeMan.width, sHeight() - pipeh);
-				Point point = new Point(pipeMan.currX, pipeh);
+				dimension = new Dimension(pipeMan.width, sHeight() - pipeh);
+				point = new Point(pipeMan.currX, pipeh);
 				Pipe pipeBottom = new Pipe(dimension, point);
 				pipeBottom.setPipeMan(pipeMan);
 				addObject(pipeBottom);
@@ -105,6 +126,9 @@ public class FlappinGame extends Game {
 		score.current = 0l;
 		bird.y = 200;
 		newHiScore = false;
+		pipesAhead.clear();
+		pipeMan.reset();
+		lastPipe = null;
 		destroyAll(Pipe.class);
 	}
 
@@ -203,9 +227,9 @@ public class FlappinGame extends Game {
 	}
 
 	class PipeManagement {
-		public float speed = 1;
+		public float speed = 1.6f;
 		public float minSpeed = 0;
-		public int width = 40;
+		public int width = 45;
 		public int xGap = (int) (this.width * 2.5);
 		public int yGap = 80;
 		public int maxHeight = sHeight() / 2;
@@ -213,7 +237,7 @@ public class FlappinGame extends Game {
 		public int maxWidth = sWidth() / 2;
 		public int minWidth = 5;
 
-		public int currX = sWidth() / 2;
+		public int currX = sWidth() - 1;
 		public boolean fromBottom;
 
 		/**
@@ -223,6 +247,15 @@ public class FlappinGame extends Game {
 		 */
 		public int randomHeight() {
 			return random.nextInt(maxHeight) + minHeight;
+		}
+
+		/**
+		 * 
+		 * @author wonka
+		 * @since 08/03/2014
+		 */
+		public void reset() {
+			currX = sWidth() - 1;
 		}
 	}
 
@@ -296,7 +329,7 @@ public class FlappinGame extends Game {
 
 				long elapsed = System.currentTimeMillis() - lastDebugCalc;
 
-				if (elapsed > 500) {
+				if (elapsed > 200) {
 					gravPull = pGround.gravitationalPull;
 					weight = pBird.weight;
 					speed = pBird.speed;
