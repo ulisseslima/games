@@ -5,6 +5,7 @@ import static com.dvlcube.gaming.util.Cuber.getRandomSquare;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.dvlcube.gaming.ControllableObject;
 
@@ -73,7 +74,7 @@ public class Biomorph extends ControllableObject {
 	}
 
 	private void updateBiomorphs() {
-		List<Object> objects = game.getObjects();
+		ConcurrentLinkedQueue<Object> objects = game.getObjects();
 		for (Object object : objects) {
 			if (object instanceof Biomorph)
 				biomorphs.add((Biomorph) object);

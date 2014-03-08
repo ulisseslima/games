@@ -14,6 +14,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.dvlcube.gaming.physics.PhysicalObject2D;
 import com.dvlcube.gaming.physics.PhysicalProperties;
@@ -34,7 +35,7 @@ public abstract class Game implements Terminatable {
 	public final Dimension screen;
 	public final Range<Integer> vRange;
 	public final Range<Integer> hRange;
-	private List<Object> objects = new ArrayList<>();
+	private ConcurrentLinkedQueue<Object> objects = new ConcurrentLinkedQueue<>();
 	private List<ControllableObject> garbage = new ArrayList<>();
 	private List<Terminatable> terminatables = new ArrayList<>();
 	public static final PhysicalProperties PHYSICAL_PROPERTIES = new PhysicalProperties();
@@ -203,7 +204,7 @@ public abstract class Game implements Terminatable {
 		}
 	}
 
-	public List<Object> getObjects() {
+	public ConcurrentLinkedQueue<Object> getObjects() {
 		return objects;
 	}
 
@@ -302,16 +303,13 @@ public abstract class Game implements Terminatable {
 	 */
 	public int destroyAll(Class<?> drawable) {
 		int objsRemoved = 0;
-		try {
-			for (Object object : objects) {
-				if (drawable.isInstance(object)) {
-					objects.remove(object);
-					objsRemoved++;
-				}
+		for (Object object : objects) {
+			if (drawable.isInstance(object)) {
+				objects.remove(object);
+				objsRemoved++;
 			}
-		} catch (Exception e) {
-
 		}
+		Debug.println("objects removed: %d", objsRemoved);
 		return objsRemoved;
 	}
 }
