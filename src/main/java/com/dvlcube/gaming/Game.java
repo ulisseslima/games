@@ -17,6 +17,7 @@ import java.util.Random;
 
 import com.dvlcube.gaming.physics.PhysicalObject2D;
 import com.dvlcube.gaming.physics.PhysicalProperties;
+import com.dvlcube.gaming.util.Cuber;
 import com.dvlcube.gaming.util.Range;
 
 /**
@@ -121,6 +122,7 @@ public abstract class Game implements Terminatable {
 	 * @since 21/09/2013
 	 */
 	public void doGraphics(Graphics2D g) {
+		Cuber.g = g;
 		try {
 			for (Object element : objects) {
 				if (element instanceof GameElement) {

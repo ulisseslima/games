@@ -3,6 +3,7 @@ package com.dvlcube.game.flappy;
 import static com.dvlcube.gaming.util.Cuber.$;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyAdapter;
@@ -27,6 +28,7 @@ public class FlappinGame extends Game {
 	private Bird bird;
 	private Test test = new Test();
 	private PipeManagement pipeMan = new PipeManagement();
+	private Score score = new Score();
 
 	public boolean newHiScore = false;
 
@@ -44,11 +46,11 @@ public class FlappinGame extends Game {
 		if (ended) {
 			int xPosition = sWidth() / 2;
 			int yPosition = sHeight() / 2;
-			$("High score: " + Score.best).write(xPosition, yPosition);
-			$("Your score: " + Score.current).write(xPosition, yPosition + 10);
+			$("High score: " + score.best).write(xPosition, yPosition);
+			$("Your score: " + score.current).write(xPosition, yPosition + 10);
 			$("(space to start again)").write(xPosition, yPosition + 20);
 		} else {
-			$(Score.current.toString()).write(Score.x, Score.y);
+			score.draw();
 			createPipes();
 		}
 
@@ -92,15 +94,15 @@ public class FlappinGame extends Game {
 	 */
 	private void endGame() {
 		ended = true;
-		if (Score.current > Score.best) {
-			Score.best = Score.current;
+		if (score.current > score.best) {
+			score.best = score.current;
 			newHiScore = true;
 		}
 	}
 
 	private void startGame() {
 		ended = false;
-		Score.current = 0l;
+		score.current = 0l;
 		bird.y = 200;
 		newHiScore = false;
 		destroyAll(Pipe.class);
@@ -182,18 +184,29 @@ public class FlappinGame extends Game {
 		}
 	}
 
-	private static class Score {
-		public static Long current = 0l;
-		public static Long best = 0l;
-		public static int x = 10;
-		public static int y = 10;
+	class Score {
+		public int size = 40;
+		private final Font FONT = new Font("SansSerif", Font.BOLD, size);
+		public Long current = 0l;
+		public Long best = 0l;
+		public int x = sWidth() / 2;
+		public int y = sHeight() / 2 - 30;
+
+		/**
+		 * 
+		 * @author wonka
+		 * @since 08/03/2014
+		 */
+		public void draw() {
+			$(score.current.toString(), FONT).write(score.x, score.y);
+		}
 	}
 
 	class PipeManagement {
 		public float speed = 1;
 		public float minSpeed = 0;
 		public int width = 40;
-		public int xGap = (int) (width * 2.5);
+		public int xGap = (int) (this.width * 2.5);
 		public int yGap = 80;
 		public int maxHeight = sHeight() / 2;
 		public int minHeight = 20;
