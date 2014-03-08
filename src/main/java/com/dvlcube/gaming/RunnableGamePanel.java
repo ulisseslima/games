@@ -2,7 +2,6 @@ package com.dvlcube.gaming;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -75,7 +74,6 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 
 	// used at game termination
 	private boolean gameOver = false;
-	private Font font;
 	private FontMetrics metrics;
 
 	// off screen rendering
@@ -97,8 +95,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 		readyForTermination();
 
 		// set up message font
-		font = new Font("SansSerif", Font.BOLD, 10);
-		metrics = this.getFontMetrics(font);
+		metrics = this.getFontMetrics(FONT);
 
 		// initialize timing elements
 		fpsStore = new double[NUM_FPS];
@@ -260,7 +257,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 		g.fillRect(0, 0, scale(PANEL_WIDTH), scale(PANEL_HEIGHT));
 
 		g.setColor(FG_COLOR);
-		g.setFont(font);
+		g.setFont(FONT);
 
 		// report frame count & average FPS and UPS at top left
 		if (debug)
@@ -292,7 +289,7 @@ public class RunnableGamePanel extends JPanel implements Runnable, GamePanel {
 		int x = (PANEL_WIDTH - metrics.stringWidth(msg)) / 2;
 		int y = (PANEL_HEIGHT - metrics.getHeight()) / 2;
 		g.setColor(Color.red);
-		g.setFont(font);
+		g.setFont(FONT);
 		g.drawString(msg, x, y);
 	}
 
