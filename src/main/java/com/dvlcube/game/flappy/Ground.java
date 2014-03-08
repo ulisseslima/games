@@ -15,7 +15,7 @@ public class Ground extends PhysicalObject2D {
 		physics.ground = true;
 		physics.fixed = true;
 		physics.weight = 10000;
-		physics.gravitationalPull = 0.1f;
+		physics.gravitationalPull = 0.2f;
 	}
 
 	/**
