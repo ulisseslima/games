@@ -1,12 +1,12 @@
 package com.dvlcube.game.flappy;
 
-import java.awt.Color;
+import static com.dvlcube.gaming.util.Cuber.$;
+
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
 import com.dvlcube.game.flappy.FlappinGame.PipeManagement;
-import com.dvlcube.gaming.GamePanel;
 import com.dvlcube.gaming.physics.PhysicalObject2D;
 
 /**
@@ -50,9 +50,7 @@ public class Pipe extends PhysicalObject2D {
 	public void draw(Graphics2D g) {
 		g.fillRect(x, y, width, height);
 		if (game.debug) {
-			g.setColor(Color.red);
-			g.drawString(String.format("height: %d, y: %d", height, y), x, y + 10);
-			g.setColor(GamePanel.FG_COLOR);
+			$(String.format("height: %d, y: %d", height, y)).write(x, y + 10);
 		}
 	}
 
