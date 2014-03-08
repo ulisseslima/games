@@ -69,9 +69,11 @@ public class FlappinGame extends Game {
 			addObject(pipeTop);
 			lastPipe = pipeTop;
 
-			int pipeh = sHeight() - (pipeTop.height + pipeMan.yGap);
+			int pipeh = pipeTop.height + pipeMan.yGap;
 			if (pipeh > 0) {
-				Pipe pipeBottom = new Pipe(new Dimension(pipeMan.width, pipeh), new Point(pipeMan.currX, pipeh / 2));
+				Dimension dimension = new Dimension(pipeMan.width, sHeight() - pipeh);
+				Point point = new Point(pipeMan.currX, pipeh);
+				Pipe pipeBottom = new Pipe(dimension, point);
 				pipeBottom.setPipeMan(pipeMan);
 				addObject(pipeBottom);
 			}
@@ -194,9 +196,9 @@ public class FlappinGame extends Game {
 		public float speed = 1;
 		public int width = 40;
 		public int xGap = (int) (width * 2.5);
-		public int yGap = 40;
-		public int maxHeight = sHeight() * 90 / 100;
-		public int minHeight = 5;
+		public int yGap = 80;
+		public int maxHeight = sHeight() / 2;
+		public int minHeight = 20;
 		public int maxWidth = sWidth() / 2;
 		public int minWidth = 5;
 
@@ -204,12 +206,12 @@ public class FlappinGame extends Game {
 		public boolean fromBottom;
 
 		/**
-		 * @return
+		 * @return random height for the pipe, ranging from the min height to the maximum height.
 		 * @author wonka
 		 * @since 02/03/2014
 		 */
 		public int randomHeight() {
-			return random.nextInt(maxHeight);
+			return random.nextInt(maxHeight) + minHeight;
 		}
 	}
 
