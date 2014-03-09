@@ -34,16 +34,7 @@ public class FlappinGame extends Game implements Terminatable {
 	private Score score = new Score();
 	private volatile LinkedList<Pipe> pipesAhead = new LinkedList<>();
 	private Sfx pleen = new Sfx("0001.wav");
-
-	public boolean newHiScore = false;
-
-	public long lastDebugCalc = 0;
-	float gravPull = 0;
-	float weight = 0;
-	float speed = 0;
-	float acceleration = 0;
 	private Pipe lastPipe;
-	double birdAngle = 0;
 
 	@Override
 	public void doLogic() {
@@ -122,7 +113,7 @@ public class FlappinGame extends Game implements Terminatable {
 		ended = true;
 		if (score.current > score.best) {
 			score.best = score.current;
-			newHiScore = true;
+			score.newHiScore = true;
 		}
 	}
 
@@ -130,7 +121,7 @@ public class FlappinGame extends Game implements Terminatable {
 		ended = false;
 		score.current = 0l;
 		bird.y = 200;
-		newHiScore = false;
+		score.newHiScore = false;
 		pipesAhead.clear();
 		pipeMan.reset();
 		lastPipe = null;
@@ -194,19 +185,18 @@ public class FlappinGame extends Game implements Terminatable {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
+
 			case KeyEvent.VK_SPACE:
 				if (ended) {
 					startGame();
+				} else {
+					FlappinGame.super.keyPressed(e);
 				}
 				break;
 
 			case KeyEvent.VK_0:
 				debug = !debug;
 				break;
-
-			default:
-				if (!ended)
-					FlappinGame.super.keyPressed(e);
 			}
 
 			test.handleInput(e);
@@ -218,6 +208,7 @@ public class FlappinGame extends Game implements Terminatable {
 		private final Font FONT = new Font("SansSerif", Font.BOLD, size);
 		public Long current = 0l;
 		public Long best = 0l;
+		public boolean newHiScore = false;
 		public int x = sWidth() / 2;
 		public int y = sHeight() / 2 - 30;
 
@@ -265,6 +256,16 @@ public class FlappinGame extends Game implements Terminatable {
 	}
 
 	private class Test {
+		public long lastDebugCalc;
+		float gravPull;
+		float weight;
+		float speed;
+		float acceleration;
+		float aero;
+
+		int pipeWidth;
+		int pipeDistance;
+		int pipeGap;
 
 		/**
 		 * @param keyCode
@@ -318,6 +319,34 @@ public class FlappinGame extends Game implements Terminatable {
 				case KeyEvent.VK_8:
 					pipeMan.speed += 0.05;
 					break;
+
+				case KeyEvent.VK_Q:
+					pBird.aerodynamic -= 0.05;
+					break;
+				case KeyEvent.VK_W:
+					pBird.aerodynamic += 0.05;
+					break;
+
+				case KeyEvent.VK_A:
+					pipeMan.xGap -= 1;
+					break;
+				case KeyEvent.VK_S:
+					pipeMan.xGap += 1;
+					break;
+
+				case KeyEvent.VK_Z:
+					pipeMan.yGap -= 1;
+					break;
+				case KeyEvent.VK_X:
+					pipeMan.yGap += 1;
+					break;
+
+				case KeyEvent.VK_E:
+					pipeMan.width -= 1;
+					break;
+				case KeyEvent.VK_R:
+					pipeMan.width += 1;
+					break;
 				}
 			}
 		}
@@ -340,15 +369,16 @@ public class FlappinGame extends Game implements Terminatable {
 					speed = pBird.speed;
 					acceleration = pBird.acceleration;
 					lastDebugCalc = System.currentTimeMillis();
-					birdAngle = bird.angle;
+					aero = pBird.aerodynamic;
+					pipeDistance = pipeMan.xGap;
+					pipeGap = pipeMan.yGap;
+					pipeWidth = pipeMan.width;
 				}
 
 				int debugx = sWidth() - 150;
 				int debugy = 10;
 
 				$("0_TOGGLE DEBUG").write(debugx, debugy);
-				debugy += 10;
-				$("ENDED: " + ended).write(debugx, debugy);
 				debugy += 10;
 				$("BIRD ACCEL: " + acceleration).write(debugx, debugy);
 				debugy += 10;
@@ -358,13 +388,21 @@ public class FlappinGame extends Game implements Terminatable {
 				debugy += 10;
 				$("5/6_BIRD SPD: " + speed).write(debugx, debugy);
 				debugy += 10;
+				$("7/8_SPEED: " + pipeMan.speed).write(debugx, debugy);
+				debugy += 10;
+				$("MAX_ACCEL: " + pBird.maxAcceleration).write(debugx, debugy);
+				debugy += 10;
 				$("◄/►_BIRD WIDTH: " + bird.width).write(debugx, debugy);
 				debugy += 10;
 				$("▼/▲_BIRD HEIGHT: " + bird.height).write(debugx, debugy);
 				debugy += 10;
-				$("7/8_SPEED: " + pipeMan.speed).write(debugx, debugy);
+				$("Q/W_AERO: " + aero).write(debugx, debugy);
 				debugy += 10;
-				$("ANGLE: " + birdAngle).write(debugx, debugy);
+				$("A/S_PIPE DISTANCE: " + pipeDistance).write(debugx, debugy);
+				debugy += 10;
+				$("Z/X_PIPE GAP: " + pipeGap).write(debugx, debugy);
+				debugy += 10;
+				$("E/R_PIPE WIDTH: " + pipeWidth).write(debugx, debugy);
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
+import com.dvlcube.gaming.F;
 import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.physics.PhysicalObject2D;
 import com.dvlcube.gaming.sound.Sfx;
@@ -19,7 +20,14 @@ public class Bird extends PhysicalObject2D implements Terminatable {
 	{
 		physics.weight = 4;
 		physics.speed = 17;
-		physics.maxAcceleration = (physics.speed / physics.weight) * 2;
+		physics.maxAcceleration = new F() {
+
+			@Override
+			public Float x() {
+				return (physics.speed / physics.weight) * 2;
+			}
+		};
+		physics.aerodynamic = 1.4f;
 	}
 
 	private Sfx bleep = new Sfx("0002.wav");
@@ -30,24 +38,24 @@ public class Bird extends PhysicalObject2D implements Terminatable {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_CONTROL:
-			flap();
-		}
+		flap();
 	}
 
 	@Override
 	public void update() {
 		if (!game.ended) {
-			angle = mapf(physics.acceleration, $range(physics.minAcceleration, physics.maxAcceleration),
-					$range(Math.toRadians(90), Math.toRadians(-45)));
+			int max = 2;
+			int min = -10;
+			float adjustedAcceleration = physics.acceleration < min ? min : physics.acceleration;
+			adjustedAcceleration = adjustedAcceleration > max ? max : adjustedAcceleration;
+			angle = mapf(adjustedAcceleration, $range(min, max), $range(90, -25));
 
 			super.update();
 		}
 	}
 
 	private void flap() {
-		physics.acceleration += physics.speed / physics.weight;
+		physics.acceleration += (physics.speed / physics.weight) * physics.aerodynamic;
 
 		bleep.play();
 		keepFalling();

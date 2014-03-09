@@ -63,11 +63,11 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 	 * @since 09/03/2014
 	 */
 	private void controlAcceleration() {
-		if (physics.acceleration < physics.minAcceleration)
-			physics.acceleration = physics.minAcceleration;
+		if (physics.acceleration < physics.minAcceleration.x())
+			physics.acceleration = physics.minAcceleration.x();
 
-		if (physics.acceleration > physics.maxAcceleration)
-			physics.acceleration = physics.maxAcceleration;
+		if (physics.acceleration > physics.maxAcceleration.x())
+			physics.acceleration = physics.maxAcceleration.x();
 	}
 
 	/**

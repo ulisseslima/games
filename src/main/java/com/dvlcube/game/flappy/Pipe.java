@@ -50,7 +50,8 @@ public class Pipe extends PhysicalObject2D {
 	public void draw(Graphics2D g) {
 		g.fillRect(x, y, width, height);
 		if (game.debug) {
-			$(String.format("height: %d, y: %d", height, y)).write(x, y + 10);
+			$(String.format("h %d", height)).write(x, y + 10);
+			$(String.format("y %d", y)).write(x, y + 20);
 		}
 	}
 

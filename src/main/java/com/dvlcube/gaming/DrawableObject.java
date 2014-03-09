@@ -119,7 +119,7 @@ public abstract class DrawableObject implements Drawable {
 	@Override
 	public void draw(Graphics2D g) {
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(angle, x, y);
+		transform.rotate(getAngleRadians(), x, y);
 		shape = transform.createTransformedShape(getShape());
 		Color previousColor = null;
 		if (color != null) {

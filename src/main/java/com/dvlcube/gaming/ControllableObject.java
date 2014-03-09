@@ -158,7 +158,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 	public Collision collided(ControllableObject o) {
 		if (getShape() != null) {
 			AffineTransform transform = new AffineTransform();
-			transform.rotate(angle, x, y);
+			transform.rotate(getAngleRadians(), x, y);
 
 			Area area = new Area(getShape());
 			Area transformedArea = area.createTransformedArea(transform);
@@ -169,7 +169,7 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 				}
 			} else {
 				AffineTransform otransform = new AffineTransform();
-				otransform.rotate(angle, x, y);
+				otransform.rotate(getAngleRadians(), x, y);
 
 				Area oarea = new Area(o.getShape());
 				Area otransformedArea = oarea.createTransformedArea(otransform);
