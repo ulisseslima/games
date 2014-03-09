@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -226,5 +227,10 @@ public class Ball extends Rectangle implements Controllable, Terminatable {
 	@Override
 	public boolean isVisible() {
 		return true;
+	}
+
+	@Override
+	public Shape getShape() {
+		return null;
 	}
 }
