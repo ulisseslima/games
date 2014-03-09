@@ -3,8 +3,6 @@ package com.dvlcube.gaming.physics;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import com.dvlcube.game.flappy.Ground;
-import com.dvlcube.game.flappy.Pipe;
 import com.dvlcube.gaming.Collision;
 import com.dvlcube.gaming.ControllableObject;
 
@@ -30,6 +28,7 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 		if (game.ended)
 			return;
 
+		controlAcceleration();
 		for (Object object : game.getObjects()) {
 			if (this == object)
 				continue;
@@ -58,6 +57,20 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 	}
 
 	/**
+	 * Keeps acceleration from going too fast (too positive or too negative)
+	 * 
+	 * @author wonka
+	 * @since 09/03/2014
+	 */
+	private void controlAcceleration() {
+		if (physics.acceleration < physics.minAcceleration)
+			physics.acceleration = physics.minAcceleration;
+
+		if (physics.acceleration > physics.maxAcceleration)
+			physics.acceleration = physics.maxAcceleration;
+	}
+
+	/**
 	 * @param object2d
 	 * @author wonka
 	 * @since 02/03/2014
@@ -67,9 +80,6 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 			object.physics.acceleration -= physics.gravitationalPull;
 			object.ybuffer += object.physics.acceleration;
 			object.mvcount = (int) object.ybuffer;
-
-			// Debug.println("pulling %s (%f - %f)", object.toString(), object.physics.acceleration,
-			// object.ybuffer);
 
 			if (object.mvcount >= 1 || object.mvcount <= -1) {
 				object.y -= object.mvcount;
@@ -102,7 +112,7 @@ public abstract class PhysicalObject2D extends ControllableObject implements Phy
 	 * @since 01/03/2014
 	 */
 	public boolean canCollideWith(Object object) {
-		return object instanceof Pipe || object instanceof Ground;
+		return object instanceof PhysicalObject2D;
 	}
 
 	/**

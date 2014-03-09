@@ -1,6 +1,7 @@
 package com.dvlcube.gaming;
 
 import java.awt.Graphics2D;
+import java.awt.Shape;
 
 /**
  * @author wonka
@@ -25,4 +26,11 @@ public interface Drawable {
 	 * @since 02/03/2014
 	 */
 	boolean isVisible();
+
+	/**
+	 * @return this object's shape, can be null.
+	 * @author wonka
+	 * @since 09/03/2014
+	 */
+	Shape getShape();
 }

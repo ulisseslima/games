@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 
 /**
  * @author wonka
@@ -87,6 +89,9 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 
 	@Override
 	public void update() {
+		if (angle > 360 || angle < -360)
+			angle = 0;
+
 		moveToDestination();
 	}
 
@@ -142,5 +147,67 @@ public abstract class ControllableObject extends DrawableObject implements Contr
 		int thisArea = this.width * this.height;
 		int oArea = o.width * o.height;
 		return thisArea > oArea;
+	}
+
+	/**
+	 * @param o
+	 * @return type of collision.
+	 * @author wonka
+	 * @since 08/03/2014
+	 */
+	public Collision collided(ControllableObject o) {
+		if (getShape() != null) {
+			AffineTransform transform = new AffineTransform();
+			transform.rotate(angle, x, y);
+
+			Area area = new Area(getShape());
+			Area transformedArea = area.createTransformedArea(transform);
+
+			if (o.getShape() == null || o.angle == 0) {
+				if (transformedArea.intersects(o.x, o.y, o.width, o.height)) {
+					return Collision.ALL;
+				}
+			} else {
+				AffineTransform otransform = new AffineTransform();
+				otransform.rotate(angle, x, y);
+
+				Area oarea = new Area(o.getShape());
+				Area otransformedArea = oarea.createTransformedArea(otransform);
+				if (transformedArea.intersects(otransformedArea.getBounds())) {
+					return Collision.ALL;
+				}
+			}
+			return Collision.NO_COLLISION;
+		} else {
+			int thisw = this.width;
+			int thish = this.height;
+			int otherw = o.width;
+			int otherh = o.height;
+			if (otherw <= 0 || otherh <= 0 || thisw <= 0 || thish <= 0) {
+				return Collision.NO_COLLISION;
+			}
+			int thisx = this.x;
+			int thisy = this.y;
+			int otherx = o.x;
+			int othery = o.y;
+			otherw += otherx;
+			otherh += othery;
+			thisw += thisx;
+			thish += thisy;
+			// overflow || intersect
+			boolean overFlowsOrIntersects = ((otherw < otherx || otherw > thisx) && (otherh < othery || otherh > thisy)
+					&& (thisw < thisx || thisw > otherx) && (thish < thisy || thish > othery));
+
+			if (overFlowsOrIntersects) {
+				int sumx = this.x - o.x;
+				int sumy = this.y - o.y;
+
+				if (sumx > sumy)
+					return Collision.NORTH;
+				else
+					return Collision.WEST;
+			}
+			return Collision.NO_COLLISION;
+		}
 	}
 }

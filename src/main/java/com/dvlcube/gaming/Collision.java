@@ -6,5 +6,5 @@ package com.dvlcube.gaming;
  */
 public enum Collision {
 
-	NORTH, SOUTH, EAST, WEST, NO_COLLISION
+	ALL, NORTH, SOUTH, EAST, WEST, NO_COLLISION
 }

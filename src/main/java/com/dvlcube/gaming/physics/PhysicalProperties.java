@@ -9,6 +9,8 @@ public class PhysicalProperties {
 	public float aerodynamic;
 	public float downforce;
 	public float acceleration = 0;
+	public float maxAcceleration = Float.MAX_VALUE;
+	public float minAcceleration = -50;
 	public float speed = 0;
 	public float maxSpeed;
 	public float gravitationalRadius;
