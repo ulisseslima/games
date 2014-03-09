@@ -8,6 +8,13 @@ import java.awt.Shape;
  * @since 27/09/2013
  */
 public interface Drawable {
+	/**
+	 * actual screen drawing code.
+	 * 
+	 * @param g
+	 * @author wonka
+	 * @since 09/03/2014
+	 */
 	void draw(Graphics2D g);
 
 	int width();
