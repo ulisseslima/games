@@ -16,8 +16,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import com.dvlcube.gaming.physics.PhysicalObject2D;
 import com.dvlcube.gaming.physics.PhysicalProperties;
+import com.dvlcube.gaming.sound.Synthesizer;
 import com.dvlcube.gaming.util.Cuber;
 import com.dvlcube.gaming.util.Range;
 
@@ -311,5 +316,21 @@ public abstract class Game implements Terminatable {
 		}
 		Debug.println("objects removed: %d", objsRemoved);
 		return objsRemoved;
+	}
+
+	/**
+	 * @param fileName
+	 * @author wonka
+	 * @since 08/03/2014
+	 */
+	public static void sound(String fileName) {
+		try {
+			Clip clip = AudioSystem.getClip();
+			AudioInputStream sound = AudioSystem.getAudioInputStream(Synthesizer.class.getResource(fileName));
+			clip.open(sound);
+			clip.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

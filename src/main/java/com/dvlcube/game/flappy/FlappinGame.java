@@ -13,13 +13,15 @@ import java.util.LinkedList;
 
 import com.dvlcube.gaming.ControllableObject;
 import com.dvlcube.gaming.Game;
+import com.dvlcube.gaming.Terminatable;
 import com.dvlcube.gaming.physics.PhysicalProperties;
+import com.dvlcube.gaming.sound.Sfx;
 
 /**
  * @author wonka
  * @since 01/03/2014
  */
-public class FlappinGame extends Game {
+public class FlappinGame extends Game implements Terminatable {
 	{
 		debug = true;
 	}
@@ -31,6 +33,7 @@ public class FlappinGame extends Game {
 	private PipeManagement pipeMan = new PipeManagement();
 	private Score score = new Score();
 	private volatile LinkedList<Pipe> pipesAhead = new LinkedList<>();
+	private Sfx pleen = new Sfx("0001.wav");
 
 	public boolean newHiScore = false;
 
@@ -40,6 +43,7 @@ public class FlappinGame extends Game {
 	float speed = 0;
 	float acceleration = 0;
 	private Pipe lastPipe;
+	double birdAngle = 0;
 
 	@Override
 	public void doLogic() {
@@ -51,6 +55,7 @@ public class FlappinGame extends Game {
 			if (bird.x + bird.width >= pipeAhead.getScoreMark()) {
 				score.current++;
 				pipesAhead.pop();
+				pleen.play();
 			}
 		}
 	}
@@ -335,6 +340,7 @@ public class FlappinGame extends Game {
 					speed = pBird.speed;
 					acceleration = pBird.acceleration;
 					lastDebugCalc = System.currentTimeMillis();
+					birdAngle = bird.angle;
 				}
 
 				int debugx = sWidth() - 150;
@@ -357,7 +363,14 @@ public class FlappinGame extends Game {
 				$("▼/▲_BIRD HEIGHT: " + bird.height).write(debugx, debugy);
 				debugy += 10;
 				$("7/8_SPEED: " + pipeMan.speed).write(debugx, debugy);
+				debugy += 10;
+				$("ANGLE: " + birdAngle).write(debugx, debugy);
 			}
 		}
+	}
+
+	@Override
+	public void terminate() {
+		pleen.terminate();
 	}
 }
